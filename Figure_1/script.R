@@ -1,3 +1,4 @@
+#test comment
 df = read.csv(file = "F2_RNAseq_mapped_genes_abundance_tidy.tsv", sep = '\t', header = TRUE)
 str(df)
 df$tpm = as.factor(df$tpm)
