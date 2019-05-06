@@ -7,7 +7,7 @@ df %>% filter(target_id == "Solyc10g075090.2.1") %>%
 ggplot(., aes(x = genotype,
                                      y = est_counts,
                                      fill = group )) +
-  geom_bar(stat = "identity")
+ geom_boxplot(stat = "identity")
   ggsave("Heatmap_ggplot.jpg", device = "jpg", scale = 1, width = 28, height = 28, units = "cm", dpi = 100) + options(device=NULL)
 
 df2 = df[,1;2;3;7]
