@@ -4,40 +4,24 @@ Codes and date for the figures of the "genetic requirement" paper
 ## Figure List Thesis Ruy
 
 Fig 1. Phenotyping the F1's
-
-    A) Metabolite levels of F1 + F1-hab + parents in leaf-wash
-
-    B) Trichome density  F1 + F1-hab + parents
-
-    C) zFPS/FPS ZIS/PHS1 expression (?? This will also come forward later in the RNA-seq) 
-
-    D) Whitefly clipcage assay F1 + F1-hab + parents
-<br/><br/>
-
-
+* A) Metabolite levels of F1 + F1-hab + parents in leaf-wash
+* B) Trichome density  F1 + F1-hab + parents
+* C) zFPS/FPS ZIS/PHS1 expression (?? This will also come forward later in the RNA-seq) 
+* D) Whitefly clipcage assay F1 + F1-hab + parents
 
 Fig 2: Volatiles full F2 + Trichome density classes 
-<br/><br/>
 
 Fig 3: "Selected" F2 lines: Type-VI trichome density + Metabolite levels per trichome + whitefly phenotype
-<br/><br/>
 
 Fig 4: Selection on "Active" and "Lazy" F2 lines: metabolite levels per trichome + cavilty volume
-<br/><br/>
 
 Fig 5: Fosmidomycin / Mevastatin treatment of "Active" / "Lazy" F2 lines + paren
-<br/><br/>
 
 Fig 6: RNA seq of F1 + F2s. Heatmap of differentially expressed genes active vs. lazy + MapMan figure of MEP/MEV pathway (?)
-<br/><br/>
 
 Fig.7: PLS-DA of RNA-seq data (?)
-<br/><br/>
 
 Fig 8: Allele-specific expressed genes
-<br/><br/>
-<br/><br/>
-
 
 Fig S1: Trichome morphology of F1 (not the cavity, but the "square shape" of the trichomes, as published recently) 
 
