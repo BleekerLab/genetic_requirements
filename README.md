@@ -6,7 +6,7 @@ Codes and date for the figures of the "genetic requirement" paper
 Fig 1. Phenotyping the F1's
 * A) Metabolite levels of F1 + F1-hab + parents in leaf-wash
 * B) Trichome density  F1 + F1-hab + parents
-* C) zFPS/FPS ZIS/PHS1 expression (?? This will also come forward later in the RNA-seq) 
+* C) zFPS/FPS ZIS/PHS1 expression
 * D) Whitefly clipcage assay F1 + F1-hab + parents
 
 Fig 2: Volatiles full F2 + Trichome density classes 
