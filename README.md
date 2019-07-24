@@ -33,5 +33,7 @@ Fig S4: Acylsugar measurements full F2 (done with rhodamine stainig in plate-rea
 
 Fig S5: Cavity volume vs. whitefly mortality 
 
-Fig S6: Heatmap / Table of MVA / MEP pathway genes + ABC-transporters + LTPs + Transcription Factors
+Fig S6: Acylsugar profiles "Active" and "Lazy" F2 lines
+
+Fig S7: Heatmap / Table of MVA / MEP pathway genes + ABC-transporters + LTPs + Transcription Factors
 
