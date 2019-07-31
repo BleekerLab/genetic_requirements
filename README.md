@@ -9,17 +9,17 @@ Fig 1. Phenotyping the F1's
 * C) zFPS/FPS ZIS/PHS1 expression
 * D) Whitefly clipcage assay F1 + F1-hab + parents
 
-Fig 2: Volatiles full F2 + Trichome density classes 
+Fig 2: Volatiles full F2 + Trichome density classes (traits both segregate --> genetic)
 
-Fig 3: "Selected" F2 lines: Type-VI trichome density + Metabolite levels per trichome
+Fig 3: "Selected" F2 lines: Type-VI trichome density + Metabolite levels per leaf (density adds but does not explain the full phenotype)
 
-Fig 4: Selection on "Active" and "Lazy" F2 lines: metabolite levels per trichome + cavilty volume
+Fig 4: Selection on "Active" and "Lazy" F2 lines: metabolite levels per trichome + cavity volume (large cavity size is related to high metabolite levels)
 
-fig extra: relation ZGB quantity (i.e. cavity volume) vs whitefly survival.
+fig extra: relation ZGB quantity (i.e. cavity volume) vs whitefly survival. (predictor for resistance)
 
-Fig 5: Fosmidomycin / Mevastatin treatment of "Active" / "Lazy" F2 lines + paren
+Fig 5: Fosmidomycin / Mevastatin treatment of "Active" / "Lazy" F2 lines + parent (precursor flux is difference between wild and cultivated tomato with more transfer from plastid to cytosol in PI127826)
 
-Fig 6: RNA seq of F1 + F2s. Heatmap of differentially expressed genes active vs. lazy + MapMan figure of MEP/MEV pathway (?)
+Fig 6: RNA seq of F1 + F2s. Heatmap of differentially expressed genes active vs. lazy + MapMan figure of MEP/MEV pathway (?) (check comparing only F2 active to F2 lazy). 
 
 Fig.7: PLS-DA of RNA-seq data (?)
 
