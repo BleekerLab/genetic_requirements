@@ -1,4 +1,4 @@
-df = read.xlsx("GCMS_Leafwash_Full_F2_EZ.xlsx",1,header = TRUE)
+df = read.csv("GCMS_Leafwash_Full_F2_EZ.csv",1,header = TRUE)
 
 #Filter datafile on zingiberene and type_VI_trichomes both abaxial and adaxial
 df.parsed = filter(df, df$group == "F2")
