@@ -2,6 +2,8 @@ library(tidyverse)
 library(Rmisc)
 library(car)
 library(ggpubr)
+library(multcompView)
+library(rcompanion)
 
 #########################
 # Import and shape data #
@@ -74,6 +76,11 @@ shapiro.test(df.wide$survival)
 qqPlot(df.wide$survival)
 
 #non-parametric test
-kruskal.test(data = df.wide, survival ~ genotype)
-wf.wilcox = pairwise.wilcox.test(df.wide$survival, df.wide$genotype, p.adjust.method = "none", paired = FALSE)
+kruskal.test(data = df, survival ~ genotype)
+wf.wilcox = pairwise.wilcox.test(df$survival, df$genotype, p.adjust.method = "none", paired = FALSE)
 capture.output(wf.wilcox, file = "Figure_1_F1_phenotypes/plots/wf_phenotype_wilcox.txt")
+
+letters_sig = multcompLetters(fullPTable(wf.wilcox$p.value), #compare the groups
+                              compare = "<",
+                              threshold = 0.05)
+print(letters_sig)
