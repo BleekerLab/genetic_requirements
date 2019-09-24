@@ -1,0 +1,118 @@
+$type_VI_abaxial
+$type_VI_abaxial[[1]]
+
+	Pairwise comparisons using Wilcoxon rank sum test 
+
+data:  x.sub$avg_value and x.sub$genotype 
+
+                  Cultivar PI127826 F1    PI127826 x LA1777
+PI127826          0.095    -        -     -                
+F1                0.190    0.857    -     -                
+PI127826 x LA1777 0.222    0.548    0.857 -                
+LA1777            0.016    0.421    0.571 0.753            
+
+P value adjustment method: none 
+
+$type_VI_abaxial[[2]]
+         Cultivar          PI127826                F1 PI127826 x LA1777            LA1777 
+              "a"              "ab"              "ab"              "ab"               "b" 
+
+
+$type_VI_adaxial
+$type_VI_adaxial[[1]]
+
+	Pairwise comparisons using Wilcoxon rank sum test 
+
+data:  x.sub$avg_value and x.sub$genotype 
+
+                  Cultivar PI127826 F1     PI127826 x LA1777
+PI127826          0.3095   -        -      -                
+F1                0.3810   0.8571   -      -                
+PI127826 x LA1777 0.0952   0.4206   0.8571 -                
+LA1777            0.0079   0.0556   0.0952 0.8413           
+
+P value adjustment method: none 
+
+$type_VI_adaxial[[2]]
+         Cultivar          PI127826                F1 PI127826 x LA1777            LA1777 
+              "a"              "ab"              "ab"              "ab"               "b" 
+
+
+$type_I_IV_abaxial
+$type_I_IV_abaxial[[1]]
+
+	Pairwise comparisons using Wilcoxon rank sum test 
+
+data:  x.sub$avg_value and x.sub$genotype 
+
+                  Cultivar PI127826 F1     PI127826 x LA1777
+PI127826          0.0097   -        -      -                
+F1                0.0545   0.0952   -      -                
+PI127826 x LA1777 0.0097   0.0952   0.3810 -                
+LA1777            0.0097   0.0079   0.0952 0.0079           
+
+P value adjustment method: none 
+
+$type_I_IV_abaxial[[2]]
+         Cultivar          PI127826                F1 PI127826 x LA1777            LA1777 
+              "a"               "b"             "abc"               "b"               "c" 
+
+
+$type_I_IV_adaxial
+$type_I_IV_adaxial[[1]]
+
+	Pairwise comparisons using Wilcoxon rank sum test 
+
+data:  x.sub$avg_value and x.sub$genotype 
+
+                  Cultivar PI127826 F1     PI127826 x LA1777
+PI127826          0.0661   -        -      -                
+F1                0.0678   0.3810   -      -                
+PI127826 x LA1777 0.0109   0.8413   0.0952 -                
+LA1777            0.0109   0.0079   0.0952 0.0079           
+
+P value adjustment method: none 
+
+$type_I_IV_adaxial[[2]]
+         Cultivar          PI127826                F1 PI127826 x LA1777            LA1777 
+              "a"              "ab"             "abc"               "b"               "c" 
+
+
+$type_non_glandular_abaxial
+$type_non_glandular_abaxial[[1]]
+
+	Pairwise comparisons using Wilcoxon rank sum test 
+
+data:  x.sub$avg_value and x.sub$genotype 
+
+                  Cultivar PI127826 F1    PI127826 x LA1777
+PI127826          0.012    -        -     -                
+F1                0.190    0.079    -     -                
+PI127826 x LA1777 0.012    0.389    0.079 -                
+LA1777            0.012    1.000    0.079 0.389            
+
+P value adjustment method: none 
+
+$type_non_glandular_abaxial[[2]]
+         Cultivar          PI127826                F1 PI127826 x LA1777            LA1777 
+              "a"               "b"              "ab"               "b"               "b" 
+
+
+$type_non_glandular_adaxial
+$type_non_glandular_adaxial[[1]]
+
+	Pairwise comparisons using Wilcoxon rank sum test 
+
+data:  x.sub$avg_value and x.sub$genotype 
+
+                  Cultivar PI127826 F1     PI127826 x LA1777
+PI127826          0.0119   -        -      -                
+F1                0.0952   0.0786   -      -                
+PI127826 x LA1777 0.0079   0.2903   0.3810 -                
+LA1777            0.0079   0.7503   0.0952 0.4005           
+
+P value adjustment method: none 
+
+$type_non_glandular_adaxial[[2]]
+         Cultivar          PI127826                F1 PI127826 x LA1777            LA1777 
+              "a"               "b"              "ab"               "b"               "b" 

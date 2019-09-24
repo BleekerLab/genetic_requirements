@@ -2,6 +2,8 @@ library(tidyverse)
 library(ggplot2)
 library(Rmisc)
 library(car)
+library(multcompView)
+library(rcompanion)
 
 ############################
 # Custom theme for plotting#
@@ -58,12 +60,11 @@ se <- function(x) sd(x)/sqrt(length(x))
 df.avg.leafdisc = df.long %>% dplyr::group_by(., genotype, plant, type, surface) %>% 
   dplyr::summarize(avg_value = mean(density_mm2), se = se(density_mm2)) %>% filter(., type != "sum_glandular")
 
-
-# Plot the different types of trichomes (Average of adaxial / abaxial side)
-
+#Calculate averages + se  over the genotypes
 df.avg.genotype = df.avg.leafdisc %>% filter(., type %in% c("non_glandular", "type_I_IV", "type_VI")) %>% filter(., surface %in% c("adaxial", "abaxial")) %>%
   summarySE(., measurevar = "avg_value", groupvars = c("genotype", "type", "surface"))
 
+# Plot the different types of trichomes (Average of adaxial / abaxial side)
 p.all = 
 df.avg.genotype %>%   
 ggplot(., aes(x = genotype,
@@ -93,24 +94,32 @@ df.avg.genotype %>% filter(type == "type_VI") %>%
 ggsave(file = "Figure_1_F1_phenotypes/plots/trichome_densities_F1.svg", plot = p.all, height = 12, width = 10)
 ggsave(file = "Figure_1_F1_phenotypes/plots/type_VI_densities_F1.svg", plot = p.type_VI, height = 8, width = 5)
 
-# Pairwise Statistics
+#############
+# Statistic #
+#############
+
+#function for easy comparisons of types / surface
 test = function(x, y, z) {
-  {x.sub = x %>% filter(type == y) %>% filter(surface == z)}
-  {will = pairwise.wilcox.test(x.sub$avg_value, x.sub$genotype, p.adjust.method = "none")}
-  return(will)
+  {x.sub = x %>% filter(type == y) %>% filter(surface == z)} #subsets the dataset
+  {will = pairwise.wilcox.test(x.sub$avg_value, x.sub$genotype, p.adjust.method = "none")} #wilcox test
+  {letters_sig = multcompLetters(fullPTable(will$p.value), #compare the groups
+                                 compare = "<",
+                                 threshold = 0.05)}
+  results = list(will, letters_sig)
+  
+  return(results)
   
 }
 
-type_VI_ab = test(df.avg.leafdisc, "type_VI", "abaxial")
-type_VI_ab = test(df.avg.leafdisc, "type_VI", "adaxial")
+# Calculate the statistics in a list called 'stats'
+stats = list(
+type_VI_abaxial = test(df.avg.leafdisc, "type_VI", "abaxial"),
+type_VI_adaxial = test(df.avg.leafdisc, "type_VI", "adaxial"),
 
-type_I_IV_ab = test(df.avg.leafdisc, "type_I_IV", "abaxial")
-type_I_IV_ab = test(df.avg.leafdisc, "type_I_IV", "adaxial")
+type_I_IV_abaxial = test(df.avg.leafdisc, "type_I_IV", "abaxial"),
+type_I_IV_adaxial = test(df.avg.leafdisc, "type_I_IV", "adaxial"),
 
-type_non_glandular_ab = test(df.avg.leafdisc, "non_glandular", "abaxial")
-type_non_glandular_ab = test(df.avg.leafdisc, "non_glandular", "adaxial")
-
-
-#outlier detection for type VI
-df.typeVI = df %>% filter(., type == "type_VI")
-rosnerTest(df.typeVI$density_mm2, k =2)
+type_non_glandular_abaxial = test(df.avg.leafdisc, "non_glandular", "abaxial"),
+type_non_glandular_adaxial = test(df.avg.leafdisc, "non_glandular", "adaxial")
+)
+print(stats)
