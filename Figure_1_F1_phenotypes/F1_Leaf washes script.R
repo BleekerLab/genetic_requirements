@@ -1,5 +1,7 @@
 library(tidyverse)
 library(ggbiplot)
+library(Rmisc)
+library(multcompView)
 
 
 #Create_dataframe
@@ -9,12 +11,12 @@ df$total_terpenes = rowSums(df[,3:ncol(df)]) #make a new column and calculate to
 
 #Change to long ('tidy') format -> filter unwanted data (e.g. the LA1777-F1 measurements)
 df_long <- gather(df, metabolite, abundance, Bpinene:total_terpenes, -genotype,-genotype,factor_key=TRUE) %>% 
-  filter(., genotype != "CV_LA1777") %>% filter(., genotype != "F1-LA1777")
+  filter(., genotype != "CV_LA1777") %>% filter(., genotype != "F1_LA1777")
 
 
 
 #Define variables 
-df_long$genotype <- factor(df_long$genotype, levels = c("CV", "PI127826", "F1", "F1-hab", "LA1777"),
+df_long$genotype <- factor(df_long$genotype, levels = c("CV", "PI127826", "F1", "F1_hab", "LA1777"),
                               ordered = TRUE)
 
 #summarise data for barplot
@@ -36,21 +38,24 @@ ggsave("Figure_1_F1_phenotypes/plots/F1_leafwashes_barplot.pdf", device = "pdf",
 
 #check for normality
 shapiro.test(df$total_terpenes) 
-qqPlot(df$X7epizingiberene)
+shapiro.test(df$X7epizingiberene)
 
-kruskal.test(data = df, total_terpenes ~  genotype)
-leafwash.wilcox = wilcox.test(df$genotype, df$total_terpenes)
-capture.output(leafwash.wilcox, file = "Figure_1_F1_phenotypes/plots/leafwashes_wilcox.txt")
-  
+#Log transform the data
+df[df == 0] <- runif(n=1,min = 1, max = 2)
+df.log =  as.data.frame(c(df[1:2],log(select(df, -c(sample, genotype))))) %>% 
+  filter(., genotype != "CV_LA1777") %>% filter(., genotype != "F1_LA1777")
 
-#ANOVA
-library(car)
-leveneTest(df_zingiberene$abundance ~ df_zingiberene$plant, data = df_zingiberene) # If p > 0.05 the data is NOT normally distributed [levenetest is part of the car package]
-aov_genotype = aov(df_zingiberene$abundance ~ genotype, data=df_zingiberene)
+
+aov_genotype = aov(X7epizingiberene ~ genotype, data=df.log)
 summary(aov_genotype)
 TK <- TukeyHSD(aov_genotype, "genotype", ordered = TRUE)
-TukeyHSD_results = as.data.frame(TK$genotype)
+
+# Write the letters
+multcompLetters(TK$genotype[,4])
+
+#Write files with results
 write.csv(TukeyHSD_results, file = "F1_leafwash_TukeyHSD_results.csv")
+
 
 ############
 #   PCA    #
@@ -66,7 +71,7 @@ df.log = log(df2)
 df.pca = prcomp(df.log)
 summary(df.pca)
 
-# Plot PCS
+# Plot PCA
 
 my.theme = 
   theme(text = element_text(),

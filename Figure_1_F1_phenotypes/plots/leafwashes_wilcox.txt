@@ -1,0 +1,14 @@
+
+	Pairwise comparisons using Wilcoxon rank sum test 
+
+data:  df$X7epizingiberene and df$genotype 
+
+          CV    CV_LA1777 F1    F1-hab F1-LA1777 LA1777
+CV_LA1777 1.000 -         -     -      -         -     
+F1        0.100 0.077     -     -      -         -     
+F1-hab    0.100 0.077     0.100 -      -         -     
+F1-LA1777 0.100 0.077     0.700 0.100  -         -     
+LA1777    0.100 0.077     0.200 0.100  0.700     -     
+PI127826  0.100 0.077     0.100 0.200  0.100     0.100 
+
+P value adjustment method: none 
