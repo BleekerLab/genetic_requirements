@@ -16,10 +16,7 @@ Fig 3: (A) "Selected" F2 lines: Type-VI trichome density VS Metabolite levels pe
 
 Fig 4: (A) Shapes of 'Active' & 'lazy'
        (B) Selection on 3x"Active" and 3x"Lazy" F2 lines: metabolite levels per head-cell + cavity volume (large cavity size is related to high metabolite levels)
-<<<<<<< HEAD
        (C) WF phenotype Active / Lazy plants
-=======
->>>>>>> abc663a418f6ca814333838673150b06c06848c0
 
 fig extra: relation ZGB quantity (i.e. cavity volume) vs whitefly survival. (predictor for resistance)
 
@@ -39,15 +36,9 @@ Fig S3: Barplot of 7-epizingiberene in the Full F2
 
 Fig S4: Barplot terpene content per type-VI head cell selected F2s
 
-<<<<<<< HEAD
-Fig S5: Acylsugar measurements small F2
-=======
-Fig S5: Acylsugar measurements full F2 (done with rhodamine stainig in plate-reader) + Acylsugar levels VS. Type I/IV trichome classes
->>>>>>> abc663a418f6ca814333838673150b06c06848c0
+Fig S5: Acylsugar measurements active/lazy
 
-Fig S5: Cavity volume vs. whitefly mortality (needs to be in main-text (somewhere))
+Fig S6: 
 
-Fig S6: Acylsugar profiles "Active" and "Lazy" F2 lines
-
-Fig S7: Heatmap / Table of MVA / MEP pathway genes + ABC-transporters + LTPs + Transcription Factors
+Fig S7: 
 
