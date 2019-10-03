@@ -7,7 +7,7 @@ library(Rmisc)
 
 my.theme = 
   theme(text = element_text(),
-        axis.text.x = element_text(size = 6, angle = 45, hjust = 1, colour = "black"),
+        axis.text.x = element_text(size = 8, angle = 45, hjust = 1, colour = "black"),
         axis.text.y  = element_text(size = 6, angle = 0, colour = "black"),
         strip.text =  element_text(size = 6, colour = "black"),
         strip.background = element_blank(),
