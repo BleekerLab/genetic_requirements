@@ -65,7 +65,7 @@ ggplot(df.subset, aes(x = genotype, y = percentage, fill = phenotype))+
   scale_fill_manual(values = c("black", "grey"))+
   my.theme
 
-ggsave("Figure_5/MVA_MEP_terpenes_day14_percentages.svg", plot = p.percentage, width = 6, height = 4)
+ggsave("Figure_5/MVA_MEP_terpenes_day14_percentages.svg", plot = p.percentage, width = 5, height = 7)
 
 
   
