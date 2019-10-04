@@ -1,10 +1,30 @@
 library(tidyverse)
 library(RColorBrewer)
-# load data
+#############################
+# Custom theme for plotting #
+#############################
+
+my.theme = 
+  theme(text = element_text(),
+        axis.text.x = element_text(size = 8, colour = "black"),
+        axis.text.y = element_text(size = 8, colour = "black"), 
+        strip.background = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(),
+        panel.background = element_rect(fill = NA, color = "black"),
+        strip.text.x = element_text(size=8, colour = "black")
+  )+
+  theme_bw()
+
+#############
+# Load data #
+#############
+
 trichomes = read.csv(file= "Figure_2/type_VI_trichomes_full_F2.csv", header = T, stringsAsFactors = T)
-volatiles = read.csv(file = "Figure_2/GCMS_Leafwash_Full_F2_EZ.csv", header = T, stringsAsFactors = T)
+volatiles = read.csv(file = "Figure_2/GCMS_Leafwash_Full_F2_EZ.csv", header = T, stringsAsFactors = T, check.names = F)
 homo = read.csv(file = "Figure_2/homozygous_ZGB_genotypes_F2.csv", header = T, stringsAsFactors = T)
-volatiles_VI = read.csv(file = "Figure_2/type_VI_gland_terpenes_F2.csv", header = T, stringsAsFactors = T)
+volatiles_VI = read.csv(file = "Figure_2/type_VI_gland_terpenes_F2.csv", header = T, stringsAsFactors = T, check.names = F)
 
 # Take only the volatile data from plants homozygous for zFPS/ZIS + P450
 volatiles.homo = left_join(homo, volatiles, by = "genotype")
@@ -24,14 +44,19 @@ type_VI_ab_ad = df %>% dplyr::group_by(genotype) %>% dplyr::summarise(., sum_typ
 type_VI_ab_ad = inner_join(type_VI_ab_ad, volatiles) 
 df2 = type_VI_ab_ad %>% filter(., !sum_type_VI %in% c("11","12", "13", "14")) # remove mistakes in trichome counting (i.e. a class can not exceed 10)
 
-#Boxplot
-df2$sum_type_VI = as.numeric(df2$sum_type_VI)
-df2$zingiberene = as.numeric(df2$zingiberene)
+##########################################
+# Boxplot type-VI density vs zingiberene #
+##########################################
+p.box = 
 ggplot(df2, aes(x = df2$sum_type_VI, y = df2$zingiberene))+
-  geom_boxplot(aes(x = as.factor(df2$sum_type_VI), y = df2$zingiberene))+
-  geom_point(size = 0.75)+
-  geom_smooth(method = "lm", aes(x =df2$sum_type_VI, y = df2$zingiberene), alpha = 0.2)+
-  ylim(NA, 500000)
+  geom_boxplot(aes(x = as.factor(df2$sum_type_VI), y = df2$zingiberene), fill = "grey", outlier.size = 0.5)+
+  geom_point(aes(x = as.factor(df2$sum_type_VI), y = df2$zingiberene),size = 0.5)+
+  ylim(NA, 500000)+
+  xlab(NULL)+
+  ylab("7-epizingiberene (ion counts / leaflet")+
+  my.theme
+
+ggsave(file = "Figure_2/plots/type-VI_class_vs_zingiberene.svg", plot = p.box, width = 3, height = 4)
 
 # Barplot
 sum = summarySE(df2, measurevar = "zingiberene", groupvars = "sum_type_VI")
