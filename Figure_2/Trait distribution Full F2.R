@@ -1,5 +1,6 @@
 library(tidyverse)
 library(RColorBrewer)
+library(multcompView)
 #############################
 # Custom theme for plotting #
 #############################
@@ -54,9 +55,19 @@ ggplot(df2, aes(x = df2$sum_type_VI, y = df2$zingiberene))+
   ylim(NA, 500000)+
   xlab(NULL)+
   ylab("7-epizingiberene (ion counts / leaflet")+
+  xlab("Type-VI trichome-density class")+
   my.theme
 
-ggsave(file = "Figure_2/plots/type-VI_class_vs_zingiberene.svg", plot = p.box, width = 3, height = 3)
+ggsave(file = "Figure_2/plots/type-VI_class_vs_zingiberene.svg", plot = p.box, width = 4, height = 3)
+
+##############
+# Statistics #
+##############
+
+aov_class = aov(log(df2$zingiberene) ~ as.factor(df2$sum_type_VI))
+summary(aov_class)
+TK = TukeyHSD(aov_class)
+significant_groups = multcompLetters(TK$`as.factor(df2$sum_type_VI)`[,4])
 
 # Barplot
 sum = summarySE(df2, measurevar = "zingiberene", groupvars = "sum_type_VI")
@@ -89,7 +100,7 @@ df2 %>% filter(!genotype %in% c("PI127826", "CV", "F1")) %>%
   xlab("Trichome class")+
   ylab("Frequence amongst F2 progeny")+
   ggtitle("Distribution of 7-epizingiberen in a F2 population")+
-  theme_bw()
+  my.theme
 
 
 #Calculate binwidth
@@ -117,7 +128,10 @@ ggplot(data = df2, aes(scale(log(df2$zingiberene+1))))+
   #xlim(-3.5, 3.5)+
   xlab("7-epizingiberene / leaflet (log-scaled ion counts)")+
   ylab("Frequence amongst F2 progeny")+
-  ggtitle("Distribution of 7-epizingiberen in a F2 population")
+  my.theme
+
+ggsave(file = "Figure_2/plots/zingiberene_full_F2_histogram.svg", plot = p.zingiberene.fullF2, width = 4, height = 3)
+
  
 
 zingi.lw.scaled = approxfun(density(scale(log(df2$zingiberene+1))))
