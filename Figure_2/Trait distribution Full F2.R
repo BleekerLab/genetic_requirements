@@ -1,23 +1,28 @@
 library(tidyverse)
 library(RColorBrewer)
 # load data
-trichomes = read.csv(file= "/Users/Ruy/Documents/Zingiberene & Derivatives/Large F2 EZ/Trichomes/type_VI_trichomes_full_F2.csv", header = T, stringsAsFactors = T)
-volatiles = read.csv(file = "/Users/Ruy/Documents/Zingiberene & Derivatives/Large F2 EZ/Volatiles EZ (full F2)/R analysis/GCMS_Leafwash_Full_F2_EZ.csv", header = T, stringsAsFactors = T)
-homo = read.csv(file = "/Users/Ruy/Documents/Zingiberene & Derivatives/Large F2 EZ/Trichomes/homozygous_ZGB_genotypes_F2.csv", header = T, stringsAsFactors = T)
-volatiles_VI = read.csv(file = "/Users/Ruy/Documents/Zingiberene & Derivatives/Large F2 EZ/Volatiles UvA/type_VI_gland_terpenes_F2.csv", header = T, stringsAsFactors = T)
-volatiles.homo = left_join(homo, volatiles, by = "genotype")
-volatiles.homo.trichomes = inner_join(volatiles.homo, trichomes)
-volatiles.homo.trichomes$genotype = as.factor(volatiles.homo.trichomes$genotype)
-df = volatiles.homo.trichomes
+trichomes = read.csv(file= "Figure_2/type_VI_trichomes_full_F2.csv", header = T, stringsAsFactors = T)
+volatiles = read.csv(file = "Figure_2/GCMS_Leafwash_Full_F2_EZ.csv", header = T, stringsAsFactors = T)
+homo = read.csv(file = "Figure_2/homozygous_ZGB_genotypes_F2.csv", header = T, stringsAsFactors = T)
+volatiles_VI = read.csv(file = "Figure_2/type_VI_gland_terpenes_F2.csv", header = T, stringsAsFactors = T)
 
-acylsugars = trichomes = read.csv(file= "/Users/Ruy/Documents/Zingiberene & Derivatives/Large F2 EZ/Acylsugar measurments/20170408_Corrected emission all.csv", header = T, stringsAsFactors = T)
+# Take only the volatile data from plants homozygous for zFPS/ZIS + P450
+volatiles.homo = left_join(homo, volatiles, by = "genotype")
+
+# Include the trichome couting data
+df = inner_join(volatiles.homo, trichomes)
+df$genotype = as.factor(df$genotype)
+
+acylsugars = trichomes = read.csv(file= "Figure_2/20170408_Corrected emission all.csv", header = T, stringsAsFactors = T)
 
 ###########
 #Trichomes #
 ############
-sum_type_VI = df %>% dplyr::group_by(genotype) %>% dplyr::summarise(., sum_type_VI = sum(type_VI))
-sum_type_VI = inner_join(sum_type_VI, volatiles) 
-df2 = sum_type_VI %>% filter(., !sum_type_VI %in% c("11","12", "13", "14"))
+
+# Take the sum of abaxial / adaxial sites and join volatile data
+type_VI_ab_ad = df %>% dplyr::group_by(genotype) %>% dplyr::summarise(., sum_type_VI = sum(type_VI))
+type_VI_ab_ad = inner_join(type_VI_ab_ad, volatiles) 
+df2 = type_VI_ab_ad %>% filter(., !sum_type_VI %in% c("11","12", "13", "14")) # remove mistakes in trichome counting (i.e. a class can not exceed 10)
 
 #Boxplot
 df2$sum_type_VI = as.numeric(df2$sum_type_VI)
