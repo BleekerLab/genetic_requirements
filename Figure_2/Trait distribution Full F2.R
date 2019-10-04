@@ -56,7 +56,7 @@ ggplot(df2, aes(x = df2$sum_type_VI, y = df2$zingiberene))+
   ylab("7-epizingiberene (ion counts / leaflet")+
   my.theme
 
-ggsave(file = "Figure_2/plots/type-VI_class_vs_zingiberene.svg", plot = p.box, width = 3, height = 4)
+ggsave(file = "Figure_2/plots/type-VI_class_vs_zingiberene.svg", plot = p.box, width = 3, height = 3)
 
 # Barplot
 sum = summarySE(df2, measurevar = "zingiberene", groupvars = "sum_type_VI")
