@@ -8,7 +8,7 @@ library(Rmisc)
 
 my.theme = 
   theme(text = element_text(),
-        axis.text.x = element_text(size = 8, angle = 45, hjust = 1, colour = "black"),
+        axis.text.x = element_text(size = 7, angle = 45, hjust = 1, colour = "black"),
         axis.text.y = element_text(size = 8, colour = "black"), 
         strip.background = element_blank(),
         panel.grid.major = element_blank(),
@@ -30,54 +30,54 @@ trichomes = read.csv(file = "Figure_3/trichome_density_F2_selection.csv", header
 # Zingiberene per type- VI#
 ###########################
 
-volatiles_VI %>% select(., genotype, total_volatiles) %>% filter(genotype %in% c("cultivar", "PI127826","F1")) %>% dplyr::group_by(.,genotype) %>% dplyr::summarise(.,  mean = mean(total_volatiles), se = sd(total_volatiles)/3)
+# Calculate the mean / sd of the volatiles and write to file
 
-#p.hist = 
-volatiles_VI %>% filter(!genotype %in% c("PI127826", "CV", "F1")) %>% select(., zingiberene) %>%
-ggplot(., aes(log(zingiberene+1)))+
-  stat_bin(binwidth = .1, colour = "grey")+
-  #geom_freqpoly(binwidth = 0.5, colour = "red")+
-  #xlim()+
-  xlab("7-epizingiberene / type-VI trichome (log-scaled ion counts)")+
-  ylab("Frequence amongst F2 progeny")+
-  ggtitle("Distribution of 7-epizingiberen")+
-theme_bw()
+write.table(volatiles_VI %>% dplyr::group_by(.,genotype) %>% dplyr::summarise_at(c(3,4,5,6,7,8), funs(mean, sd)),
+            file = "Figure_3/mean_volatiles_type_VI_glands.tsv", row.names = F, sep = "\t", dec = ".")
 
-sum.volatiles = summarySE(volatiles_VI, measurevar = "total_volatiles", groupvars = c("genotype"))
 
+# Summarise data and make a barplot
+sum.volatiles = summarySE(volatiles_VI, measurevar = "total_volatiles", groupvars = c("genotype", "group"))
+
+p.volatiles = 
 ggplot(sum.volatiles, x = reorder(genotype, -total_volatiles), y = total_volatiles)+
-  geom_bar(stat = "identity", aes(x =reorder(genotype, -total_volatiles), y = total_volatiles, fill = genotype))+
+  geom_bar(stat = "identity", aes(x =reorder(genotype, -total_volatiles), y = total_volatiles, fill = group))+
   geom_errorbar(aes(x = genotype, ymin = total_volatiles - se, ymax = total_volatiles + se))+
-  my.theme
+  scale_fill_manual(values = c("gray28", "lightgrey", "gray52", "black"))+
+  xlab(NULL)+
+  ylab("Summed terpenes (ng / type-VI trichome)")+
+  my.theme + theme(legend.position = "none")
+
+ggsave("Figure_3/barplot_total_volatiles_type_VI.svg", plot = p.volatiles, height = 4, width = 7)
 
 
+###############################
+# Distribution of zinigberene #
+###############################
 
-
-###### Log scaled distribution of zinigberene in trichome type-VI head cells ###
 
 #make the density function of the data
 #scaled
 zingi.scaled = approxfun(density(scale(log(volatiles_VI$total_volatiles+1))))
 
 #log
+
 vol.log = approxfun(density((log(volatiles_VI$total_volatiles+1))))
+pdf("Figure_3/F2_volatiles_type_VI_density_plot.pdf") 
 plot(vol.log, xlim = c(-1.5,4.5), xlab = "scaled zingiberene content / type-VI trichome", ylab = "proportion of the F2 population")
 abline(v = log(17.7+1)) # mean PI127826
 abline(v = log(0.51+1)) # mean CV
 abline(v = log(0.9 +1)) # mean F1
+dev.off()
 
 #Calculate the area's of the function: integrate(funtion, xmin, xmax)
 integrate(zingi.scaled, -2.6,0.91)
 
 #plot the data
 
-pdf("/Users/Ruy/Documents/Zingiberene & Derivatives/Large F2 EZ/F2_volatiles_type_VI_density.pdf") 
-p.density = plot(zingi.scaled, xlim = c(-3,3), xlab = "scaled zingiberene content / type-VI trichome", ylab = "proportion of the F2 population")
-abline(v = 0.5) # line at 66%
-abline(v = 0.91)#line at 75 %
-abline(v=-0.85)
 
-ggsave("/Users/Ruy/Documents/Zingiberene & Derivatives/Large F2 EZ/F2_volatiles_type_VI_histogram.pdf", plot = p.hist, height = 6, width = 6)
+
+
 ggsave("/Users/Ruy/Documents/Zingiberene & Derivatives/Large F2 EZ/F2_zingiberene_full_set_histogram.pdf", plot = p.zingiberene.fullF2, height = 6, width = 6)
 ggsave("/Users/Ruy/Documents/Zingiberene & Derivatives/Large F2 EZ/F2_trichome_class_full_set_histogram.pdf", plot = p.trichomes, height = 6, width = 6)
 ggsave("/Users/Ruy/Documents/Zingiberene & Derivatives/Large F2 EZ/F2_trichome_class_vs_zingiberene.pdf", plot = p.density.class.zingiberene, height = 6, width = 10)
