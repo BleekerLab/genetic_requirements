@@ -7,7 +7,7 @@ library(multcompView)
 
 my.theme = 
   theme(text = element_text(),
-        axis.text.x = element_text(size = 8, colour = "black"),
+        axis.text.x = element_text(size = 1, colour = "black"),
         axis.text.y = element_text(size = 8, colour = "black"), 
         strip.background = element_blank(),
         panel.grid.major = element_blank(),
@@ -144,53 +144,26 @@ abline(v = 0.75)
 z.log = approxfun(density(log(df2$zingiberene+1)))
 plot(z.log, xlim= c(0,20))
 
+###################
+# Stacked barplot #
+###################
 
+volatiles.long = gather(volatiles,
+                        key = "metabolite",
+                        value = "value",
+                        -sample, -genotype, -group)
 
-########################### 
-# Zingiberene per type- VI#
-###########################
-
-volatiles_VI %>% select(., genotype, total_volatiles) %>% filter(genotype %in% c("cultivar", "PI127826","F1")) %>% dplyr::group_by(.,genotype) %>% dplyr::summarise(.,  mean = mean(total_volatiles), se = sd(total_volatiles)/3)
-
-p.hist = 
-volatiles_VI %>% filter(!genotype %in% c("PI127826", "CV", "F1")) %>% select(., zingiberene) %>%
-ggplot(., aes(scale(log(zingiberene+1))))+
-  stat_bin(binwidth = .5, colour = "grey")+
-  #geom_freqpoly(binwidth = 0.5, colour = "red")+
-  #xlim()+
-  xlab("7-epizingiberene / type-VI trichome (log-scaled ion counts)")+
-  ylab("Frequence amongst F2 progeny")+
-  ggtitle("Distribution of 7-epizingiberen")+
-theme_bw()
-
-###### Log scaled distribution of zinigberene in trichome type-VI head cells ###
-
-#make the density function of the data
-#scaled
-zingi.scaled = approxfun(density(scale(log(volatiles_VI$total_volatiles+1))))
-
-#log
-vol.log = approxfun(density((log(volatiles_VI$total_volatiles+1))))
-plot(vol.log, xlim = c(-1,5), xlab = "scaled zingiberene content / type-VI trichome", ylab = "proportion of the F2 population")
-abline(v = log(17.7+1)) # mean PI127826
-abline(v = log(0.51+1)) # mean CV
-abline(v = log(0.9 +1)) # mean F1
-
-#Calculate the area's of the function: integrate(funtion, xmin, xmax)
-integrate(zingi.scaled, -2.6,0.91)
-
-#plot the data
-
-pdf("/Users/Ruy/Documents/Zingiberene & Derivatives/Large F2 EZ/F2_volatiles_type_VI_density.pdf") 
-p.density = plot(zingi.scaled, xlim = c(-3,3), xlab = "scaled zingiberene content / type-VI trichome", ylab = "proportion of the F2 population")
-abline(v = 0.5) # line at 66%
-abline(v = 0.91)#line at 75 %
-abline(v=-0.85)
-
-ggsave("/Users/Ruy/Documents/Zingiberene & Derivatives/Large F2 EZ/F2_volatiles_type_VI_histogram.pdf", plot = p.hist, height = 6, width = 6)
-ggsave("/Users/Ruy/Documents/Zingiberene & Derivatives/Large F2 EZ/F2_zingiberene_full_set_histogram.pdf", plot = p.zingiberene.fullF2, height = 6, width = 6)
-ggsave("/Users/Ruy/Documents/Zingiberene & Derivatives/Large F2 EZ/F2_trichome_class_full_set_histogram.pdf", plot = p.trichomes, height = 6, width = 6)
-ggsave("/Users/Ruy/Documents/Zingiberene & Derivatives/Large F2 EZ/F2_trichome_class_vs_zingiberene.pdf", plot = p.density.class.zingiberene, height = 6, width = 10)
+volatiles.long$metabolite = factor(volatiles.long$metabolite, levels = c("B_phellandrene", "carene", "caryophyllene", "elemene", "ocymene", "pinene", "zingiberene", "zingiberenol", "epoxy-zingiberenol",
+                                                                         ordered = TRUE))
+p.bar = 
+ggplot(volatiles.long)+
+  geom_bar(stat = "identity", aes(x = reorder(genotype, -value,sum), y = value, fill = metabolite))+
+  scale_fill_manual(values = c("grey", "grey","grey", "grey","grey", "grey","black", "black","black"))+
+  my.theme +
+  ylab("Summed volatiles (ion counts / leaflet)")+
+  xlab("F2 progeny")
+  
+ggsave("Figure_S3/Barplot_volatiles_Full_F2.svg", plot = p.bar, height = 4, width = 12)
 
 ##############
 # Acylsugars #
