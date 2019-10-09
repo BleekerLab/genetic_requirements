@@ -42,6 +42,7 @@ ggplot(df.fold.change, aes(x = log2FoldChange, y = -log(padj)))+
   my.theme
 
 ggsave(file = "Figure_1/Deseq_analysis/plots/Volacano_p_001.svg", plot = p.volcano, height = 4, width = 4)
+ggsave(file = "Figure_1/Deseq_analysis/plots/Volacano_p_001.png", plot = p.volcano, height = 4, width = 4)
 
 ##########################
 # Plot significant genes #
