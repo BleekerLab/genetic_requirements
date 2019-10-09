@@ -62,7 +62,7 @@ sum  %>% filter(type == "type_VI") %>%
        y = "Leaf-trichome desity (trichomes/mm2)")
 
 p.all =
-  sum  %>% filter(!type == "type_VI") %>%
+  sum  %>% filter(!type == "type_VI") %>% filter(!type == "sum_glandular") %>% 
   ggplot(., aes(x = genotype,
                 y = density_mm2)) +
   geom_bar(aes(x = genotype, y = density_mm2), stat = "identity", fill = "black")+
