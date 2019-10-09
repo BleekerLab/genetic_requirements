@@ -11,7 +11,7 @@ library(rcompanion)
 
 my.theme = 
   theme(text = element_text(),
-        axis.text.x = element_text(size = 8, angle = 30, hjust = 1, colour = "black"), 
+        axis.text.x = element_text(size = 8, colour = "black"), 
         strip.background = element_blank(),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
@@ -36,55 +36,40 @@ df =
          value = "density_mm2",
          -genotype, - plant, -surface, -leafdisc, - date, -person)
 
-df.wide = 
-  spread(data = df,
-         key = "surface",
-         value = "density_mm2")
 
-#Calculate avarage of ab/adaxial
-df.wide$ab_ad = (df.wide$abaxial + df.wide$adaxial)/2
-df.wide[is.na(df.wide)] = 0
+# Summerise different types of trichomes (Average of adaxial / abaxial side)
+# First over the leafdisc
+df.mean.leafdisc = as.data.frame(df %>% dplyr::group_by(genotype, plant, surface, type) %>% dplyr::summarise(density_mm2 = mean(density_mm2)))
 
-df.long = 
-  gather(data = df.wide,
-         key = "surface",
-         value = "density_mm2",
-         -genotype, - plant, -type, -leafdisc, - date, -person)
-df.long$genotype = factor(df.long$genotype, 
-                     levels = c("Cultivar", "PI127826", "F1", "PI127826 x LA1777", "LA1777"),
-                     ordered = TRUE)
+# Summarise over the genotypes
+sum = summarySE(df.mean.leafdisc, measurevar = "density_mm2", groupvars = c("genotype", "surface", "type"))
+sum$genotype = factor(sum$genotype, 
+                          levels = c("Cultivar", "PI127826", "F1", "PI127826 x LA1777", "LA1777"),
+                          ordered = TRUE)
 
+sum$surface = factor(sum$surface, levels = c("adaxial", "abaxial"), ordered = TRUE)
 
-#calculate averages over the two leafdiscs
-se <- function(x) sd(x)/sqrt(length(x))
-df.avg.leafdisc = df.long %>% dplyr::group_by(., genotype, plant, type, surface) %>% 
-  dplyr::summarize(avg_value = mean(density_mm2), se = se(density_mm2)) %>% filter(., type != "sum_glandular")
-
-#Calculate averages + se  over the genotypes
-df.avg.genotype = df.avg.leafdisc %>% filter(., type %in% c("non_glandular", "type_I_IV", "type_VI")) %>% filter(., surface %in% c("adaxial", "abaxial")) %>%
-  summarySE(., measurevar = "avg_value", groupvars = c("genotype", "type", "surface"))
-
-# Plot the different types of trichomes (Average of adaxial / abaxial side)
-p.all = 
-df.avg.genotype %>%   
-ggplot(., aes(x = genotype,
-              y = avg_value)) +
-  geom_bar(aes(x = genotype, y = avg_value), stat = "identity", fill = "black")+
-  geom_errorbar(aes(x = genotype, ymin = avg_value - se, ymax = avg_value+se), width = 0.2)+
-  facet_grid(type~surface, scale = "free")+
+# Plot only type-VI trichomes (Average of abaxial / adaxial side)
+p.type_VI =
+sum  %>% filter(type == "type_VI") %>%
+  ggplot(., aes(x = genotype,
+                y = density_mm2)) +
+  geom_bar(aes(x = genotype, y = density_mm2), stat = "identity", fill = "black")+
+  geom_errorbar(aes(x = genotype, ymin = density_mm2 - se, ymax = density_mm2+se), width = 0.2)+
+  facet_wrap(~surface, scale = "free", ncol = 1)+
   my.theme +
   labs(x = NULL,
        y = "Leaf-trichome desity (trichomes/mm2)")
 
-# Plot only type-VI trichomes (Average of abaxial / adaxial side)
-p.type_VI =
-df.avg.genotype %>% filter(type == "type_VI") %>%
+p.all =
+  sum  %>% filter(!type == "type_VI") %>%
   ggplot(., aes(x = genotype,
-                y = avg_value)) +
-  geom_bar(aes(x = genotype, y = avg_value), stat = "identity", fill = "black")+
-  geom_errorbar(aes(x = genotype, ymin = avg_value - se, ymax = avg_value+se), width = 0.2)+
-  facet_wrap(~surface, scale = "free", ncol = 1)+
+                y = density_mm2)) +
+  geom_bar(aes(x = genotype, y = density_mm2), stat = "identity", fill = "black")+
+  geom_errorbar(aes(x = genotype, ymin = density_mm2 - se, ymax = density_mm2+se), width = 0.2)+
+  facet_grid(surface~type, scale = "free")+
   my.theme +
+  theme(axis.text.x = element_text(size = 6, angle = 45, hjust = 1,  colour = "black"))+
   labs(x = NULL,
        y = "Leaf-trichome desity (trichomes/mm2)")
 
@@ -101,7 +86,7 @@ ggsave(file = "Figure_1_F1_phenotypes/plots/type_VI_densities_F1.svg", plot = p.
 #function for easy comparisons of types / surface
 test = function(x, y, z) {
   {x.sub = x %>% filter(type == y) %>% filter(surface == z)} #subsets the dataset
-  {will = pairwise.wilcox.test(x.sub$avg_value, x.sub$genotype, p.adjust.method = "none")} #wilcox test
+  {will = pairwise.wilcox.test(x.sub$density_mm2, x.sub$genotype, p.adjust.method = "none")} #wilcox test
   {letters_sig = multcompLetters(fullPTable(will$p.value), #compare the groups
                                  compare = "<",
                                  threshold = 0.05)}
@@ -113,13 +98,13 @@ test = function(x, y, z) {
 
 # Calculate the statistics in a list called 'stats'
 stats = list(
-type_VI_abaxial = test(df.avg.leafdisc, "type_VI", "abaxial"),
-type_VI_adaxial = test(df.avg.leafdisc, "type_VI", "adaxial"),
+type_VI_abaxial = test(df.mean.leafdisc, "type_VI", "abaxial"),
+type_VI_adaxial = test(df.mean.leafdisc, "type_VI", "adaxial"),
 
-type_I_IV_abaxial = test(df.avg.leafdisc, "type_I_IV", "abaxial"),
-type_I_IV_adaxial = test(df.avg.leafdisc, "type_I_IV", "adaxial"),
+type_I_IV_abaxial = test(df.mean.leafdisc, "type_I_IV", "abaxial"),
+type_I_IV_adaxial = test(df.mean.leafdisc, "type_I_IV", "adaxial"),
 
-type_non_glandular_abaxial = test(df.avg.leafdisc, "non_glandular", "abaxial"),
-type_non_glandular_adaxial = test(df.avg.leafdisc, "non_glandular", "adaxial")
+type_non_glandular_abaxial = test(df.mean.leafdisc, "non_glandular", "abaxial"),
+type_non_glandular_adaxial = test(df.mean.leafdisc, "non_glandular", "adaxial")
 )
 print(stats)
