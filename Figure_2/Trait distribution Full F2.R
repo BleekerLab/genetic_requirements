@@ -7,7 +7,7 @@ library(multcompView)
 
 my.theme = 
   theme(text = element_text(),
-        axis.text.x = element_text(size = 1, colour = "black"),
+        axis.text.x = element_text(size = 8, colour = "black"),
         axis.text.y = element_text(size = 8, colour = "black"), 
         strip.background = element_blank(),
         panel.grid.major = element_blank(),
@@ -59,6 +59,24 @@ ggplot(df2, aes(x = df2$sum_type_VI, y = df2$zingiberene))+
   my.theme
 
 ggsave(file = "Figure_2/plots/type-VI_class_vs_zingiberene.svg", plot = p.box, width = 4, height = 3)
+
+
+
+### Supplemental:  highlighting the selected lines ####
+df.parsed  = na.omit(left_join(volatiles_VI, df2, by = "genotype"))
+
+p.box.highlight.subset = 
+  ggplot(df2, aes(x = df2$sum_type_VI, y = df2$zingiberene))+
+  geom_boxplot(aes(x = as.factor(df2$sum_type_VI), y = df2$zingiberene), fill = "grey", outlier.size = 0.5)+
+  geom_point(aes(x = as.factor(df2$sum_type_VI), y = df2$zingiberene),size = 0.5)+
+  geom_jitter(data = df.parsed, aes(x = na.omit(sum_type_VI)-1, y = zingiberene.y), color = "red", width = .05)+
+    ylim(0,500000)+
+  xlab(NULL)+
+  ylab("7-epizingiberene (ion counts / leaflet)")+
+  xlab("Type-VI trichome-density class")+
+  my.theme
+
+ggsave(file = "Figure_2/plots/type-VI_class_vs_zingiberene_highlight_subset.svg", plot = p.box.highlight.subset, width = 4, height = 4)
 
 ##############
 # Statistics #
