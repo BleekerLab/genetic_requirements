@@ -76,7 +76,7 @@ p.all =
 ###############
 # Print plots #
 ###############
-ggsave(file = "Figure_1_F1_phenotypes/plots/trichome_densities_F1.svg", plot = p.all, height = 12, width = 10)
+ggsave(file = "Figure_1_F1_phenotypes/plots/trichome_densities_F1.svg", plot = p.all, height = 8, width = 10)
 ggsave(file = "Figure_1_F1_phenotypes/plots/type_VI_densities_F1.svg", plot = p.type_VI, height = 8, width = 5)
 
 #############
