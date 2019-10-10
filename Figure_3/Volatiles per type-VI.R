@@ -75,19 +75,22 @@ integrate(zingi.scaled, -2.6,0.91)
 
 #plot the data
 
-
-
-
-ggsave("/Users/Ruy/Documents/Zingiberene & Derivatives/Large F2 EZ/F2_zingiberene_full_set_histogram.pdf", plot = p.zingiberene.fullF2, height = 6, width = 6)
-ggsave("/Users/Ruy/Documents/Zingiberene & Derivatives/Large F2 EZ/F2_trichome_class_full_set_histogram.pdf", plot = p.trichomes, height = 6, width = 6)
-ggsave("/Users/Ruy/Documents/Zingiberene & Derivatives/Large F2 EZ/F2_trichome_class_vs_zingiberene.pdf", plot = p.density.class.zingiberene, height = 6, width = 10)
-
 ##############
 # Statistics #
 ##############
 
-aov_class = aov(log(df2$zingiberene) ~ as.factor(df2$sum_type_VI))
-summary(aov_class)
-TK = TukeyHSD(aov_class)
-significant_groups = multcompLetters(TK$`as.factor(df2$sum_type_VI)`[,4])
-  
+sum.volatiles$total_volatiles = as.integer(sum.volatiles$total_volatiles)
+glm(data=sum.volatiles, total_volatiles ~ genotype, family = poisson(link = "log"))
+
+coefs = as.data.frame(summary(fit)$coefficients)
+colnames(coefs)=c("coeff","stderr","zval","pval")
+coefs$genotype = row.names(coefs$genotype)
+coefs$genotype= sub("^genotype",replacement = "",x = row.names(coefs))
+coefs$genotype[1] = "Intercept"
+
+coefs$text = NA
+coefs[which(coefs$pval > 0.05),]$text <- "ns"
+coefs[which(coefs$pval < 0.05),]$text <- "***"
+
+write.table(coefs,file = "Figure_3/GLM_type_VI_volatiles.tsv",sep = "\t",quote = F,row.names = F)
+
