@@ -8,7 +8,7 @@ library(multcompView)
 my.theme = 
   theme(text = element_text(),
         axis.text.x = element_text(size = 8, colour = "black"),
-        axis.text.y = element_text(size = 8, colour = "black"), 
+        axis.text.y = element_text(size = 8, colour = "black"),
         strip.background = element_blank(),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
@@ -23,15 +23,18 @@ my.theme =
 #############
 
 trichomes = read.csv(file= "Figure_2/type_VI_trichomes_full_F2.csv", header = T, stringsAsFactors = T)
-volatiles = read.csv(file = "Figure_2/GCMS_Leafwash_Full_F2_EZ.csv", header = T, stringsAsFactors = T, check.names = F)
+volatiles = read.csv(file = "Figure_2/GCMS_Leafwash_Full_F2_EZ_clean_data.csv", header = T, stringsAsFactors = T, check.names = F)
 homo = read.csv(file = "Figure_2/homozygous_ZGB_genotypes_F2.csv", header = T, stringsAsFactors = T)
 volatiles_VI = read.csv(file = "Figure_2/type_VI_gland_terpenes_F2.csv", header = T, stringsAsFactors = T, check.names = F)
 
 # Take only the volatile data from plants homozygous for zFPS/ZIS + P450
 volatiles.homo = left_join(homo, volatiles, by = "genotype")
+volatiles.homo = volatiles.homo[complete.cases(volatiles.homo), ] # Remove rows with NA values
+volatiles.parents = volatiles %>% filter(., group != "F2") #subset parents from original data
+volatiles = full_join(volatiles.homo, volatiles.parents) # join homozygous F2 plants with parents
 
 # Include the trichome couting data
-df = inner_join(volatiles.homo, trichomes)
+df = inner_join(volatiles, trichomes)
 df$genotype = as.factor(df$genotype)
 
 acylsugars = trichomes = read.csv(file= "Figure_2/20170408_Corrected emission all.csv", header = T, stringsAsFactors = T)
@@ -150,8 +153,52 @@ ggplot(data = df2, aes(scale(log(df2$zingiberene+1))))+
 
 ggsave(file = "Figure_2/plots/zingiberene_full_F2_histogram.svg", plot = p.zingiberene.fullF2, width = 4, height = 3)
 
- 
+# Frequency discribution of zgb
 
+p.F2 = 
+  volatiles %>% filter(., group == "F2") %>%
+  ggplot(., aes(x = zingiberene))+
+  stat_bin(binwidth = 100000, colour = "black", fill = "black") +
+  #facet_grid(~group) +
+  xlim(-100000,2500000)+
+  my.theme  + theme(legend.position = "none", axis.title.y = element_blank(), axis.title.x = element_blank()) 
+
+p.F1 =
+  volatiles %>% filter(., group == "F1") %>%
+  ggplot(., aes(x = zingiberene))+
+  stat_bin(binwidth = 100000, colour = "black", fill = "gray53") +
+  #facet_grid(~group) +
+  xlim(-100000,2500000)+
+  my.theme  + theme(legend.position = "none", axis.title.y = element_blank(), axis.title.x = element_blank()) 
+
+p.cultivar =
+  volatiles %>% filter(., group == "cultivar") %>%
+  ggplot(., aes(x = zingiberene))+
+  stat_bin(binwidth = 100000, colour = "black", fill = "gray76") +
+  #facet_grid(~group) +
+  xlim(-100000,2500000)+
+  my.theme  + theme(legend.position = "none", axis.title.y = element_blank(), axis.title.x = element_blank()) 
+
+p.PI127826 =
+  volatiles %>% filter(., group == "PI127826") %>%
+  ggplot(., aes(x = zingiberene))+
+  stat_bin(binwidth = 100000, colour = "black", fill = "gray30") +
+  #facet_grid(~group) +
+  xlim(-100000,2500000)+
+  my.theme  + theme(legend.position = "none", axis.title.y = element_blank(), axis.title.x = element_blank()) 
+
+p.all = grid.arrange(p.cultivar, p.F1,p.PI127826,p.F2, ncol = 1)
+
+ggsave("Figure_2/ZGB_distribution_Full_F2.pdf", plot = p.all, height = 12, width = 7)
+
+##############
+# Statistics #
+##############
+
+PI = volatiles %>% filter(., group == "PI127826")
+summary(PI)
+
+#######################
 zingi.lw.scaled = approxfun(density(scale(log(df2$zingiberene+1))))
 integrate(zingi.lw.scaled, -4.4,0.75)
 
