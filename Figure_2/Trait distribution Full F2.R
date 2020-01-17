@@ -53,9 +53,10 @@ df2 = type_VI_ab_ad %>% filter(., !sum_type_VI %in% c("11","12", "13", "14")) # 
 ##########################################
 p.box = 
 ggplot(df2, aes(x = df2$sum_type_VI, y = df2$zingiberene))+
-  geom_boxplot(aes(x = as.factor(df2$sum_type_VI), y = df2$zingiberene), fill = "grey", outlier.size = 0.5)+
-  geom_point(aes(x = as.factor(df2$sum_type_VI), y = df2$zingiberene),size = 0.5)+
-  ylim(NA, 500000)+
+  #geom_boxplot(aes(x = as.factor(df2$sum_type_VI), y = df2$zingiberene), fill = "grey", outlier.size = 0.5)+
+  geom_jitter(aes(x = as.factor(df2$sum_type_VI), y = df2$zingiberene),size = 0.5)+
+  #geom_smooth(method = "lm")+
+  ylim(NA, 100000)+
   xlab(NULL)+
   ylab("7-epizingiberene (ion counts / leaflet")+
   xlab("Type-VI trichome-density class")+
@@ -63,7 +64,8 @@ ggplot(df2, aes(x = df2$sum_type_VI, y = df2$zingiberene))+
 
 ggsave(file = "Figure_2/plots/type-VI_class_vs_zingiberene.svg", plot = p.box, width = 4, height = 3)
 
-
+model= polym(formula = zingiberene~sum_type_VI, data = df2, Hess = TRUE)
+summary(model)
 
 ### Supplemental:  highlighting the selected lines ####
 df.parsed  = na.omit(left_join(volatiles_VI, df2, by = "genotype"))
