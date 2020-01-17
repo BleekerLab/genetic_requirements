@@ -160,7 +160,7 @@ p.F2 =
   ggplot(., aes(x = zingiberene))+
   stat_bin(binwidth = 100000, colour = "black", fill = "black") +
   #facet_grid(~group) +
-  xlim(-100000,2500000)+
+  xlim(-100000,1500000)+
   my.theme  + theme(legend.position = "none", axis.title.y = element_blank(), axis.title.x = element_blank()) 
 
 p.F1 =
@@ -168,7 +168,7 @@ p.F1 =
   ggplot(., aes(x = zingiberene))+
   stat_bin(binwidth = 100000, colour = "black", fill = "gray53") +
   #facet_grid(~group) +
-  xlim(-100000,2500000)+
+  xlim(-100000,1500000)+
   my.theme  + theme(legend.position = "none", axis.title.y = element_blank(), axis.title.x = element_blank()) 
 
 p.cultivar =
@@ -176,7 +176,7 @@ p.cultivar =
   ggplot(., aes(x = zingiberene))+
   stat_bin(binwidth = 100000, colour = "black", fill = "gray76") +
   #facet_grid(~group) +
-  xlim(-100000,2500000)+
+  xlim(-100000,1500000)+
   my.theme  + theme(legend.position = "none", axis.title.y = element_blank(), axis.title.x = element_blank()) 
 
 p.PI127826 =
@@ -184,12 +184,33 @@ p.PI127826 =
   ggplot(., aes(x = zingiberene))+
   stat_bin(binwidth = 100000, colour = "black", fill = "gray30") +
   #facet_grid(~group) +
-  xlim(-100000,2500000)+
+  xlim(-100000,1500000)+
   my.theme  + theme(legend.position = "none", axis.title.y = element_blank(), axis.title.x = element_blank()) 
 
 p.all = grid.arrange(p.cultivar, p.F1,p.PI127826,p.F2, ncol = 1)
 
-ggsave("Figure_2/ZGB_distribution_Full_F2.pdf", plot = p.all, height = 12, width = 7)
+p.F2.insert = 
+  volatiles %>% filter(., group == "F2") %>%
+  ggplot(., aes(x = zingiberene))+
+  stat_bin(binwidth = 100000, colour = "black", fill = "black") +
+  #facet_grid(~group) +
+  xlim(100000,2500000)+
+  ylim(0,10)+
+  theme(text = element_text(),
+        axis.text.x = element_text(size = 6, colour = "black"),
+        axis.text.y = element_text(size = 4, colour = "black"),
+        strip.background = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(),
+        panel.background = element_rect(fill = NA, color = "black"),
+        strip.text.x = element_text(size=8, colour = "black")
+  )+
+  theme_bw()+
+  theme(legend.position = "none", axis.title.y = element_blank(), axis.title.x = element_blank()) 
+
+ggsave("Figure_2/ZGB_distribution_Full_F2.pdf", plot = p.all, height = 6, width = 3.5)
+ggsave("Figure_2/F2-insert.pdf", plot = p.F2.insert, height = 1, width = 2)
 
 ##############
 # Statistics #
