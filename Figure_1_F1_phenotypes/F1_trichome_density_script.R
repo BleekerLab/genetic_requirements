@@ -11,7 +11,8 @@ library(rcompanion)
 
 my.theme = 
   theme(text = element_text(),
-        axis.text.x = element_text(size = 8, colour = "black"), 
+        axis.text.x = element_text(size = 8, colour = "black", angle = 30, hjust = 1),
+        axis.text.y = element_text(size = 8, colour = "black"),
         strip.background = element_blank(),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
@@ -44,7 +45,7 @@ df.mean.leafdisc = as.data.frame(df %>% dplyr::group_by(genotype, plant, surface
 # Summarise over the genotypes
 sum = summarySE(df.mean.leafdisc, measurevar = "density_mm2", groupvars = c("genotype", "surface", "type"))
 sum$genotype = factor(sum$genotype, 
-                          levels = c("Cultivar", "PI127826", "F1", "PI127826 x LA1777", "LA1777"),
+                          levels = c("Cultivar","F1", "PI127826",  "PI127826 x LA1777", "LA1777"),
                           ordered = TRUE)
 
 sum$surface = factor(sum$surface, levels = c("adaxial", "abaxial"), ordered = TRUE)
@@ -56,7 +57,7 @@ sum  %>% filter(type == "type_VI") %>%
                 y = density_mm2)) +
   geom_bar(aes(x = genotype, y = density_mm2), stat = "identity", fill = "black")+
   geom_errorbar(aes(x = genotype, ymin = density_mm2 - se, ymax = density_mm2+se), width = 0.2)+
-  facet_wrap(~surface, scale = "free", ncol = 1)+
+  facet_grid(~surface, scale = "free")+
   my.theme +
   labs(x = NULL,
        y = "Leaf-trichome desity (trichomes/mm2)")
@@ -77,7 +78,7 @@ p.all =
 # Print plots #
 ###############
 ggsave(file = "Figure_1_F1_phenotypes/plots/trichome_densities_F1.svg", plot = p.all, height = 8, width = 10)
-ggsave(file = "Figure_1_F1_phenotypes/plots/type_VI_densities_F1.svg", plot = p.type_VI, height = 8, width = 5)
+ggsave(file = "Figure_1_F1_phenotypes/plots/type_VI_densities_F1.pdf", plot = p.type_VI, width = 9, height = 5.5, units = "cm")
 
 #############
 # Statistic #

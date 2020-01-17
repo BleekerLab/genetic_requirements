@@ -48,7 +48,7 @@ ggplot(., aes(x = genotype, y = abundance)) +
   ylab("Metabolite abundance (ion counts / mg fresh leaf)")+
   xlab(NULL)
 
-ggsave("Figure_1_F1_phenotypes/plots/F1_leafwashes_barplot.pdf", plot = p.leafwash, width = 6, height = 4)
+ggsave("Figure_1_F1_phenotypes/plots/F1_leafwashes_barplot.pdf", plot = p.leafwash, width = 9, height = 5.5, units = "cm")
 
 #check for normality
 shapiro.test(df$total_terpenes) 
