@@ -3,9 +3,23 @@ library(ggbiplot)
 library(Rmisc)
 library(multcompView)
 
+#Theme for plotting
+my.theme = 
+  theme(text = element_text(),
+        axis.text.x = element_text(size = 8, colour = "black", angle = 30, hjust = 1),
+        axis.text.y = element_text(size = 8, colour = "black"),
+        strip.background = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(),
+        panel.background = element_rect(fill = NA, color = "black"),
+        strip.text.x = element_text(size=8, colour = "black")
+  )+
+  theme_bw()
+
 
 #Create_dataframe
-df <- read.delim("Figure_1_F1_phenotypes/20170425_F1s leaf washes_peak area.txt", header = T, sep = "\t", dec = ".")
+df <- read.delim("Figure_1_F1_phenotypes/20170425_F1s leaf washes_peak area.txt", header = T, sep = "\t", dec = ".", check.names = F)
 df$total_terpenes = rowSums(df[,3:ncol(df)]) #make a new column and calculate total terpene ion counts
 
 
@@ -16,7 +30,7 @@ df_long <- gather(df, metabolite, abundance, Bpinene:total_terpenes, -genotype,-
 
 
 #Define variables 
-df_long$genotype <- factor(df_long$genotype, levels = c("CV", "PI127826", "F1", "F1_hab", "LA1777"),
+df_long$genotype <- factor(df_long$genotype, levels = c("CV", "F1", "PI127826",  "F1_hab", "LA1777"),
                               ordered = TRUE)
 
 #summarise data for barplot
@@ -25,16 +39,16 @@ sum = summarySE(df_long, measurevar = "abundance", groupvars = c("genotype", "me
 #### BARPLOT ###
 
 p.leafwash =
-sum %>% filter(., metabolite %in% c("total_terpenes", "X7epizingiberene")) %>%
+sum %>% filter(., metabolite %in% c("total_terpenes", "7epizingiberene")) %>%
 ggplot(., aes(x = genotype, y = abundance)) +
   geom_bar(stat = "identity", color = "black", fill = "black") +
     geom_errorbar(aes(x = genotype, ymin=abundance-se, ymax=abundance+se), width=.2) +
-    my_theme +
+    my.theme +
   facet_grid(~metabolite)+
   ylab("Metabolite abundance (ion counts / mg fresh leaf)")+
   xlab(NULL)
 
-ggsave("Figure_1_F1_phenotypes/plots/F1_leafwashes_barplot.pdf", device = "pdf", scale = 1, width = 10, height = 6)
+ggsave("Figure_1_F1_phenotypes/plots/F1_leafwashes_barplot.pdf", plot = p.leafwash, width = 6, height = 4)
 
 #check for normality
 shapiro.test(df$total_terpenes) 
