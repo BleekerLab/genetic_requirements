@@ -1,6 +1,8 @@
 library(tidyverse)
 library(RColorBrewer)
 library(multcompView)
+library(Rmisc)
+library(FSA)
 #############################
 # Custom theme for plotting #
 #############################
@@ -53,16 +55,16 @@ df2 = type_VI_ab_ad %>% filter(., !sum_type_VI %in% c("11","12", "13", "14")) # 
 ##########################################
 p.box = 
 ggplot(df2, aes(x = df2$sum_type_VI, y = df2$zingiberene))+
-  #geom_boxplot(aes(x = as.factor(df2$sum_type_VI), y = df2$zingiberene), fill = "grey", outlier.size = 0.5)+
-  geom_jitter(aes(x = as.factor(df2$sum_type_VI), y = df2$zingiberene),size = 0.5)+
+  geom_boxplot(aes(x = as.factor(df2$sum_type_VI), y = df2$zingiberene), fill = "grey", outlier.size = 0.5)+
+  geom_jitter(aes(x = as.factor(df2$sum_type_VI), y = df2$zingiberene),size = 0.5, width = 0.2)+
   #geom_smooth(method = "lm")+
-  ylim(NA, 100000)+
+  #ylim(NA, 2000000)+
   xlab(NULL)+
-  ylab("7-epizingiberene (ion counts / leaflet")+
+  ylab("7-epizingiberene (ion counts / leaflet)")+
   xlab("Type-VI trichome-density class")+
   my.theme
 
-ggsave(file = "Figure_2/plots/type-VI_class_vs_zingiberene.svg", plot = p.box, width = 4, height = 3)
+ggsave(file = "Figure_2/plots/type-VI_class_vs_zingiberene.pdf", plot = p.box, width = 4, height = 4)
 
 model= polym(formula = zingiberene~sum_type_VI, data = df2, Hess = TRUE)
 summary(model)
@@ -87,10 +89,36 @@ ggsave(file = "Figure_2/plots/type-VI_class_vs_zingiberene_highlight_subset.svg"
 # Statistics #
 ##############
 
-aov_class = aov(log(df2$zingiberene) ~ as.factor(df2$sum_type_VI))
+#Test for normality
+shapiro.test(df2$zingiberene)
+
+#Kruskal-Wallis test
+kruskal.test(data = df2, zingiberene~sum_type_VI)
+
+#Wilcox test for parewise comparison
+wc = pairwise.wilcox.test(df2$zingiberene, df2$sum_type_VI, p.adjust.method = "BH")
+dt = dunnTest(data = df2, zingiberene ~ sum_type_VI, method = "bh")
+
+#show signficant comparisons from Dunn's test
+sig.groups = dt$res[,c(1,4)] %>% filter(., P.adj < 0.05)
+
+#Multicompletters doesn't work yet on this data output
+#significant_groups = multcompLetters(dt$res[,c(1,4)])
+                                     
+
+
+
+# If it was normally distributed we could do an anova
+df2$sum_type_VI = as.factor(df2$sum_type_VI)
+aov_class = aov(data = df2, zingiberene ~ sum_type_VI)
 summary(aov_class)
 TK = TukeyHSD(aov_class)
-significant_groups = multcompLetters(TK$`as.factor(df2$sum_type_VI)`[,4])
+significant_groups = multcompLetters(TK$sum_type_VI[,4])
+
+
+###############################
+# Distribution of the classes #
+###############################
 
 # Barplot
 sum = summarySE(df2, measurevar = "zingiberene", groupvars = "sum_type_VI")
