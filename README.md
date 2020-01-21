@@ -6,39 +6,26 @@ Codes and data for the figures of the "genetic requirement" paper
 Fig 1. Phenotyping the F1's
 * A) Metabolite levels of F1 + F1-hab + parents in leaf-wash
 * B) Trichome density  F1 + F1-hab + parents
-* C) Whitefly clipcage assay F1 + F1-hab + parents
 
 Fig 2: (A) Distribution volatiles F2
-       (B) Volatiles classes vs 7-epizingiberene
 
-Fig 3: (A) "Selected" F2 lines: Type-VI trichome density VS Metabolite levels per leaf (density adds but does not explain the full phenotype)
-       (B) Distribution head-cells of selected F2
+Fig 3: (A) Trichome-density classes F2 VS zingiberene content
+       (B) Scaterplot volatiles per type/VI gland VS trichome density
 
-Fig 4: (A) Shapes of 'Active' & 'lazy'
-       (B) Selection on 3x"Active" and 3x"Lazy" F2 lines: metabolite levels per head-cell + cavity volume (large cavity size is related to high metabolite levels)
-       (C) WF phenotype Active / Lazy plants
-
-fig extra: relation ZGB quantity (i.e. cavity volume) vs whitefly survival. (predictor for resistance)
+Fig 4: (A) Shapes of 'Active' & 'lazy' storage comparetments
+       (B) Quantification of storage cavities 
+       (C) Fosmidomycin on PI127826 = collapse of storage-cavity
+       
 
 Fig 5: Fosmidomycin / Mevastatin treatment of "Active" / "Lazy" F2 lines + parent (precursor flux is difference between wild and cultivated tomato with more transfer from plastid to cytosol in PI127826)
 
-Fig 6: RNA seq of F1 + F2s. Heatmap of differentially expressed genes active vs. lazy + MapMan figure of MEP/MEV pathway (?) (check comparing only F2 active to F2 lazy). 
+Fig 6: RNA seq of F1 / F2s. Heatmap of MVA / MEP pathway
 
-Fig.7: PLS-DA of RNA-seq data (?)
-
-Fig 8: Allele-specific expressed genes
+Fig.7: Allele-specific expressed genes
 
 Fig S1: All terpenes in F1 (+parents)
 
 Fig S2: Other classes of trichomes in F1
 
-Fig S3: Barplot of 7-epizingiberene in the Full F2
-
-Fig S4: Barplot terpene content per type-VI head cell selected F2s
-
-Fig S5: Acylsugar measurements active/lazy
-
-Fig S6: 
-
-Fig S7: 
+Fig S3: Zingiberene vs caryophyllene/humulene
 
