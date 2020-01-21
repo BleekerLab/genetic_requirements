@@ -8,4 +8,4 @@ Transcriptomic analysis from stem trichomes of the S. lyc parent (elite cultivar
 (C): heatmap of the differentially expressed genes?   
 (D): Overrepresentation analysis (GO / MapMan BINS) of the differentially expressed genes etc.  
 
-![Figure deseq]([./DEseq_analysis/ABC_transporters_heatmap_scaled.png)
+![Figure deseq](./DEseq_analysis/ABC_transporters_heatmap_scaled.png)
