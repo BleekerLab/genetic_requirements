@@ -89,9 +89,9 @@ sig.groups = dt$res[,c(1,4)] %>% filter(., P.adj < 0.05)
 
 
 
-###############################
-# Distribution of the classes #
-###############################
+#########################################
+# Optional: Distribution of the classes #
+#########################################
 
 # Barplot
 sum = summarySE(df2, measurevar = "zingiberene", groupvars = "sum_type_VI")
