@@ -44,13 +44,33 @@ df$genotype = as.factor(df$genotype)
 ################################
 # Shape trichome counting data #
 ################################
-#
-# Take the sum of abaxial / adaxial sites and join volatile data
+
+# Take the sum of abaxial+adaxial surface
 type_VI_ab_ad = df %>% dplyr::group_by(genotype) %>% dplyr::summarise(., sum_type_VI = sum(type_VI))
+
+# Join trichome data with volatile data
 type_VI_ab_ad = inner_join(type_VI_ab_ad, volatiles) 
 
 # remove mistakes in trichome counting (i.e. class can not exceed 10)
-df2 = type_VI_ab_ad %>% filter(., !sum_type_VI %in% c("11","12", "13", "14")) 
+df2 = type_VI_ab_ad %>% filter(., !sum_type_VI %in% c("11","12", "13", "14"))
+
+##########################################
+# Boxplot type-VI density vs zingiberene #
+##########################################
+
+p.box = 
+ggplot(df2, aes(x = df2$sum_type_VI, y = df2$zingiberene))+
+  geom_boxplot(aes(x = as.factor(df2$sum_type_VI), y = df2$zingiberene), fill = "grey", outlier.size = 0.5)+
+  geom_jitter(aes(x = as.factor(df2$sum_type_VI), y = df2$zingiberene),size = 0.5, width = 0.2)+
+  #geom_smooth(method = "lm")+
+  ylim(NA, 2000000)+
+  xlab(NULL)+
+  ylab("7-epizingiberene (ion counts / leaflet)")+
+  xlab("Type-VI trichome-density class")+
+  my.theme
+
+ggsave(file = "Figure_3/plots/type-VI_class_vs_zingiberene.pdf", plot = p.box, width = 4, height = 4)
+
 
 ##############
 # Statistics #
@@ -88,46 +108,11 @@ ggplot(sum, aes(x = sum_type_VI, y = zingiberene))+
   xlab("trichome-density class")+
   theme_bw()
 
-# Class density plot
-classes = approxfun(density(as.numeric(df2$sum_type_VI)))
-plot(classes, xlim = c(1,11))
-hist(as.numeric(df2$sum_type_VI), breaks = 10, xlim = c(1,11))
 
-# histogram No trichomes
-p.trichomes = 
-df2 %>% filter(!genotype %in% c("PI127826", "CV", "F1")) %>%
-  ggplot(., aes(sum_type_VI))+
-  stat_bin(binwidth = 1, colour = "grey")+
-  #geom_freqpoly(binwidth = 0.5, colour = "red")+
-  #xlim()+
-  #scale_x_continuous(breaks= 1) +
-  xlab("Trichome class")+
-  ylab("Frequence amongst F2 progeny")+
-  ggtitle("Distribution of 7-epizingiberen in a F2 population")+
-  my.theme
-
-
-#Calculate binwidth
-2 * IQR(scale(log(df2$epoxy.zingiberenol))) / length(df2$epoxy.zingiberenol)^(1/3)
-
-##########################################
-# Boxplot type-VI density vs zingiberene #
-##########################################
-p.box = 
-ggplot(df2, aes(x = df2$sum_type_VI, y = df2$zingiberene))+
-  geom_boxplot(aes(x = as.factor(df2$sum_type_VI), y = df2$zingiberene), fill = "grey", outlier.size = 0.5)+
-  geom_jitter(aes(x = as.factor(df2$sum_type_VI), y = df2$zingiberene),size = 0.5, width = 0.2)+
-  #geom_smooth(method = "lm")+
-  #ylim(NA, 2000000)+
-  xlab(NULL)+
-  ylab("7-epizingiberene (ion counts / leaflet)")+
-  xlab("Type-VI trichome-density class")+
-  my.theme
-
-ggsave(file = "Figure_2/plots/type-VI_class_vs_zingiberene.pdf", plot = p.box, width = 4, height = 4)
-
-
-### Supplemental:  highlighting the selected lines ####
+#############################################################################################
+# Supplemental ?                                                                            #
+# highlighting the selected lines for individual type-VI gland investigation                #
+#############################################################################################
 df.parsed  = na.omit(left_join(volatiles_VI, df2, by = "genotype"))
 
 p.box.highlight.subset = 
