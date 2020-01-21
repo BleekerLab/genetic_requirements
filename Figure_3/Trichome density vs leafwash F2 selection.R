@@ -64,6 +64,6 @@ ggplot(df.parsed, aes(x=density, y=level)) +
            size = 3)
 
 # Save plot
-ggsave(file = "Figure_3/trichome_density_VS_leafwash.svg", plot = p.scatter, height = 4, width = 4)
+ggsave(file = "Figure_3/trichome_density_VS_leafwash.pdf", plot = p.scatter, height = 5, width = 4)
   
 

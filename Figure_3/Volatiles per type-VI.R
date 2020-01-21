@@ -75,6 +75,31 @@ integrate(zingi.scaled, -2.6,0.91)
 
 #plot the data
 
+##########################
+# Density vs. volatiles #
+#########################
+
+mean.trichomes = trichomes %>% dplyr::group_by(., genotype) %>% dplyr::summarise(., mean(type_VI_mm2))
+mean.volatiles = volatiles_VI %>% dplyr::group_by(., genotype) %>% dplyr::summarise(., mean(total_volatiles))
+
+mean.trichomes.sum.volatiles = inner_join(mean.trichomes, mean.volatiles, by = "genotype")
+
+p.density.activity = 
+ggplot(mean.trichomes.sum.volatiles,
+       aes(x = mean.trichomes.sum.volatiles$`mean(type_VI_mm2)`, 
+           y = mean.trichomes.sum.volatiles$`mean(total_volatiles)`))+ 
+  geom_point()+
+  ylab("Volatiles per type-VI gland (ng / gland)")+
+  xlab("Type-VI trichome density (trichomes / mm2)")+
+  geom_text(aes(label=mean.trichomes.sum.volatiles$genotype),hjust=1.5, vjust=0.5, size = 2)+
+  my.theme
+
+ggsave(file = "Figure_3/desnty_VS_acitivty.pdf", plot = p.density.activity, height = 4, width = 4)
+
+
+
+
+
 ##############
 # Statistics #
 ##############

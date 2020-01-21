@@ -1,7 +1,7 @@
 library(ggplot2)
 library(tidyverse)
 library(Rmisc)
-df <- read.csv(file = "20190115_ng_trichome_all.csv", header = TRUE)
+df <- read.csv(file = "Figure_5/20190115_ng_trichome_all.csv", header = TRUE, check.names = FALSE)
 df$day = as.factor(df$day)
 df[is.na(df)] = 0
 
@@ -21,9 +21,11 @@ df.long$genotype = factor(df.long$genotype,
                           levels = c("PI127826", "73", "CV", "411"),
                           ordered = TRUE)
 #Filter data
-df.long %>% filter(., 
-                   df.long$metabolite %in% c("total_MVA_terpenes", "total_MEP_terpenes") & 
-                     df.long$day == "7") %>%
+df.long %>% filter(.,
+                   df.long$treatment %in% c("control", "fosmidomycin") &
+                   df.long$metabolite == "total_terpenes" &
+                     df.long$genotype == "PI127826" &
+                     df.long$day == "14") %>%
 
 
 #Boxplot
@@ -39,7 +41,8 @@ ggplot(., aes(x=treatment, y=level, fill = phenotype)) +
         strip.text.x = element_text(size=8, colour = "black"),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank()) +
-  labs(y = "Metabolite level (ng metabolite / type-VI trichome)") +
+  labs(y = "Metabolite level (ng metabolite / type-VI trichome)") 
+
   ggsave("Total_cytosolic_Day7.jpg", device = "jpg", scale = 1, width = 28, height = 10, units = "cm", dpi = 300)
   
   
