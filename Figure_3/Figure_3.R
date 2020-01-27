@@ -63,13 +63,14 @@ ggplot(df2, aes(x = df2$sum_type_VI, y = df2$zingiberene))+
   geom_boxplot(aes(x = as.factor(df2$sum_type_VI), y = df2$zingiberene), fill = "grey", outlier.size = 0.5)+
   geom_jitter(aes(x = as.factor(df2$sum_type_VI), y = df2$zingiberene),size = 0.5, width = 0.2)+
   #geom_smooth(method = "lm")+
-  ylim(NA, 2000000)+
+  #ylim(NA, 2000000)+
+  scale_y_continuous(trans='log10')+
   xlab(NULL)+
   ylab("7-epizingiberene (ion counts / leaflet)")+
   xlab("Type-VI trichome-density class")+
   my.theme
 
-ggsave(file = "Figure_3/plots/type-VI_class_vs_zingiberene.pdf", plot = p.box, width = 4, height = 4)
+ggsave(file = "Figure_3/plots/type-VI_class_vs_zingiberene_log10_transformed.pdf", plot = p.box, width = 4, height = 4)
 
 
 ##############
