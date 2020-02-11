@@ -66,11 +66,11 @@ ggplot(df2, aes(x = df2$sum_type_VI, y = df2$zingiberene))+
   #ylim(NA, 2000000)+
   scale_y_continuous(trans='log10')+
   xlab(NULL)+
-  ylab("7-epizingiberene (ion counts / leaflet)")+
+  ylab("7-epizingiberene (log10 ion counts / leaflet)")+
   xlab("Type-VI trichome-density class")+
   my.theme
 
-ggsave(file = "Figure_3/plots/type-VI_class_vs_zingiberene_log10_transformed.pdf", plot = p.box, width = 4, height = 4)
+ggsave("Figure_3/type-VI_class_vs_zingiberene_log10_transformed.pdf", plot = p.box, width = 4, height = 4)
 
 
 ##############
