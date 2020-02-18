@@ -1,9 +1,20 @@
+###########
+# The checkpoint library checkpoint allows you to install packages 
+# as they existed on CRAN on a specific snapshot.
+# It ensures script reproducibility
+# More info: https://rdrr.io/cran/checkpoint/
+###########
+
+library("checkpoint")
+#checkpoint("2020-01-01") # all package versions are from that date
+
+
 library(tidyverse)
-library(ggplot2)
 library(Rmisc)
 library(car)
 library(multcompView)
-library(rcompanion)
+
+source("Figure_1/full_ptable.R")
 
 ############################
 # Custom theme for plotting#
@@ -16,13 +27,12 @@ library(rcompanion)
 df = read.csv(file = "Figure_1/F1_trichomes_densitites_CSV.csv", 
               header = T, 
               stringsAsFactors = T)
-str(df)
+
 df$leafdisc = as.factor(df$leafdisc)
 
 # Make data tidy
-df_tidy = 
-  gather(data = df,
-         key = "type",
+df_tidy = df %>% 
+  gather(key = "type",
          value = "density_mm2",
          -genotype, - plant, -surface, -leafdisc, - date, -person)
 
@@ -32,6 +42,7 @@ df_tidy =
 # leaf_disc_one = df %>% filter(leafdisc == 1)
 # leaf_disc_two = df %>% filter(leafdisc == 2)
 # t.test(x = leaf_disc_one$density_mm2, y = leaf_disc_two$density_mm2)
+
 df_parsed = df_tidy %>% 
   dplyr::group_by(genotype, plant, surface, type) %>% 
   dplyr::summarise(density_mm2 = mean(density_mm2)) %>% 
@@ -47,16 +58,22 @@ df_parsed = df_tidy %>%
                          levels = c("adaxial", "abaxial"),
                          ordered = TRUE))
 
-# Plot only type-VI trichomes (Average of abaxial / adaxial side)
+# Plot only type-VI trichomes (average of abaxial / adaxial side)
 p.type_VI = df_parsed  %>% 
   filter(type == "type_VI") %>%
   ggplot(., aes(x = genotype,
                 y = density_mm2)) +
-    geom_bar(aes(x = genotype, y = density_mm2), stat = "identity", fill = "black") +
-    geom_errorbar(aes(x = genotype, 
-                      ymin = density_mm2 - se, 
-                      ymax = density_mm2 + se), 
-                  width = 0.2) +
+  geom_bar(aes(x = genotype, 
+               y = density_mm2), 
+           stat = "identity",
+           color = "black", 
+           fill = "black",
+           alpha = 0.5) +
+  geom_point() +
+  geom_errorbar(aes(x = genotype, 
+                    ymin = density_mm2 - se, 
+                    ymax = density_mm2 + se), 
+                width = 0.2) +
   facet_wrap(~ surface, scales = "fixed") +
   my.theme +
   xlab(NULL) + 
@@ -71,13 +88,73 @@ ggsave(file = "Figure_1/figure1B.pdf", plot = p.type_VI, width = 9, height = 5.5
 #############
 # Statistic #
 #############
+
+# function for easy comparisons of types / surface
+test = function(x, y, z) {
+  {x.sub = x %>% filter(type == y) %>% filter(surface == z)} #subsets the dataset
+  {will = pairwise.wilcox.test(x.sub$density_mm2, x.sub$genotype, p.adjust.method = "none")} #wilcox test
+  {letters_sig = multcompLetters(fullPTable(will$p.value), #compare the groups
+                                 compare = "<",
+                                 threshold = 0.05)}
+  results = list(will, letters_sig)
+  
+  return(results)
+  
+}
+
 # Calculate the statistics in a list called 'stats'
-type_VI_abaxial = test(x = df.mean.leafdisc, 
-                       y = "type_VI", 
-                       z = "abaxial")
+stats = list(
+  type_VI_abaxial = test(df_parsed, "type_VI", "abaxial"),
+  type_VI_adaxial = test(df_parsed, "type_VI", "adaxial"),
+  
+  type_I_IV_abaxial = test(df_parsed, "type_I_IV", "abaxial"),
+  type_I_IV_adaxial = test(df_parsed, "type_I_IV", "adaxial"),
+  
+  type_non_glandular_abaxial = test(df_parsed, "non_glandular", "abaxial"),
+  type_non_glandular_adaxial = test(df_parsed, "non_glandular", "adaxial")
+)
 
-type_VI_abaxial = test(test(df.mean.leafdisc, "type_VI", "abaxial"))
+# extract letters
+groups_ab = as.data.frame(stats$type_VI_abaxial[[2]]$Letters)
+colnames(groups_ab) = "abaxial"
+groups_ab$genotype = row.names(groups_ab)
 
-print(stats)
+groups_ad = as.data.frame(stats$type_VI_adaxial[[2]]$Letters)
+colnames(groups_ad) = "adaxial"
+groups_ad$genotype = row.names(groups_ad)
 
-p.type_VI
+groups_ad = pivot_longer(
+  data = groups_ad,
+  cols = "adaxial", 
+  names_to = "surface", 
+  values_to = "group")
+
+groups_ab = pivot_longer(
+  data = groups_ab,
+  cols = "abaxial", 
+  names_to = "surface", 
+  values_to = "group")
+
+groups_side = rbind(groups_ad, groups_ab)
+###########
+# Figure 1B
+###########
+
+# calculate maximum value + small margin to positionate the HSD letters
+y_max <- max(df_tidy$density_mm2) + 0.1 * max(df_tidy$density_mm2)
+
+p.type_VI_alternative = 
+  df_tidy  %>% 
+  filter(type == "type_VI") %>%
+  ggplot(., aes(x = genotype,
+                y = density_mm2)) +
+  geom_boxplot() +
+  geom_jitter(stat = "identity", width = 0.05) +
+  facet_grid(~ surface, scales = "fixed") +
+  my.theme +
+  xlab(NULL) + 
+  ylab(expression("Leaf trichome density, trichomes/mm"^2)) +
+  scale_y_continuous(limits = c(0,15)) + 
+  geom_text(data = groups_side, aes(x = genotype, y = 15, label = group))
+
+p.type_VI_alternative
