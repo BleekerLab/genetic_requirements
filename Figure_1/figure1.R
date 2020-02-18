@@ -81,23 +81,46 @@ terpenes_log10 = terpenes %>%
   cbind.data.frame(
     log10(terpenes[,3:ncol(terpenes)]))
 
+# zingiberene
 aov_genotype = aov(data = terpenes_log10,
                    formula = `7-epizingiberene` ~ genotype)
-
-# extract p-values dataframe
 HSD_res <- TukeyHSD(aov_genotype, "genotype", ordered = TRUE)
-
-# write the letters
 groups <- as.data.frame(multcompLetters(HSD_res$genotype[,4])$Letters)
-colnames(groups) = "group"
+colnames(groups) = "7-epizingiberene"
 groups$genotype = row.names(groups)
+groups_zingi = pivot_longer(
+  data = groups,
+  cols = "7-epizingiberene", 
+  names_to = "metabolite", 
+  values_to = "group")
+
+
+# total terpenes
+aov_genotype_terpenes = aov(data = terpenes_log10,
+                            formula = total_terpenes ~ genotype)
+HSD_res2 <- TukeyHSD(aov_genotype_terpenes, "genotype", ordered = TRUE)
+groups2 <- as.data.frame(multcompLetters(HSD_res2$genotype[,4])$Letters)
+colnames(groups2) = "total_terpenes"
+groups2$genotype = row.names(groups2)
+groups_total = pivot_longer(
+  data = groups2,
+  cols = "total_terpenes", 
+  names_to = "metabolite", 
+  values_to = "group")
+
+# collect letters in one unique dataframe
+group_letters = rbind(groups_zingi,groups_total)
+
+
+#######################
+# Final plot: Figure 1A
+#######################
 
 # calculate maximum value + small margin to positionate the HSD letters
 y_max <- max(terpenes_mean_std$abundance) + max(terpenes_mean_std$sd) 
 
 p.figure1a =
   terpenes_mean_std %>% 
-  left_join(., groups, by = "genotype") %>% 
   ggplot(aes(x = genotype, y = abundance)) +
   geom_bar(stat = "identity", color = "black", fill = "black", alpha = 0.5) +
   geom_point(data = terpenes_long) +
@@ -110,6 +133,7 @@ p.figure1a =
   ylab("Log10 of normalised metabolite abundance (ion counts / mg fresh leaf)")+
   xlab(NULL) +
   coord_flip() + 
-  geom_text(aes(y = y_max, label = group))
+  geom_text(data = group_letters, 
+            aes(x = genotype, y = y_max, label = group))
 
 p.figure1a
