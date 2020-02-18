@@ -12,6 +12,8 @@ library(tidyverse)
 library(Rmisc)
 library(multcompView)
 library(stats)
+source("Figure_1/full_ptable.R")
+library("gridExtra")
 
 ##############
 # custom theme
@@ -111,13 +113,12 @@ groups_total = pivot_longer(
 # collect letters in one unique dataframe
 group_letters = rbind(groups_zingi,groups_total)
 
-
 #######################
 # Final plot: Figure 1A
 #######################
 
 # calculate maximum value + small margin to positionate the HSD letters
-y_max <- max(terpenes_mean_std$abundance) + max(terpenes_mean_std$sd) 
+y_max_figure_1a <- max(terpenes_mean_std$abundance) + max(terpenes_mean_std$sd) 
 
 p.figure1a =
   terpenes_mean_std %>% 
@@ -132,8 +133,122 @@ p.figure1a =
   facet_grid(~ metabolite) +
   ylab("Log10 of normalised metabolite abundance (ion counts / mg fresh leaf)")+
   xlab(NULL) +
-  coord_flip() + 
+#  coord_flip() + 
   geom_text(data = group_letters, 
-            aes(x = genotype, y = y_max, label = group))
+            aes(x = genotype, y = y_max_figure_1a, label = group))
 
 p.figure1a
+
+###########
+# Figure 1B
+###########
+
+#########################
+# Import and shape data #
+#########################
+
+df = read.csv(file = "Figure_1/F1_trichomes_densitites_CSV.csv", 
+              header = T, 
+              stringsAsFactors = T)
+
+df$leafdisc = as.factor(df$leafdisc)
+
+# Make data tidy
+df_tidy = df %>% 
+  gather(key = "type",
+         value = "density_mm2",
+         -genotype, - plant, -surface, -leafdisc, - date, -person)
+
+#############
+# Statistic #
+#############
+
+# function for easy comparisons of types / surface
+test = function(x, y, z) {
+  {x.sub = x %>% filter(type == y) %>% filter(surface == z)} #subsets the dataset
+  {will = pairwise.wilcox.test(x.sub$density_mm2, x.sub$genotype, p.adjust.method = "none")} #wilcox test
+  {letters_sig = multcompLetters(fullPTable(will$p.value), #compare the groups
+                                 compare = "<",
+                                 threshold = 0.05)}
+  results = list(will, letters_sig)
+  
+  return(results)
+  
+}
+
+# Calculate the statistics in a list called 'stats'
+stats = list(
+  type_VI_abaxial = test(df_parsed, "type_VI", "abaxial"),
+  type_VI_adaxial = test(df_parsed, "type_VI", "adaxial"),
+  
+  type_I_IV_abaxial = test(df_parsed, "type_I_IV", "abaxial"),
+  type_I_IV_adaxial = test(df_parsed, "type_I_IV", "adaxial"),
+  
+  type_non_glandular_abaxial = test(df_parsed, "non_glandular", "abaxial"),
+  type_non_glandular_adaxial = test(df_parsed, "non_glandular", "adaxial")
+)
+
+# extract letters
+groups_ab = as.data.frame(stats$type_VI_abaxial[[2]]$Letters)
+colnames(groups_ab) = "abaxial"
+groups_ab$genotype = row.names(groups_ab)
+
+groups_ad = as.data.frame(stats$type_VI_adaxial[[2]]$Letters)
+colnames(groups_ad) = "adaxial"
+groups_ad$genotype = row.names(groups_ad)
+
+groups_ad = pivot_longer(
+  data = groups_ad,
+  cols = "adaxial", 
+  names_to = "surface", 
+  values_to = "group")
+
+groups_ab = pivot_longer(
+  data = groups_ab,
+  cols = "abaxial", 
+  names_to = "surface", 
+  values_to = "group")
+
+groups_side = rbind(groups_ad, groups_ab)
+
+###########
+# Figure 1B
+###########
+
+# calculate maximum value + small margin to positionate the HSD letters
+y_max_figure_1b = 
+  df_tidy %>% 
+  filter(type == "type_VI") %>% 
+  select(density_mm2) %>% 
+  max() 
+y_max_figure_1b = y_max_figure_1b + 0.1 * y_max_figure_1b # 10% margin
+
+p.figure1b = 
+  df_tidy  %>% 
+  filter(type == "type_VI") %>%
+  ggplot(., aes(x = genotype,
+                y = density_mm2)) +
+  geom_boxplot() +
+  geom_jitter(stat = "identity", width = 0.05) +
+  facet_grid(~ surface, scales = "fixed") +
+  my.theme +
+  xlab(NULL) + 
+  ylab(expression("Leaf trichome density, trichomes/mm"^2)) +
+  scale_y_continuous(limits = c(0,15)) + 
+  geom_text(data = groups_side, 
+            aes(x = genotype, y = y_max_figure_1b, label = group))
+
+p.figure1b
+
+###############
+# Save plots #
+###############
+ggsave(file = "Figure_1/figure1A.pdf", plot = p.figure1a)
+ggsave(file = "Figure_1/figure1B.pdf", plot = p.figure1b)
+
+grid.arrange(p.figure1a, p.figure1b, nrow = 1) # to visualise
+
+g <- arrangeGrob(p.figure1a, p.figure1b, nrow = 1) # to save
+ggsave(filename = "Figure_1/figure1.pdf", g)
+ggsave(filename = "Figure_1/figure1.png", g)
+
