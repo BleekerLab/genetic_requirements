@@ -1,10 +1,10 @@
 # Figure 1
 
-## Figure 1A
-Some legend here
+## Figure 1 legend
+Some legend here  
+(A)   
+(B)   
 
-## Figure 1B
-Some legend here
-
+## Figure preview 
 
 ![Figure 1](./figure1.png "Figure 1")

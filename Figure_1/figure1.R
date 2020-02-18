@@ -6,7 +6,7 @@
 ###########
 
 library("checkpoint")
-#checkpoint("2020-01-01") # all package versions are from that date
+checkpoint("2020-01-01") # all package versions are from that date
 
 library(tidyverse)
 library(Rmisc)
@@ -147,7 +147,7 @@ p.figure1a
 # Import and shape data #
 #########################
 
-df = read.csv(file = "Figure_1/F1_trichomes_densitites_CSV.csv", 
+df = read.csv(file = "Figure_1/F1_trichome_density.csv", 
               header = T, 
               stringsAsFactors = T)
 
