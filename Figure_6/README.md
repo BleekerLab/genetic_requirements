@@ -1,5 +1,7 @@
 # Figure 6
 
+![Figure 6](./figure6.png "Figure 6")
+
 ## Data provenance
 The `abundance_tidy.tsv` file contains the transcript scaled counts based on mRNA-seq files (see below) and on the ITAG4.0 transcriptome of S. lycopersicum Heinz1706.
 
