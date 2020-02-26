@@ -1,3 +1,10 @@
+if (! "checkpoint" %in% installed.packages()){
+  install.packages("checkpoint")
+}
+
+library("checkpoint")
+checkpoint("2020-01-01")
+
 library(tidyverse)
 library(RColorBrewer)
 library(multcompView)
@@ -69,7 +76,7 @@ ggplot(df2, aes(x = df2$sum_type_VI, y = df2$zingiberene))+
   xlab("Type-VI trichome-density class")+
   my.theme
 
-ggsave(file = "Figure_3/plots/type-VI_class_vs_zingiberene.pdf", plot = p.box, width = 4, height = 4)
+ggsave(file = "Figure_3/plot_type-VI_class_vs_zingiberene.pdf", plot = p.box, width = 4, height = 4)
 
 
 ##############
@@ -126,4 +133,7 @@ p.box.highlight.subset =
   xlab("Type-VI trichome-density class")+
   my.theme
 
-ggsave(file = "Figure_2/plots/type-VI_class_vs_zingiberene_highlight_subset.svg", plot = p.box.highlight.subset, width = 4, height = 4)
+ggsave(file = "Figure_3/plot_type-VI_class_vs_zingiberene_highlight_subset.pdf", 
+       plot = p.box.highlight.subset, 
+       width = 4, 
+       height = 4)
