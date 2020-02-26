@@ -66,8 +66,15 @@ df2 = df %>%
   dplyr::group_by(genotype) %>% 
   # take the sum of abaxial + adaxial surface (leaf wash)
   dplyr::summarise(., sum_type_VI = sum(type_VI)) %>% 
-  left_join(., volatiles, by = "genotype") %>% # re-add the volatiles info
-  filter(sum_type_VI <= 10)                    # maximum class
+  left_join(., volatiles, by = "genotype") %>%       # re-add the volatiles info
+  filter(sum_type_VI <= 10) %>%                      # maximum class
+  mutate(sum_type_VI = as.factor(sum_type_VI))       # convert int to factor
+ 
+levels(df2$sum_type_VI) = paste("C",
+                               levels(df2$sum_type_VI),
+                               sep = "") # to show classes
+
+
 
 ##########################################
 # Boxplot type-VI density vs zingiberene #
