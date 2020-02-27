@@ -29,12 +29,14 @@ df = read.delim("Figure_3/volatiles_and_trichomes.tsv",
 ################################
 
 df2 = df %>% 
-  dplyr::group_by(genotype, zingiberene, type_VI) %>% 
+  dplyr::group_by(sample, zingiberene, type_VI) %>% 
   # take the sum of abaxial + adaxial surface (leaf wash)
   dplyr::summarise(., sum_type_VI = sum(type_VI)) %>% 
-  filter(sum_type_VI <= 10) %>%                      # maximum class value
-  mutate(sum_type_VI = as.factor(sum_type_VI))       # convert int to factor
+  filter(sum_type_VI <= 10)                    # maximum class value
  
+
+df2$sum_type_VI = as.factor(df2$sum_type_VI)  # convert int to factor
+
 # to create C2 to C10 classes of trichome counts
 levels(df2$sum_type_VI) = paste("C",
                                levels(df2$sum_type_VI),
