@@ -13,19 +13,7 @@ library(FSA)
 #############################
 # Custom theme for plotting #
 #############################
-
-my.theme = 
-  theme(text = element_text(),
-        axis.text.x = element_text(size = 8, colour = "black"),
-        axis.text.y = element_text(size = 8, colour = "black"),
-        strip.background = element_blank(),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        panel.border = element_rect(),
-        panel.background = element_rect(fill = NA, color = "black"),
-        strip.text.x = element_text(size=8, colour = "black")
-  )+
-  theme_bw()
+source("theme.R")
 
 #############
 # Load data #
@@ -70,9 +58,10 @@ df2 = df %>%
   filter(sum_type_VI <= 10) %>%                      # maximum class
   mutate(sum_type_VI = as.factor(sum_type_VI))       # convert int to factor
  
+# to create C2 to C10 classes of trichome counts
 levels(df2$sum_type_VI) = paste("C",
                                levels(df2$sum_type_VI),
-                               sep = "") # to show classes
+                               sep = "") 
 
 
 
@@ -91,7 +80,7 @@ ggplot(df2, aes(x = df2$sum_type_VI, y = df2$zingiberene)) +
   xlab(NULL) +
   ylab("7-epizingiberene (ion counts / leaflet)") +
   xlab("Type-VI trichome-density class") +
-  my.theme
+  my_theme
 
 ggsave(file = "Figure_3/plot_type-VI_class_vs_zingiberene.pdf", 
        plot = p.box, 
@@ -126,17 +115,17 @@ sum = summarySE(df2, measurevar = "zingiberene", groupvars = "sum_type_VI")
 
 # p.density.class.zingiberene = 
 ggplot(sum, aes(x = sum_type_VI, y = zingiberene))+
-  geom_bar(aes(x = sum_type_VI, y = sum$zingiberene), 
+  geom_boxplot(aes(x = sum_type_VI, y = sum$zingiberene), 
            stat= "identity", 
            fill = "black") +
   geom_point(data = df2, aes(x = df2$sum_type_VI, y = df2$zingiberene))+
   geom_smooth(method = lm)+
   geom_errorbar(aes(x = sum$sum_type_VI, ymin = sum$zingiberene - se, ymax = sum$zingiberene + se), width = 0.2)+
-  scale_x_continuous(breaks=c(1:10))+
+  #scale_x_continuous(breaks=c(1:10))+
   ylim(NA, 400000)+
   ylab("7-epizingiberene (ion counts / leaflet)")+
   xlab("trichome-density class")+
-  theme_bw()
+  theme_bw() 
 
 
 #############################################################################################
@@ -154,7 +143,7 @@ p.box.highlight.subset =
   xlab(NULL)+
   ylab("7-epizingiberene (ion counts / leaflet)")+
   xlab("Type-VI trichome-density class")+
-  my.theme
+  my_theme
 
 ggsave(file = "Figure_3/plot_type-VI_class_vs_zingiberene_highlight_subset.pdf", 
        plot = p.box.highlight.subset, 
