@@ -77,7 +77,7 @@ p.box =
   geom_jitter(size = 0.5, 
               width = 0.1, 
               height = 0.1) +
-  ylab("7-epizingiberene (ion counts / leaflet)") +
+  ylab("7-epizingiberene (ion counts / leaflet), log2 scale") +
   xlab("Type-VI trichome density class") +
   my_theme +
   geom_text(data = groups_trichome_class, 
