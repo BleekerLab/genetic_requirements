@@ -3,17 +3,13 @@ if (! "checkpoint" %in% installed.packages()){
 }
 
 library("checkpoint")
-#checkpoint("2020-01-01")
-
-# nicely formatted table summaries
-library(gtsummary)
-library(gt)
+checkpoint("2020-01-01")
 
 library(tidyverse)
-library(RColorBrewer)
 library(multcompView)
-library(Rmisc)
-library(FSA)
+library(ggrepel)
+library(ggpubr)
+library(gridExtra)
 
 #############################
 # Custom theme for plotting #
@@ -68,9 +64,8 @@ groups_trichome_class = pivot_longer(
 max_y_figure_3a = max(log2(df2$zingiberene + 1)) + 
   0.1 * max(log2(df2$zingiberene + 1))  
 
-p.box = 
+p_fig3a = 
   df2 %>%
-#  filter(zingiberene > 0) %>% 
   ggplot(aes(x = sum_type_VI, y = log2(zingiberene + 1))) +
   geom_boxplot(fill = "grey", 
                outlier.size = 0.5) +
@@ -84,16 +79,15 @@ p.box =
             mapping = aes(x = class, y = max_y_figure_3a, label = group))
 
 
-p.box 
-
+p_fig3a
 
 ggsave(file = "Figure_3/Figure3A.pdf", 
-       plot = p.box, 
+       plot = p_fig3a, 
        width = 7, 
        height = 5)
 
 ggsave(file = "Figure_3/Figure3A.png", 
-       plot = p.box, 
+       plot = p_fig3a, 
        width = 7, 
        height = 5)
 
@@ -109,7 +103,9 @@ df = read.csv("Figure_3/Leafwash vs Trichome density.csv",
               check.names = FALSE)
 
 
-# Change to long ('tidy') format. First the volatiles (df.long) and than also the trichomes (df.long2)
+# Change to long ('tidy') format. 
+# First the volatiles (df.long) 
+# and then also the trichomes (df.long2)
 df.long = gather(
   data = df,
   key = "metabolite",
@@ -124,7 +120,10 @@ df.long2 = gather(
 
 
 # Filter datafile on total_volatiles and type_VI_trichomes both abaxial and adaxial
-df.parsed = df.long2 %>% filter(., df.long2$metabolite == "total_volatiles" & df.long2$trichome_position == "Type_VI_mm") %>% filter(., !sample == "250")
+df.parsed = df.long2 %>% 
+  filter(metabolite == "total_volatiles" & trichome_position == "Type_VI_mm") %>% 
+  filter(., !sample == "250")
+
 df.parsed$metabolite = as.factor(df.parsed$metabolite)
 df.parsed$trichome_position = as.factor(df.parsed$trichome_position)
 
@@ -133,26 +132,48 @@ model  = lm(data = df.parsed, level ~ density)
 summary(model)
 
 # Scatterplot
-p.scatter = 
-  ggplot(df.parsed, aes(x=density, y=level)) +
+p_fig3b  = 
+  ggplot(df.parsed, aes(x = density, y = level)) +
+  my_theme +
   geom_point(size = 0.5) +
   geom_smooth(method = "lm", formula = y ~ x, alpha  = 0.2) + 
-  my_theme+
-  ylab("Summed terpenes (ng / mg fresh leaf)")+
-  xlab("Type-VI trichome density (trichomes / mm2)")+
-  geom_text(aes(label=df.parsed$sample),hjust=1.5, vjust=0.5, size = 1.5)+
-  annotate(geom = "text", x = 22, y = 320, 
-           label = round(summary(model)$adj.r.squared, digits= 3), 
-           size = 3) +
-  annotate(geom = "text", x = 19.5, y = 320, 
-           label = "r^2=",
-           size = 3)
+  ylab("Summed terpenes (ng / mg fresh leaf)") +
+  xlab("Type-VI trichome density (trichomes / mm2)") +
+  geom_text_repel(aes(label = df.parsed$sample), size = 3) +
+  stat_regline_equation(
+    label.x = 3, 
+    label.y = 1000) + 
+  stat_cor(
+    method = "pearson",
+    label.x = 3, 
+    label.y = max(df.parsed$level))
+  
 
-# Save plot
-ggsave(file = "Figure_3/trichome_density_VS_leafwash.pdf", plot = p.scatter, height = 5, width = 4)
+p_fig3b
+
+# Save plots
+ggsave(file = "Figure_3/Figure3B.png", 
+       plot = p_fig3b, 
+       height = 5, 
+       width = 7)
 
 
+ggsave(file = "Figure_3/Figure3B.pdf", 
+       plot = p_fig3b, 
+       height = 5, 
+       width = 7)
 
 
+##########################
+# Figure 3: Figure 3A + 3B
+##########################
+
+# to visualise
+grid.arrange(p_fig3a, p_fig3b, nrow = 1)
+
+# to save
+g <- arrangeGrob(p_fig3a, p_fig3b, nrow = 1) 
+ggsave(filename = "Figure_3/Figure3.pdf", g)
+ggsave(filename = "Figure_3/Figure3.png", g)
 
 

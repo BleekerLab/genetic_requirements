@@ -7,4 +7,4 @@ Some legend here
 
 ## Figure preview 
 
-![Figure 3A](./Figure3A.png "Figure 3A")
+![Figure 3](./Figure3.png "Figure 3")
