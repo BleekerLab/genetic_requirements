@@ -1,7 +1,7 @@
 # Figure 1
 
 ## Figure 1 legend
-Some legend here  
+Some legend here.  
 (A)   
 (B)   
 
