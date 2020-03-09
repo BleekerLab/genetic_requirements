@@ -13,11 +13,12 @@ Differentially expressed genes between the "lazy" and "active" trichome types. H
 ## Graphical visualisation
 
 ### PCA
-![PCA score plot]("./plot_pca.png")
-![PCA loading plot]("./plot_loadings.png")
+![PCA score plot](./plot_pca.png)  
+
+![PCA loading plot](./plot_loadings.png)
 
 ### Volcano
-![Volcano plot]("./plot_volcano.png")
+![Volcano plot](./plot_volcano.png)
 
 
 
