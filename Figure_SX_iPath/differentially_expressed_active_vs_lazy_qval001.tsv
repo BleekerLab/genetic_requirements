@@ -1,4 +1,4 @@
-target_id	solyc	qval	fold_change	annotation	kegg
+target_id	solyc	qval	log2_fold_change	annotation	kegg
 Solyc00g500090.1.1	Solyc00g500090	0.004533616	4.006353487	NA	NA
 Solyc01g006050.2.1	Solyc01g006050	9.79E-06	-1.366413722	transmembrane protein 45B-like (AHRD V3.3 *** A0A2I4DQK0_9ROSI)	NA
 Solyc01g010290.4.1	Solyc01g010290	0.00321836	0.687269851	Ureide permease (AHRD V3.3 *** A0A2R6PBP7_ACTCH)	NA
