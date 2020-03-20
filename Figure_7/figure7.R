@@ -1,4 +1,4 @@
-# Figure 6
+# Figure 7
 
 #########
 # Library
@@ -18,13 +18,13 @@ library(pheatmap)
 ## Step 1: filtering scaled counts using target genes
 
 # scaled counts data preparation
-df <- read_tsv("Figure_6/abundance_tidy.tsv", col_names = TRUE)
+df <- read_tsv("figure_7/abundance_tidy.tsv", col_names = TRUE)
 # create a locus/gene column to prepare future filtering using target_genes 
 colnames(df)[1] = "transcript" 
 df_parsed = df %>% mutate(gene = substr(transcript, start = 1, stop = 14)) 
 
 # target genes 
-target_genes <- read.delim("Figure_6/targets.tsv", header = T, stringsAsFactors = F)
+target_genes <- read.delim("figure_7/targets.tsv", header = T, stringsAsFactors = F)
 
 # filter the scaled counts using the target genes
 df_filtered <- inner_join(df_parsed, target_genes, by = "gene")
@@ -33,7 +33,7 @@ df_filtered <- inner_join(df_parsed, target_genes, by = "gene")
 df_filtered_wide <- pivot_wider(df_filtered, id_cols = "gene", names_from = "sample", values_from = "est_counts") 
 
 ## Step two: importing the sample information and re-ordering it
-samples <- read_tsv("Figure_6/samples.tsv", col_names = TRUE)[c("sample", "condition")]
+samples <- read_tsv("Figure_7/samples.tsv", col_names = TRUE)[c("sample", "condition")]
 samples$condition <- with(samples, factor(condition, levels = c("elite","F1","wild","F2")))
 samples_ordered <- with(samples, samples[order(condition),])
 
