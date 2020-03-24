@@ -1,6 +1,7 @@
 # Allele-specific expression
 
-ASE expression plot.
+![Figure 8](./figure8.png)
+
 
 # Data provenance
 

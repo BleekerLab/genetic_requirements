@@ -67,7 +67,14 @@ final_df = bind_rows(perc_habro, perc_heinz) %>%
   pivot_longer(., 
                cols = - c(target, genome),
                names_to = "genotype", 
-               values_to = "counts") 
+               values_to = "percentage_of_counts") 
 
-  #ggplot(., aes(x = counts)) + 
-  #geom_density() 
+p_barplot <- final_df %>% 
+  ggplot(., aes(x = genotype, y = percentage_of_counts, fill = genome)) +
+    geom_bar(stat = "identity") +
+    facet_wrap(~ target) + 
+    coord_flip() +
+    labs(x = "Genotype", y = "Percentage of read counts from parental genome") +
+    theme(axis.text.x = element_text(angle = 0))
+  
+ggsave(filename = "Figure_8/figure8.png", plot = p_barplot, width = 10, height = 7)
