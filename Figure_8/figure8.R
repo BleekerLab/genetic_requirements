@@ -67,6 +67,7 @@ norm_habro <- norm_habro[order(row.names(norm_habro)),]
 # sanity check
 if (! all_equal(row.names(norm_habro), row.names(norm_heinz)) ) {
   stop("problems with matching gene names")
+}
 
 ###################################
 # Conversion to matrix and addition
@@ -88,8 +89,8 @@ perc_habro$genome = "habrochaites"
 perc_heinz$genome = "lycopersicum"
 
 # add genes names
-perc_habro$target <- targets
-perc_heinz$target <- targets
+perc_habro$target <- row.names(perc_habro)
+perc_heinz$target <- row.names(perc_heinz)
 
 # add genome ref
 perc_habro$genome = "habrochaites"
