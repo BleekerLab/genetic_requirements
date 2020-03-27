@@ -44,6 +44,16 @@ dds_habro <- estimateSizeFactors(dds_habro)
 norm_heinz <- DESeq2::counts(dds_heinz, normalized = TRUE)
 norm_habro <- DESeq2::counts(dds_habro, normalized = TRUE)
 
+
+sizeFactors(dds_habro)
+# PI127826_F1    Elite_02    PI127826      F2-127      F2-151       F2-28      F2-411      F2-445 
+# 1.2096404   1.7970084   5.6072283   0.6248092   0.3027169   1.0980686   0.8782959   0.5217501 
+
+sizeFactors(dds_heinz)
+# PI127826_F1    Elite_02    PI127826      F2-127      F2-151       F2-28      F2-411      F2-445 
+# 1.5236759   2.3360036   1.1099383   0.7158597   0.8291317   1.1280188   0.9450720   0.8123031 
+
+# PI127826 has a problem on its own genome (correction factor of 5.0 !)
 ###################
 # Keep common genes
 ###################
