@@ -1,6 +1,6 @@
 library(ggplot2)
 library(tidyverse)
-library(Rmisc)
+
 df <- read.csv(file = "Figure_5/20190115_ng_trichome_all.csv", header = TRUE, check.names = FALSE)
 df$day = as.factor(df$day)
 df[is.na(df)] = 0
@@ -21,6 +21,21 @@ df.long$genotype = factor(df.long$genotype,
                           levels = c("PI127826", "73", "CV", "411"),
                           ordered = TRUE)
 
+my.theme = 
+  theme(text = element_text(),
+        axis.text.x = element_text(size = 8, colour = "black", angle = 30, hjust = 1),
+        axis.text.y = element_text(size = 8, colour = "black"),
+        strip.background = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(),
+        panel.background = element_rect(fill = NA, color = "black"),
+        strip.text.x = element_text(size=8, colour = "black")
+  )+
+  theme_bw()
+
+metabolite.labels = c("Plastidial terpenes", "Cytosolic terpenes")
+names(metabolite.labels) = c("total_MEP_terpenes", "total_MVA_terpenes")
 
 #Barplot
 
@@ -30,11 +45,13 @@ df.long %>%
   filter(metabolite %in% c("total_MVA_terpenes", "total_MEP_terpenes") & 
          day == "14") %>%
   
-  ggplot(., aes(x=treatment, y=mean_level, fill = phenotype)) +
-  geom_bar(stat = "identity")+
-  geom_errorbar(aes(ymin = mean_level- se, ymax = mean_level + se), width=0.1)+
-  facet_grid(genotype~metabolite, scale = "free") +
-  theme_bw()
+  ggplot(aes(x=treatment, y=mean_level, fill = phenotype)) +
+  geom_bar(stat = "identity", fill = "black")+
+  geom_errorbar(aes(x=treatment, ymin = mean_level- se, ymax = mean_level + se), width=0.1)+
+  facet_grid(genotype~metabolite, scale = "free",
+             labeller = labeller(metabolite = metabolite.labels)) +
+  labs(y = "Metabolite level (ng/gland)")+
+  my.theme
 
 ###### Relative values #######
 
