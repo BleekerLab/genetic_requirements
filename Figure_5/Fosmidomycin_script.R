@@ -39,7 +39,7 @@ metabolite.labels = c("Plastidial terpenes", "Cytosolic terpenes")
 names(metabolite.labels) = c("total_MEP_terpenes", "total_MVA_terpenes")
 
 #Barplot
-
+p1 = 
 df.long %>% 
   dplyr::group_by(genotype, phenotype, treatment, day, metabolite) %>%
   dplyr::summarise(mean_level = mean(level), se = sd(level)/sqrt(n())) %>%
@@ -53,6 +53,8 @@ df.long %>%
              labeller = labeller(metabolite = metabolite.labels)) +
   labs(y = "Metabolite level (ng/gland)")+
   my.theme
+
+ggsave(filename = "Figure_5/MVA_MEP terpenes day 14_barplot.pdf", plot = p1, width = 6, height = 12)
 
 ###### Statistics #######
 
