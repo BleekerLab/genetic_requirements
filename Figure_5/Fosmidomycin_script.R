@@ -1,5 +1,6 @@
 library(ggplot2)
 library(tidyverse)
+library(PMCMR)
 
 df <- read.csv(file = "Figure_5/20190115_ng_trichome_all.csv", header = TRUE, check.names = FALSE)
 df$day = as.factor(df$day)
@@ -55,3 +56,15 @@ df.long %>%
 
 ###### Statistics #######
 
+data.summary = df.long %>% 
+  filter(metabolite %in% c("total_MVA_terpenes", "total_MEP_terpenes") & 
+           day == "14")
+write.table(data.summary, file = "Figure_5/inhibitor_treatments_summary.tsv", row.names = FALSE, sep = "\t")
+
+KT = function(plant, what_metabolite){
+  df.parsed = df.long %>% 
+    filter(metabolite == what_metabolite & genotype == plant & day == "14")
+             
+  
+  return(posthoc.kruskal.nemenyi.test(df.parsed$value,df.parsed$treatment, method="Tukey"))
+}
