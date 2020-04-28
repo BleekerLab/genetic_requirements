@@ -29,6 +29,7 @@ df = read.delim("Figure_3/volatiles_and_trichomes.tsv",
 # Sum trichome counts #
 ################################
 
+
 df = df %>% 
   filter(zingiberene > 0) %>%  # keep only lines with non-null 7-epizingiberene 
   dplyr::group_by(sample, zingiberene, type_VI) %>% 
@@ -223,4 +224,87 @@ ggsave(filename = "Figure_3/Figure3.svg", g, width = 15, height = 7)
 #        plot = p_fig3b, 
 #        height = 5, 
 #        width = 7)
+=======
+# Take the sum of abaxial+adaxial surface
+type_VI_ab_ad = df %>% dplyr::group_by(genotype) %>% dplyr::summarise(., sum_type_VI = sum(type_VI))
+
+# Join trichome data with volatile data
+type_VI_ab_ad = inner_join(type_VI_ab_ad, volatiles) 
+
+# remove mistakes in trichome counting (i.e. class can not exceed 10)
+df2 = type_VI_ab_ad %>% filter(., !sum_type_VI %in% c("11","12", "13", "14"))
+
+##########################################
+# Boxplot type-VI density vs zingiberene #
+##########################################
+
+p.box = 
+ggplot(df2, aes(x = df2$sum_type_VI, y = df2$zingiberene))+
+  geom_boxplot(aes(x = as.factor(df2$sum_type_VI), y = df2$zingiberene), fill = "grey", outlier.size = 0.5)+
+  geom_jitter(aes(x = as.factor(df2$sum_type_VI), y = df2$zingiberene),size = 0.5, width = 0.2)+
+  #geom_smooth(method = "lm")+
+  #ylim(NA, 2000000)+
+  scale_y_continuous(trans='log10')+
+  xlab(NULL)+
+  ylab("7-epizingiberene (log10 ion counts / leaflet)")+
+  xlab("Type-VI trichome-density class")+
+  my.theme
+
+ggsave("Figure_3/type-VI_class_vs_zingiberene_log10_transformed.pdf", plot = p.box, width = 4, height = 4)
+
+
+##############
+# Statistics #
+##############
+
+#Test for normality
+shapiro.test(df2$zingiberene)
+
+#Kruskal-Wallis test
+kruskal.test(data = df2, zingiberene~sum_type_VI)
+
+#Dunn's test for parewise comparison
+dt = dunnTest(data = df2, zingiberene ~ sum_type_VI, method = "bh")
+#show signficant comparisons from Dunn's test
+sig.groups = dt$res[,c(1,4)] %>% filter(., P.adj < 0.05)
+
+
+
+#########################################
+# Optional: Distribution of the classes #
+#########################################
+
+# Barplot
+sum = summarySE(df2, measurevar = "zingiberene", groupvars = "sum_type_VI")
+
+#p.density.class.zingiberene = 
+ggplot(sum, aes(x = sum_type_VI, y = zingiberene))+
+  geom_bar(aes(x = sum_type_VI, y = sum$zingiberene), stat= "identity", fill = "black") +
+  geom_point(data = df2, aes(x = df2$sum_type_VI, y = df2$zingiberene))+
+  geom_smooth(method = lm)+
+  geom_errorbar(aes(x = sum$sum_type_VI, ymin = sum$zingiberene - se, ymax = sum$zingiberene + se), width = 0.2)+
+  scale_x_continuous(breaks=c(1:10))+
+  ylim(NA, 400000)+
+  ylab("zingiberene (ion counts / leaflet)")+
+  xlab("trichome-density class")+
+  theme_bw()
+
+
+#############################################################################################
+# Supplemental ?                                                                            #
+# highlighting the selected lines for individual type-VI gland investigation                #
+#############################################################################################
+df.parsed  = na.omit(left_join(volatiles_VI, df2, by = "genotype"))
+
+p.box.highlight.subset = 
+  ggplot(df2, aes(x = df2$sum_type_VI, y = df2$zingiberene))+
+  geom_boxplot(aes(x = as.factor(df2$sum_type_VI), y = df2$zingiberene), fill = "grey", outlier.size = 0.5)+
+  geom_point(aes(x = as.factor(df2$sum_type_VI), y = df2$zingiberene),size = 0.5)+
+  geom_jitter(data = df.parsed, aes(x = na.omit(sum_type_VI)-1, y = zingiberene.y), color = "red", width = .05)+
+    ylim(0,500000)+
+  xlab(NULL)+
+  ylab("7-epizingiberene (ion counts / leaflet)")+
+  xlab("Type-VI trichome-density class")+
+  my.theme
+
 
