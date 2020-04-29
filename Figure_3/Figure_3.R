@@ -227,7 +227,6 @@ ggsave(filename = "Figure_3/Figure3.svg", g, width = 15, height = 7)
 #        plot = p_fig3b, 
 #        height = 5, 
 #        width = 7)
-=======
 # Take the sum of abaxial+adaxial surface
 type_VI_ab_ad = df %>% dplyr::group_by(genotype) %>% dplyr::summarise(., sum_type_VI = sum(type_VI))
 
