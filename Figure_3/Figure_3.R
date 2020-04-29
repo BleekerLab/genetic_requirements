@@ -99,7 +99,7 @@ p_fig3a =
              y = log2(zingiberene))) +
   geom_boxplot(aes(fill = sum_type_VI), 
                outlier.size = 0.5) +
-  geom_jitter(size = 0.5, 
+  geom_point(size = 0.5, 
               width = 0.1, 
               height = 0.1) +
   ylab("7-epizingiberene (Log2 ion counts / leaflet)") +
