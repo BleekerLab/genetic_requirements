@@ -85,15 +85,14 @@ max_y_figure_3a = max(log2(df$zingiberene)) +
   0.1 * max(log2(df$zingiberene + 1))  
 
 labels_for_legend = c(
-  "C1: 0 to X trichomes",
-  "C2: X to X trichomes", 
-  "C3: X to X trichomes",
-  "C4: X to X trichomes",
-  "C5: X to X trichomes",
-  "C6: X to X trichomes",
-  "C8:X to X trichomes",
-  "C10: X to X trichomes"
-  )
+  "C4: 2 to 30 trichomes",
+  "C5: 16 to 30 trichomes", 
+  "C6: 30 to 65 trichomes",
+  "C7: 45 to 90 trichomes",
+  "C8: 60 to 105 trichomes",
+  "C9: 80 to 125 trichomes",
+  "C10:100 to 150 trichomes"
+)
 
 p_fig3a = 
   ggplot(df, aes(x = sum_type_VI, 
@@ -103,8 +102,8 @@ p_fig3a =
   geom_jitter(size = 0.5, 
               width = 0.1, 
               height = 0.1) +
-  ylab("7-epizingiberene (ion counts / leaflet), log2 scale") +
-  xlab("Type-VI trichome density class") +
+  ylab("7-epizingiberene (Log2 ion counts / leaflet)") +
+  xlab("Type-VI trichome-density class") +
   my_theme +
   scale_fill_brewer(name = "Class of trichome density",
                     labels = labels_for_legend,
