@@ -32,7 +32,7 @@ df = read.delim("Figure_3/volatiles_and_trichomes.tsv",
 
 df = df %>% 
   filter(zingiberene > 0) %>%  # keep only lines with non-null 7-epizingiberene 
-  dplyr::group_by(sample, zingiberene, type_VI) %>% 
+  dplyr::group_by(sample, zingiberene) %>% 
   # take the sum of abaxial + adaxial surface (leaf wash)
   dplyr::summarise(., sum_type_VI = sum(type_VI)) %>% 
   filter(sum_type_VI <= 10)                    # maximum class value
