@@ -127,6 +127,8 @@ p_fig3a = p_fig3a +
 
 p_fig3a
 
+ggsave(filename = "Figure_3/Figure3A.pdf", plot = p_fig3a, width = 6, height = 4)
+
 ##################################################
 # Figure 3B: trichome densities versus zingiberene
 ##################################################
@@ -186,6 +188,8 @@ p_fig3b  =
     label.y.npc = 0.9)
   
 p_fig3b
+
+
 
 ##########################
 # Figure 3: Figure 3A + 3B
