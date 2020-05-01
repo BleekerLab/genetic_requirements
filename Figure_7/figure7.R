@@ -62,10 +62,16 @@ annotation_cols = as.data.frame(samples)
 row.names(annotation_cols) <- samples$sample
 annotation_cols$sample <- NULL
 
+my_colour = list(
+  condition = c(elite = "#5977ff", F1= "#f74747", wild = "gray31", F2 = "orangered3"),
+  pathway= c(MEP = "#82ed82", MVA = "#9e82ed")
+)
+
         pheatmap(mat = mat_log2_scaled, 
          scale = "none", 
          cluster_rows = F, 
          cluster_cols = F,
          annotation_col = annotation_cols, 
-         annotation_row = annotation_rows)
+         annotation_row = annotation_rows,
+         annotation_colors = my_colour)
 
