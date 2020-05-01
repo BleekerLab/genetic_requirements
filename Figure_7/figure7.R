@@ -30,7 +30,7 @@ target_genes <- read.delim("figure_7/targets.tsv", header = T, stringsAsFactors 
 target_genes = target_genes %>% filter(name != "Nudix")
 
 # filter the scaled counts using the target genes
-df_filtered <- inner_join(target_genes,df_parsed, by = "gene")
+df_filtered <- left_join(target_genes,df_parsed, by = "gene")
 df_filtered = df_filtered[order(df_filtered$pathway),]
 
 # transform into wide format 
