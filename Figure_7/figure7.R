@@ -27,7 +27,7 @@ df_parsed = df %>% mutate(gene = substr(transcript, start = 1, stop = 14))
 target_genes <- read.delim("figure_7/targets.tsv", header = T, stringsAsFactors = F)
 
 # filter the scaled counts using the target genes
-df_filtered <- inner_join(df_parsed, target_genes, by = "gene")
+df_filtered <- inner_join(target_genes,df_parsed, by = "gene")
 
 # transform into wide format 
 df_filtered_wide <- pivot_wider(df_filtered, id_cols = "gene", names_from = "sample", values_from = "est_counts") 
@@ -52,14 +52,15 @@ mat_log2_scaled <- mat_log2_scaled[,samples_ordered$sample]
 
 annotation_rows = as.data.frame(target_genes[,-1])
 row.names(annotation_rows) <- target_genes$gene
+annotation_rows = annotation_rows[order(annotation_rows$pathway),]
 
 annotation_cols = as.data.frame(samples)
 row.names(annotation_cols) <- samples$sample
 annotation_cols$sample <- NULL
 
-pheatmap(mat = mat_log2_scaled, 
+hm = pheatmap(mat = mat_log2_scaled, 
          scale = "none", 
-         cluster_rows = T, 
+         cluster_rows = F, 
          cluster_cols = F,
          annotation_col = annotation_cols, 
          annotation_row = annotation_rows)
