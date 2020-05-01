@@ -26,6 +26,9 @@ df_parsed = df %>% mutate(gene = substr(transcript, start = 1, stop = 14))
 # target genes 
 target_genes <- read.delim("figure_7/targets.tsv", header = T, stringsAsFactors = F)
 
+# Remove (putative) Nudix genes as this is still unclear in tomato
+target_genes = target_genes %>% filter(name != "Nudix")
+
 # filter the scaled counts using the target genes
 df_filtered <- inner_join(target_genes,df_parsed, by = "gene")
 df_filtered = df_filtered[order(df_filtered$pathway),]
@@ -59,7 +62,7 @@ annotation_cols = as.data.frame(samples)
 row.names(annotation_cols) <- samples$sample
 annotation_cols$sample <- NULL
 
-hm = pheatmap(mat = mat_log2_scaled, 
+        pheatmap(mat = mat_log2_scaled, 
          scale = "none", 
          cluster_rows = F, 
          cluster_cols = F,
