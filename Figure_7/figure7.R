@@ -28,6 +28,7 @@ target_genes <- read.delim("figure_7/targets.tsv", header = T, stringsAsFactors 
 
 # filter the scaled counts using the target genes
 df_filtered <- inner_join(target_genes,df_parsed, by = "gene")
+df_filtered = df_filtered[order(df_filtered$pathway),]
 
 # transform into wide format 
 df_filtered_wide <- pivot_wider(df_filtered, id_cols = "gene", names_from = "sample", values_from = "est_counts") 
