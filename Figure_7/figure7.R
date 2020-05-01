@@ -19,6 +19,7 @@ library(pheatmap)
 
 # scaled counts data preparation
 df <- read_tsv("figure_7/abundance_tidy.tsv", col_names = TRUE)
+df = df %>% filter(!sample %in% c("Elite_02", "F1-hab", "LA1777_F1", "LA1777"))
 # create a locus/gene column to prepare future filtering using target_genes 
 colnames(df)[1] = "transcript" 
 df_parsed = df %>% mutate(gene = substr(transcript, start = 1, stop = 14)) 
@@ -30,7 +31,7 @@ target_genes <- read.delim("figure_7/targets.tsv", header = T, stringsAsFactors 
 target_genes = target_genes %>% filter(name != "Nudix")
 
 # filter the scaled counts using the target genes
-df_filtered <- left_join(target_genes,df_parsed, by = "gene")
+df_filtered <- inner_join(target_genes,df_parsed, by = "gene")
 df_filtered = df_filtered[order(df_filtered$pathway),]
 
 # transform into wide format 
