@@ -72,7 +72,7 @@ mat_log2_scaled = mat_log2_scaled[,col_order]
 
 annotation_rows = as.data.frame(precursor_genes[,-1])
 row.names(annotation_rows) <- precursor_genes$gene
-annotation_rows = annotation_rows[order(annotation_rows$pathway),]
+annotation_rows = annotation_rows[order(annotation_rows$pathway),] # this makes the rows separate in MEP/MVA
 
 
         pheatmap(mat = mat_log2_scaled, 
@@ -112,11 +112,10 @@ mat_TPS_log2_scaled <- log2(mat_TPS + 1)
 mat_TPS_log2_scaled <- mat_TPS_log2_scaled[,col_order]
 
 # heatmap
-
-TPS_expressed = as.data.frame(left_join(df_filtered_TPS_wide, TPS, by = "gene"))
-row.names(TPS_expressed) <- TPS_expressed$gene
-TPS_expressed = TPS_expressed %>% select("annotation")
-annotation_rows = TPS_expressed
+# Order on localisation
+annotation_rows = left_join(df_filtered_TPS_wide, TPS, by = "gene") %>% select(gene, annotation, localisation) %>% column_to_rownames(var = "gene")
+annotation_rows = annotation_rows[order(annotation_rows$localisation),]
+mat_TPS_log2_scaled = mat_TPS_log2_scaled[row.names(annotation_rows),]
 
 
 pheatmap(mat_TPS_log2_scaled, 
@@ -130,6 +129,8 @@ pheatmap(mat_TPS_log2_scaled,
          annotation_col = annotation_cols,
          annotation_colors = my_colour,
          filename = "Figure_7/TPS_heatmap.pdf")
+
+
 
 ###########################
 # Trans-prenyltranferases #
