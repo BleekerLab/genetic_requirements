@@ -44,8 +44,8 @@ my_colour = list(
 # MEP/MVA precursors
 
 precursor_genes <- read.delim("figure_7/precursor_genes.tsv", header = T, stringsAsFactors = F)
-# Remove (putative) Nudix genes as this is still unclear in tomato
-precursor_genes = precursor_genes %>% filter(name != "Nudix")
+# Remove (putative) Nudix and IPK genes as this is still unclear in tomato
+precursor_genes = precursor_genes %>% filter(!name %in% c("Nudix", "IPK"))
 # filter the scaled counts using the target genes
 df_filtered <- inner_join(precursor_genes,df_parsed, by = "gene")
 df_filtered = df_filtered[order(df_filtered$pathway),]
