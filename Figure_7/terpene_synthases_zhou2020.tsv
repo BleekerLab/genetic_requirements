@@ -1,66 +1,66 @@
-gene	annotation	structure 
-Solyc01g101170	TPS31	functional
-Solyc01g101180	TPS32	functional
-Solyc01g101190	TPS33	functional
-Solyc01g101210	TPS35	functional
-Solyc01g105870	TPS3	functional
-Solyc01g105880	TPS4	functional
-Solyc01g105890	TPS5	functional
-Solyc01g105920	TPS7	functional
-Solyc01g105960	TPS8	functional
-Solyc02g079840	TPS38	functional
-Solyc02g079890	TPS25	functional
-Solyc02g079910	TPS27	functional
-Solyc00g154480	TPS27	functional
-Solyc03g006550	TPS46	functional
-Solyc03g007730	TPS47	functional
-Solyc04g051620	TPS48	functional
-Solyc04g054380	TPS28	functional
-Solyc06g059885	TPS9	functional
-Solyc06g059910	TPS10	functional
-Solyc06g059920	TPS10	functional
-Solyc06g059930	TPS12	functional
-Solyc06g060180	TPS36	functional
-Solyc06g084240	TPS40	functional
-Solyc07g008680	TPS16	functional
-Solyc07g008690	TPS16	functional
-Solyc07g052120	TPS51	functional
-Solyc07g052130	TPS51	functional
-Solyc07g052140	TPS52	functional
-Solyc07g052150	TPS52	functional
-Solyc07g066670	TPS24	functional
-Solyc07g066675	TPS24	functional
-Solyc08g005640	TPS21	functional
-Solyc08g005665	TPS20	functional
-Solyc08g005670	TPS19	functional
-Solyc08g005710	TPS41	functional
-Solyc08g005720	TPS18	functional
-Solyc09g092470	TPS14	functional
-Solyc10g005390	TPS39	functional
-Solyc10g005410	TPS37	functional
-Solyc12g006570	TPS17	functional
-Solyc01g101190	TPS34	pseudogene
-Solyc01g101220	TPS30	pseudogene
-Solyc01g105850	TPS1	pseudogene
-Solyc01g105860	TPS1	pseudogene
-Solyc01g105900	TPS6	pseudogene
-Solyc01g105910	TPS2	pseudogene
-Solyc01g105930 	TPS22	pseudogene
-Solyc01g105940	TPS22	pseudogene
-Solyc01g105950	TPS22	pseudogene
-Solyc02g079900	TPS26	pseudogene
-Solyc02g079895	TPS26	pseudogene
-Solyc03g112175	TPS49	pseudogene
-Solyc04g005100	TPS50	pseudogene
-Solyc05g026590	TPS43	pseudogene
-Solyc05g026600	TPS43	pseudogene
-Solyc06g059885	TPS23	pseudogene
-Solyc06g059880	TPS23	pseudogene
-Solyc06g059930	TPS11	pseudogene
-Solyc06g060010	TPS13	pseudogene
-Solyc06g060013	TPS13	pseudogene
-Solyc07g051940	TPS15	pseudogene
-Solyc09g065230	TPS44	pseudogene
-Solyc10g005420	TPS42	pseudogene
-Solyc10g052745	TPS53	pseudogene
-Solyc12g019240	TPS29	pseudogene
+gene	annotation	structure 	localisation
+Solyc06g059910	TPS10	functional	cytosol
+Solyc06g059920	TPS10	functional	cytosol
+Solyc06g059930	TPS12	functional	cytosol
+Solyc09g092470	TPS14	functional	cytosol
+Solyc07g008680	TPS16	functional	cytosol
+Solyc07g008690	TPS16	functional	cytosol
+Solyc12g006570	TPS17	functional	cytosol
+Solyc08g005720	TPS18	functional	mitochondria
+Solyc08g005670	TPS19	functional	plastid
+Solyc08g005665	TPS20	functional	plastid
+Solyc08g005640	TPS21	functional	plastid
+Solyc07g066670	TPS24	functional	plastid
+Solyc07g066675	TPS24	functional	plastid
+Solyc02g079890	TPS25	functional	cytosol
+Solyc02g079910	TPS27	functional	cytosol
+Solyc00g154480	TPS27	functional	cytosol
+Solyc04g054380	TPS28	functional	cytosol
+Solyc01g105870	TPS3	functional	plastid
+Solyc01g101170	TPS31	functional	cytosol
+Solyc01g101180	TPS32	functional	cytosol
+Solyc01g101190	TPS33	functional	cytosol
+Solyc01g101210	TPS35	functional	cytosol
+Solyc06g060180	TPS36	functional	mitochondria
+Solyc10g005410	TPS37	functional	cytosol
+Solyc02g079840	TPS38	functional	cytosol
+Solyc10g005390	TPS39	functional	cytosol
+Solyc01g105880	TPS4	functional	plastid
+Solyc06g084240	TPS40	functional	plastid
+Solyc08g005710	TPS41	functional	mitochondria
+Solyc03g006550	TPS46	functional	cytosol
+Solyc03g007730	TPS47	functional	cytosol
+Solyc04g051620	TPS48	functional	cytosol
+Solyc01g105890	TPS5	functional	plastid
+Solyc07g052120	TPS51	functional	cytosol
+Solyc07g052130	TPS51	functional	cytosol
+Solyc07g052140	TPS52	functional	cytosol
+Solyc07g052150	TPS52	functional	cytosol
+Solyc01g105920	TPS7	functional	plastid
+Solyc01g105960	TPS8	functional	cytosol
+Solyc06g059885	TPS9	functional	cytosol
+Solyc01g101190	TPS34	pseudogene	
+Solyc01g101220	TPS30	pseudogene	
+Solyc01g105850	TPS1	pseudogene	
+Solyc01g105860	TPS1	pseudogene	
+Solyc01g105900	TPS6	pseudogene	
+Solyc01g105910	TPS2	pseudogene	
+Solyc01g105930 	TPS22	pseudogene	
+Solyc01g105940	TPS22	pseudogene	
+Solyc01g105950	TPS22	pseudogene	
+Solyc02g079900	TPS26	pseudogene	
+Solyc02g079895	TPS26	pseudogene	
+Solyc03g112175	TPS49	pseudogene	
+Solyc04g005100	TPS50	pseudogene	
+Solyc05g026590	TPS43	pseudogene	
+Solyc05g026600	TPS43	pseudogene	
+Solyc06g059885	TPS23	pseudogene	
+Solyc06g059880	TPS23	pseudogene	
+Solyc06g059930	TPS11	pseudogene	
+Solyc06g060010	TPS13	pseudogene	
+Solyc06g060013	TPS13	pseudogene	
+Solyc07g051940	TPS15	pseudogene	
+Solyc09g065230	TPS44	pseudogene	
+Solyc10g005420	TPS42	pseudogene	
+Solyc10g052745	TPS53	pseudogene	
+Solyc12g019240	TPS29	pseudogene	
