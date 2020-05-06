@@ -45,7 +45,7 @@ my_colour = list(
 
 precursor_genes <- read.delim("figure_7/precursor_genes.tsv", header = T, stringsAsFactors = F)
 # Remove (putative) Nudix and IPK genes as this is still unclear in tomato
-precursor_genes = precursor_genes %>% filter(!name %in% c("Nudix", "IPK"))
+# precursor_genes = precursor_genes %>% filter(!name %in% c("Nudix", "IPK"))
 # filter the scaled counts using the target genes
 df_filtered <- inner_join(precursor_genes,df_parsed, by = "gene")
 df_filtered = df_filtered[order(df_filtered$pathway),]
@@ -76,10 +76,16 @@ annotation_rows = annotation_rows[order(annotation_rows$pathway),]
          scale = "none", 
          cluster_rows = F, 
          cluster_cols = F,
+         fontsize = 10,
+         cellwidth = 15,
+         cellheight = 15,
          annotation_col = annotation_cols, 
          annotation_row = annotation_rows,
          annotation_colors = my_colour,
+         gaps_row = 10,
          filename = "Figure_7/precursors.pdf")
+         
+         #filename = "Figure_7/precursors.pdf")
         
 
         
@@ -121,6 +127,9 @@ pheatmap(mat = mat_TPS_log2_scaled,
          scale = "none", 
          cluster_rows = F, 
          cluster_cols = F,
+         fontsize = 10,
+         cellwidth = 15,
+         cellheight = 15,
          annotation_row = annotation_rows,
          annotation_col = annotation_cols,
          annotation_colors = my_colour,
@@ -163,6 +172,9 @@ pheatmap(mat = mat_TPT_log2_scaled,
          scale = "none", 
          cluster_rows = F, 
          cluster_cols = F,
+         fontsize = 10,
+         cellwidth = 15,
+         cellheight = 15,
          annotation_row = annotation_rows,
          annotation_col = annotation_cols,
          annotation_colors = my_colour,
