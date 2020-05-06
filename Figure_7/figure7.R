@@ -125,6 +125,7 @@ pheatmap(mat_TPS_log2_scaled,
          cellwidth = 15,
          cellheight = 15,
          gaps_col = 5,
+         gaps_row = c(11,13),
          annotation_row = annotation_rows,
          annotation_col = annotation_cols,
          annotation_colors = my_colour,
@@ -157,7 +158,11 @@ mat_TPT_log2_scaled <- mat_TPT_log2_scaled[,col_order]
 TPT_expressed = as.data.frame(left_join(df_filtered_TPT_wide, TPT, by = "gene"))
 row.names(TPT_expressed) <- TPT_expressed$gene
 TPT_expressed = TPT_expressed %>% select("annotation")
-annotation_rows = TPT_expressed 
+annotation_rows = TPT_expressed
+
+annotation_rows = left_join(df_filtered_TPT_wide, TPT, by = "gene") %>% select(gene, annotation, localisation) %>% column_to_rownames(var = "gene")
+annotation_rows = annotation_rows[order(annotation_rows$localisation),]
+mat_TPT_log2_scaled = mat_TPT_log2_scaled[row.names(annotation_rows),]
 
 
 pheatmap(mat = mat_TPT_log2_scaled, 
@@ -168,6 +173,7 @@ pheatmap(mat = mat_TPT_log2_scaled,
          cellwidth = 15,
          cellheight = 15,
          gaps_col = 5,
+         gaps_row = c(2,4),
          annotation_row = annotation_rows,
          annotation_col = annotation_cols,
          annotation_colors = my_colour,
