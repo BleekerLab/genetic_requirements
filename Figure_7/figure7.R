@@ -179,3 +179,20 @@ pheatmap(mat = mat_TPT_log2_scaled,
          annotation_colors = my_colour,
          filename = "Figure_7/TPT_heatmap.pdf")
 
+##################################
+# Differentially expressed genes #
+##################################
+
+de = read.table("TableS1_DE_genes/differentials.tsv", header = T, sep = "\t")
+# create a locus/gene column to prepare future filtering using precursor_genes 
+colnames(de)[1] = "transcript" 
+de_parsed = de %>% mutate(gene = substr(transcript, start = 1, stop = 14))
+de_parsed = de_parsed[,-1]
+
+de_above2fold = de_parsed %>% filter(b > 2 | b < -2)
+de_plus2 = de_parsed %>% filter(b > 2)
+de_min2 = de_parsed %>% filter(b < 2)
+
+df_filtered_plus2 = left_join(df_filtered_plus2, df_parsed, by = "gene")
+
+df_filtered_plus2_wide <- pivot_wider(df_filtered_plus2, id_cols = "gene", names_from = "sample", values_from = "est_counts") 
