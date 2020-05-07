@@ -1,7 +1,7 @@
 # Figure 7
-![Figure 7](./precursors.pdf "Precursors")
-![Figure 7](./TPS_heatmap.pdf "Terpene synthases")
-![Figure 7](./TPT_heatmap.pdf "Prenyl transferases")
+![Precursors](./precursors.pdf "Precursors")
+![Terpene synthases](./TPS_heatmap.pdf "Terpene synthases")
+![Prenyl transferases](./TPT_heatmap.pdf "Prenyl transferases")
 
 ## Data provenance
 The `abundance_tidy.tsv` file contains the transcript scaled counts based on mRNA-seq files (see below) and on the ITAG4.0 transcriptome of S. lycopersicum Heinz1706.
