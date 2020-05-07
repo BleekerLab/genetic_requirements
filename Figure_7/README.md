@@ -1,5 +1,6 @@
 # Figure 7
-
+![Figure 7](./figure7.png "Figure 7")
+![Figure 7](./figure7.png "Figure 7")
 ![Figure 7](./figure7.png "Figure 7")
 
 ## Data provenance
