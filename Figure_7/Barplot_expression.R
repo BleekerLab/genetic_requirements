@@ -1,5 +1,6 @@
 library(tidyverse)
 library(ggbiplot)
+library(ggfortify)
 
 df = read.delim(file = "Figure_7/abundance_tidy.tsv", header = T)
 
@@ -64,5 +65,5 @@ df.for.pca <- log(df.for.pca +1)
 pca <- prcomp(df.for.pca, scale = T, center = T)
 
 conditions = c("lazy", "active", "lazy", "active", "lazy", "lazy", "active", "active", "lazy")
-ggbiplot(pca, groups = conditions, obs.scale = 1, var.scale = 1)
+# ggbiplot(pca, groups = conditions, obs.scale = 1, var.scale = 1)
 autoplot(pca, label = TRUE)

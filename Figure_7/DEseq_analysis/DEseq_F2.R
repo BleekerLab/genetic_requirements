@@ -5,7 +5,7 @@ library(dplyr)
 library(tidyr)
 library(tibble)
 library(plyr)
-library(ggfortify)
+
 
 # Load reads
 counts = read.table("Figure_7/abundance_tidy.tsv", header = T, sep = "\t") %>% 
