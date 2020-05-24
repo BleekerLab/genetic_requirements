@@ -43,22 +43,26 @@ df.parsed %>% filter(target_id %in% diff.top10) %>%
 # Selection based on counts #
 #############################
 
-df.wide counts = df.parsed  %>% pivot_wider(names_from = sample, values_from = est_counts)
+df.wide = df.parsed  %>% select(-condition) %>% pivot_wider(names_from = sample, values_from = est_counts)
+df.wide = distinct(df.wide, target_id, .keep_all = TRUE)
 write.table(df.wide, file = "Figure_7/abundance_wide.tsv", sep = "\t", col.names = TRUE, row.names = FALSE)
 
-df.filtered = df.wide %>% filter(
-                                   
-                                   "F2-28" > "F2-151" &
-                                   "F2-28" > "F2-411") &
-                                   "F2-28" > "F2-455" 
-)
 
 #######
 # PCA #
 #######
 df.for.pca <- df.wide %>% column_to_rownames(var = "target_id")
-df.for.pca <- t(df.for.pca)
-df.for.pca <- log(df.for.pca +1)
-pca <- prcomp(df.for.pca)
 
-ggbiplot(pca, groups = conditions)
+#Select for top 1000 highest expressed genes
+df.for.pca$sum <- rowSums(df.for.pca)
+df.for.pca = df.for.pca[order(-df.for.pca$sum),]
+df.for.pca.top1000 = df.for.pca[1:10000,] %>% select(-sum)
+
+df.for.pca <- t(df.for.pca.top1000)
+df.for.pca <- log(df.for.pca +1)
+
+pca <- prcomp(df.for.pca, scale = T, center = T)
+
+conditions = c("lazy", "active", "lazy", "active", "lazy", "lazy", "active", "active", "lazy")
+ggbiplot(pca, groups = conditions, obs.scale = 1, var.scale = 1)
+autoplot(pca, label = TRUE)
