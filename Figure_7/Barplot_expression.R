@@ -25,19 +25,23 @@ df.parsed$sample = factor(df.parsed$sample, levels = c("Elite_01", "PI127826_F1"
                                                        "PI127826", "F2-28", "F2-73", "F2-127"),
                           ordered = TRUE)
 
-# load differentially expressed genes
+##################################################
+# Load Differentially expressed genes from DEse2 #
+##################################################
 
 diff <- read.delim(file = "Figure_7/DEseq_analysis/F2_RNAseq_DEseq_resuts_significant_genes.tsv", header = TRUE) %>% 
   mutate(target_id = substr(target_id, start = 1, stop = 14)) %>% 
-  arrange(log2FoldChange)
+  arrange(diff$log2FoldChange)
 
 diff.top10 <- diff[1:10,1]
 
 # Filter by solycnumber and plot
-df.parsed %>% filter(target_id %in% diff.top10) %>%
+p.top10 = df.parsed %>% filter(target_id %in% diff.top10) %>%
   ggplot(aes(x = reorder(sample, condition), y = est_counts, fill = condition))+
   geom_bar(stat = "identity")+
   facet_wrap(~target_id, scale = "free")
+
+ggsave(file = "Figure_7/plots/top10_diff_expressed.pdf", plot = p.top10)
 
 
 #############################
