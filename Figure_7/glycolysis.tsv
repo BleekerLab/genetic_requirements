@@ -1,0 +1,47 @@
+target_id	annotation	localisation
+solyc11g010450	ATP-dependent phosphofructokinase	plastid
+solyc04g014270	ATP-dependent phosphofructokinase	plastid
+solyc02g084440	"fructose-1,6-bisphosphate aldolase"	plastid
+solyc02g062340	"fructose-1,6-bisphosphate aldolase"	plastid
+solyc05g008600	"fructose-1,6-bisphosphate aldolase"	plastid
+solyc01g110360	"fructose-1,6-bisphosphate aldolase"	plastid
+solyc10g054870	triosephosphate isomerase	plastid
+solyc01g111120	triosephosphate isomerase	plastid
+solyc10g005510	glyceraldehyde 3-phosphate dehydrogenase	plastid
+solyc07g066610	phosphoglycerate kinase	plastid
+solyc04g072800	phosphoglycerate mutase	plastid
+solyc04g054820	phosphoglycerate mutase	plastid
+solyc03g114500	enolase	plastid
+solyc01g106780	pyruvate kinase	plastid
+solyc03g007810	pyruvate kinase	plastid
+solyc08g077180	pyruvate kinase	plastid
+solyc09g082970	pyruvate kinase	plastid
+solyc12g095880	ATP-dependent phosphofructokinase	cytosol
+solyc04g072580	ATP-dependent phosphofructokinase	cytosol
+solyc08g066100	ATP-dependent phosphofructokinase	cytosol
+solyc07g045160	ATP-dependent phosphofructokinase	cytosol
+solyc03g093520	ATP-dependent phosphofructokinase	cytosol
+solyc07g049280	pyrophosphate-dependent phosphofructokinase	cytosol
+solyc02g081160	pyrophosphate-dependent phosphofructokinase	cytosol
+solyc04g082880	pyrophosphate-dependent phosphofructokinase	cytosol
+solyc12g095760	pyrophosphate-dependent phosphofructokinase	cytosol
+solyc07g065900	aldolase	cytosol
+solyc10g083570	aldolase	cytosol
+solyc09g009260	aldolase	cytosol
+solyc06g005490	triosephosphate isomerase	cytosol
+solyc04g011510	triosephosphate isomerase	cytosol
+solyc05g014470	NAD-dependent glyceraldehyde 3-phosphate dehydrogenase	cytosol
+solyc05g005820	NAD-dependent glyceraldehyde 3-phosphate dehydrogenase	cytosol
+solyc06g071920	NAD-dependent glyceraldehyde 3-phosphate dehydrogenase	cytosol
+solyc03g111010	NAD-dependent glyceraldehyde 3-phosphate dehydrogenase	cytosol
+solyc07g005390	NADP-dependent glyceraldehyde 3-phosphate dehydrogenase	cytosol
+solyc07g066600	phosphoglycerate kinase	cytosol
+solyc07g066610	phosphoglycerate kinase	cytosol
+solyc10g045100	phosphoglycerate mutase	cytosol
+solyc01g098590	phosphoglycerate mutase	cytosol
+solyc08g081390	phosphoglycerate mutase	cytosol
+solyc10g045430	phosphoglycerate mutase	cytosol
+solyc01g098580	phosphoglycerate mutase	cytosol
+solyc06g076650	enolase	cytosol
+solyc04g008740	pyruvate kinase	cytosol
+solyc01g049650	pyruvate kinase	cytosol
