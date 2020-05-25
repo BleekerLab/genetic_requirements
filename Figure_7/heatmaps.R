@@ -230,4 +230,52 @@ pheatmap(mat = mat_CIT_log2_scaled,
          height = 8,
          filename = "Figure_7/heatmaps/Cit_shuttle_heatmap.pdf")
 
+##############
+# Glycolysis #
+##############
+
+GLY<- read.delim("figure_7/glycolysis.tsv", header = T, stringsAsFactors = F)
+
+# filter the scaled counts using the target genes
+df_filtered_GLY <- inner_join(GLY,df_parsed, by = "target_id")
+# transform into wide format 
+df_filtered_GLY_wide <- pivot_wider(df_filtered_GLY, id_cols = "target_id", names_from = "sample", values_from = "est_counts") 
+
+# Scaling
+# convert to matrix
+mat_GLY <- as.data.frame(df_filtered_GLY_wide[,-1]) 
+row.names(mat_GLY) <- df_filtered_GLY_wide$target_id
+
+mat_GLY_log2_scaled <- log2(mat_GLY + 1)
+mat_GLY_log2_scaled <- mat_GLY_log2_scaled[,col_order]
+
+# heatmap
+# Order on localisation
+annotation_rows = left_join(df_filtered_GLY_wide, GLY, by = "target_id") %>% select(target_id, annotation, localisation) %>% column_to_rownames(var = "target_id")
+annotation_rows = annotation_rows[order(annotation_rows$localisation),]
+#mat_TPS_log2_scaled = mat_TPS_log2_scaled[row.names(annotation_rows),]
+
+my_colour2 = list(
+  condition = c(elite = "gray99", F1= "gray99", wild = "gray0", F2 = "gray75"),
+  pathway= c(MEP = "forestgreen", MVA = "midnightblue"),
+  localisation = c(cytosol = "midnightblue", mitochondria = "firebrick", plastid = "forestgreen")
+)
+
+pheatmap(mat = mat_GLY_log2_scaled, 
+         scale = "none", 
+         cluster_rows = F, 
+         cluster_cols = F,
+         fontsize = 10,
+         cellwidth = 15,
+         cellheight = 15,
+         gaps_col = 5,
+         gaps_row =17,
+         annotation_row = annotation_rows,
+         annotation_col = annotation_cols,
+         annotation_colors = my_colour2,
+         height = 11,
+         filename = "Figure_7/heatmaps/Glycolysis_heatmap.pdf")
+
+
+
 
