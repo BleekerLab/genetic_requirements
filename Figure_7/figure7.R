@@ -51,7 +51,8 @@ my_colour = list(
 
 # MEP/MVA precursors
 
-precursor_genes <- read.delim("figure_7/precursor_genes.tsv", header = T, stringsAsFactors = F)
+precursor_genes <- read.delim("figure_7/precursor_genes.tsv", header = T, stringsAsFactors = F) %>%
+  rename(gene = target_id)
 # Remove (putative) Nudix and IPK genes as this is still unclear in tomato
 # precursor_genes = precursor_genes %>% filter(!name %in% c("Nudix", "IPK"))
 # filter the scaled counts using the target genes
@@ -95,7 +96,8 @@ annotation_rows = annotation_rows[order(annotation_rows$pathway),] # this makes 
 # Terpene Synthases #
 #####################
 
-TPS <- read.delim("figure_7/terpene_synthases_zhou2020.tsv", header = T, stringsAsFactors = F)
+TPS <- read.delim("figure_7/terpene_synthases_zhou2020.tsv", header = T, stringsAsFactors = F) %>% 
+          rename(gene = target_id)
 TPS = TPS %>% filter(structure == "functional") # Remove pseudogenes 
         
 # filter the scaled counts using the target genes
