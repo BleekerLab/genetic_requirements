@@ -1,5 +1,4 @@
-my_theme = 
-  theme(text = element_text(),
+my_theme = theme(text = element_text(),
         axis.text.x = element_text(size = 8, colour = "black"),
         axis.text.y = element_text(size = 8, colour = "black"),
         strip.background = element_blank(),

@@ -1,11 +1,12 @@
-gene	TPT
-Solyc12g015860	FPPS1
-Solyc11g011240	GGPPS1
-Solyc04g079960	GGPPS2
-Solyc07g061990	SPPS
-Solyc08g023470	DPPS
-Solyc02g085700	GGPPS3
-Solyc02g085710	TPT1
-Solyc02g085720	TPT2
-Solyc07g064660	SSU I
-Solyc09g008920	SSU II
+target_id	annotation	localisation
+Solyc12g015860	FPPS1	cytosol
+Solyc11g011240	GGPPS1	plastid
+Solyc04g079960	GGPPS2	plastid
+Solyc07g061990	SPPS	plastid
+Solyc08g023470	DPPS	cytosol
+Solyc02g085700	GGPPS3	plastid
+Solyc02g085710	TPT1	mitochondria
+Solyc02g085720	TPT2	mitochondria
+Solyc07g064660	SSU I	plastid
+Solyc09g008920	SSU II	plastid
+Solyc08g005680	NDPS/zFPS	plastid
