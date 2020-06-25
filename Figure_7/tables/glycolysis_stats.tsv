@@ -1,0 +1,44 @@
+"target_id"	"annotation"	"localisation"	"log2FoldChange"	"padj"
+"Solyc11g010450"	"ATP-dependent phosphofructokinase"	"plastid"	-0.0402692689100942	0.999925131801308
+"Solyc04g014270"	"ATP-dependent phosphofructokinase"	"plastid"	0.0575319520810372	0.999925131801308
+"Solyc02g084440"	"fructose-1,6-bisphosphate aldolase"	"plastid"	-0.57077786688316	0.999925131801308
+"Solyc02g062340"	"fructose-1,6-bisphosphate aldolase"	"plastid"	-1.5999172323393	0.999925131801308
+"Solyc05g008600"	"fructose-1,6-bisphosphate aldolase"	"plastid"	0.397460953610708	0.999925131801308
+"Solyc01g110360"	"fructose-1,6-bisphosphate aldolase"	"plastid"	-1.69761365873616	0.999925131801308
+"Solyc10g054870"	"triosephosphate isomerase"	"plastid"	-0.679283965287228	0.999925131801308
+"Solyc01g111120"	"triosephosphate isomerase"	"plastid"	0.331659697050144	0.999925131801308
+"Solyc10g005510"	"glyceraldehyde 3-phosphate dehydrogenase"	"plastid"	0.308486304604048	0.999925131801308
+"Solyc07g066610"	"phosphoglycerate kinase"	"plastid"	0.0399889588824195	0.999925131801308
+"Solyc04g072800"	"phosphoglycerate mutase"	"plastid"	0.620356972104781	0.999925131801308
+"Solyc04g054820"	"phosphoglycerate mutase"	"plastid"	-0.01264239309423	0.999925131801308
+"Solyc03g114500"	"enolase"	"plastid"	0.470540974953363	0.999925131801308
+"Solyc01g106780"	"pyruvate kinase"	"plastid"	0.59429996233764	0.999925131801308
+"Solyc03g007810"	"pyruvate kinase"	"plastid"	0.270641055685268	0.999925131801308
+"Solyc08g077180"	"pyruvate kinase"	"plastid"	0.2331869938721	0.999925131801308
+"Solyc09g082970"	"pyruvate kinase"	"plastid"	-0.370650726333431	0.999925131801308
+"Solyc12g095880"	"ATP-dependent phosphofructokinase"	"cytosol"	-0.389570408898785	0.999925131801308
+"Solyc04g072580"	"ATP-dependent phosphofructokinase"	"cytosol"	1.25079066873336	0.999925131801308
+"Solyc07g045160"	"ATP-dependent phosphofructokinase"	"cytosol"	-1.34869740263571	0.999925131801308
+"Solyc03g093520"	"ATP-dependent phosphofructokinase"	"cytosol"	0.22523175210126	0.999925131801308
+"Solyc07g049280"	"pyrophosphate-dependent phosphofructokinase"	"cytosol"	0.831223939332242	0.999925131801308
+"Solyc02g081160"	"pyrophosphate-dependent phosphofructokinase"	"cytosol"	0.206017482257087	0.999925131801308
+"Solyc04g082880"	"pyrophosphate-dependent phosphofructokinase"	"cytosol"	-0.155502796286103	0.999925131801308
+"Solyc12g095760"	"pyrophosphate-dependent phosphofructokinase"	"cytosol"	0.00278002644846291	0.999925131801308
+"Solyc07g065900"	"aldolase"	"cytosol"	-0.739446171124827	0.999925131801308
+"Solyc10g083570"	"aldolase"	"cytosol"	0.335995557983412	0.999925131801308
+"Solyc09g009260"	"aldolase"	"cytosol"	0.404344779497531	0.999925131801308
+"Solyc06g005490"	"triosephosphate isomerase"	"cytosol"	0.0167748313562524	0.999925131801308
+"Solyc04g011510"	"triosephosphate isomerase"	"cytosol"	0.3644467839926	0.999925131801308
+"Solyc05g014470"	"NAD-dependent glyceraldehyde 3-phosphate dehydrogenase"	"cytosol"	0.335851328936115	0.999925131801308
+"Solyc06g071920"	"NAD-dependent glyceraldehyde 3-phosphate dehydrogenase"	"cytosol"	-0.545562900477998	0.999925131801308
+"Solyc03g111010"	"NAD-dependent glyceraldehyde 3-phosphate dehydrogenase"	"cytosol"	0.231739615563235	0.999925131801308
+"Solyc07g005390"	"NADP-dependent glyceraldehyde 3-phosphate dehydrogenase"	"cytosol"	-0.0566674039051918	0.999925131801308
+"Solyc07g066600"	"phosphoglycerate kinase"	"cytosol"	-0.0424782118839548	0.999925131801308
+"Solyc10g045100"	"phosphoglycerate mutase"	"cytosol"	0.87653076049424	0.999925131801308
+"Solyc01g098590"	"phosphoglycerate mutase"	"cytosol"	-1.03148510380472	0.999925131801308
+"Solyc08g081390"	"phosphoglycerate mutase"	"cytosol"	-0.0406139128461466	0.999925131801308
+"Solyc10g045430"	"phosphoglycerate mutase"	"cytosol"	-0.198304474368377	0.999925131801308
+"Solyc01g098580"	"phosphoglycerate mutase"	"cytosol"	0.433965221681298	0.999925131801308
+"Solyc06g076650"	"enolase"	"cytosol"	0.374992183325618	0.999925131801308
+"Solyc04g008740"	"pyruvate kinase"	"cytosol"	0.315105342481028	0.999925131801308
+"Solyc01g049650"	"pyruvate kinase"	"cytosol"	0.179566104358489	0.999925131801308
