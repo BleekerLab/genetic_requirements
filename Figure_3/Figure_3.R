@@ -85,13 +85,13 @@ max_y_figure_3a = max(log2(df$zingiberene)) +
   0.1 * max(log2(df$zingiberene + 1))  
 
 labels_for_legend = c(
-  "C4: 2 to 30 trichomes",
-  "C5: 16 to 30 trichomes", 
-  "C6: 30 to 65 trichomes",
-  "C7: 45 to 90 trichomes",
-  "C8: 60 to 105 trichomes",
-  "C9: 80 to 125 trichomes",
-  "C10:100 to 150 trichomes"
+  "C4: 2-30",
+  "C5: 16-30", 
+  "C6: 30-65",
+  "C7: 45-90",
+  "C8: 60-105",
+  "C9: 80-125",
+  "C10:100-150"
 )
 
 p_fig3a = 
@@ -107,7 +107,7 @@ p_fig3a =
   my_theme +
   scale_fill_brewer(name = "Class of trichome density",
                     labels = labels_for_legend,
-                    palette = "Blues") 
+                    palette = "Greys") 
 
 # add post-hoc groups
 p_fig3a = p_fig3a + 
@@ -117,19 +117,13 @@ p_fig3a = p_fig3a +
                 y = 25, 
                 label = group)) 
 
-# add number of measurements
-p_fig3a = p_fig3a + 
-  geom_text(data = n_per_class,
-            size = 3,
-            aes(x = class, 
-                y = 24, 
-                label = paste("N = ", n_measured)))
+
 
 p_fig3a
 
-ggsave(filename = "Figure_3/Figure3A.pdf", plot = p_fig3a, width = 6, height = 4)
+ggsave(filename = "Figure_3/Figure3A.pdf", plot = p_fig3a, width =5, height = 3.5)
 
-##################################################
++#################################################
 # Figure 3B: trichome densities versus zingiberene
 ##################################################
 
@@ -188,6 +182,9 @@ p_fig3b  =
     label.y.npc = 0.9)
   
 p_fig3b
+
+ggsave(filename = "Figure_3/Figure3B.pdf", plot = p_fig3b, width =3, height = 3.5)
+
 
 
 
