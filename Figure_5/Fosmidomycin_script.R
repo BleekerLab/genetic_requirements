@@ -22,18 +22,19 @@ df.long$genotype = factor(df.long$genotype,
                           levels = c("PI127826", "73", "CV", "411"),
                           ordered = TRUE)
 
-my.theme = 
+my.theme =
+  theme_bw() + 
   theme(text = element_text(),
-        axis.text.x = element_text(size = 8, colour = "black", angle = 30, hjust = 1),
-        axis.text.y = element_text(size = 8, colour = "black"),
+        axis.text.x = element_text(size = 10, colour = "black", angle = 30, hjust = 1),
+        axis.text.y = element_text(size = 10, colour = "black"),
         strip.background = element_blank(),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
+  
+   
         panel.border = element_rect(),
         panel.background = element_rect(fill = NA, color = "black"),
         strip.text.x = element_text(size=8, colour = "black")
-  )+
-  theme_bw()
+  )
+  
 
 metabolite.labels = c("Plastidial terpenes", "Cytosolic terpenes")
 names(metabolite.labels) = c("total_MEP_terpenes", "total_MVA_terpenes")
@@ -54,7 +55,7 @@ df.long %>%
   labs(y = "Metabolite level (ng/gland)")+
   my.theme
 
-ggsave(filename = "Figure_5/MVA_MEP terpenes day 14_barplot.pdf", plot = p1, width = 6, height = 12)
+ggsave(filename = "Figure_5/MVA_MEP terpenes day 14_barplot.pdf", plot = p1, width = 6, height = 6)
 
 ###### Statistics #######
 
