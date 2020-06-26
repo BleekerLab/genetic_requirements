@@ -51,7 +51,6 @@ df$genotype = as.factor(df$genotype)
   stat_bin(binwidth = 100000, colour = "black", fill = "black") +
   #facet_grid(~group) +
   xlim(-100000,1500000)+
-  ylim(0,30)+
   my.theme  + theme(legend.position = "none", axis.title.y = element_blank(), axis.title.x = element_blank()) 
 
 p.F1 =
@@ -112,7 +111,7 @@ volatiles %>% filter(., group == "F2") %>%
   xlab("7-epizingiberene abundance (peak area)")+
   ylab("Number of F2 genotypes")+
   my.theme
-ggsave(filename = "Figure_2/plots/F2_zingiberene_histogram.pdf", plot = p.F2.ylim, width = 5, height = 3)
+ggsave(filename = "Figure_2/plots/F2_zingiberene_histogram.pdf", plot = p.F2.ylim, width = 4, height = 2.5)
 
 
 sum <- volatiles.parents %>% dplyr::group_by(genotype) %>% dplyr::summarise(zingi_mean = mean(zingiberene))
