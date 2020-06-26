@@ -8,17 +8,17 @@ library(FSA)
 #############################
 
 my.theme = 
+  theme_bw() + 
   theme(text = element_text(),
-        axis.text.x = element_text(size = 8, colour = "black"),
-        axis.text.y = element_text(size = 8, colour = "black"),
+        axis.text.x = element_text(size = 10, colour = "black"),
+        axis.text.y = element_text(size = 10, colour = "black"),
         strip.background = element_blank(),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         panel.border = element_rect(),
         panel.background = element_rect(fill = NA, color = "black"),
-        strip.text.x = element_text(size=8, colour = "black")
-  )+
-  theme_bw()
+        strip.text.x = element_text(size=10, colour = "black")
+  )
 
 #############
 # Load data #
@@ -45,12 +45,13 @@ df$genotype = as.factor(df$genotype)
 
 # Plot different genotype groups seperatly
 
-p.F2 = 
+#p.F2 = 
   volatiles %>% filter(., group == "F2") %>%
   ggplot(., aes(x = zingiberene))+
   stat_bin(binwidth = 100000, colour = "black", fill = "black") +
   #facet_grid(~group) +
   xlim(-100000,1500000)+
+  ylim(0,30)+
   my.theme  + theme(legend.position = "none", axis.title.y = element_blank(), axis.title.x = element_blank()) 
 
 p.F1 =
@@ -99,7 +100,24 @@ p.F2.insert =
   theme_bw()+
   theme(legend.position = "none", axis.title.y = element_blank(), axis.title.x = element_blank()) 
 
+########
 
+p.F2.ylim = # version with a limited y  
+volatiles %>% filter(., group == "F2") %>%
+  ggplot(., aes(x = zingiberene))+
+  stat_bin(binwidth = 100000, colour = "black", fill = "black") +
+  #facet_grid(~group) +
+  xlim(-100000,1500000)+
+  ylim(0,30)+
+  xlab("7-epizingiberene abundance (peak area)")+
+  ylab("Number of F2 genotypes")+
+  my.theme
+ggsave(filename = "Figure_2/plots/F2_zingiberene_histogram.pdf", plot = p.F2.ylim, width = 5, height = 3)
+
+
+sum <- volatiles.parents %>% dplyr::group_by(genotype) %>% dplyr::summarise(zingi_mean = mean(zingiberene))
+
+########
 p.all = grid.arrange(p.cultivar, p.F1,p.PI127826,p.F2, ncol = 1)
 
 ggsave("Figure_2/ZGB_distribution_Full_F2.pdf", plot = p.all, height = 6, width = 3.5)
