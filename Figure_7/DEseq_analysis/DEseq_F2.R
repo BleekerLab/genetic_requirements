@@ -5,6 +5,7 @@ library(dplyr)
 library(tidyr)
 library(tibble)
 library(plyr)
+library(ggrepel)
 library(EnhancedVolcano)
 
 
@@ -29,9 +30,9 @@ counts4DE[2:10] = lapply(counts4DE[2:10], as.integer) # change floating numbers 
 colnames(counts4DE)[2:10] <- sampleinfo[,1] # Add samples names 
 
 ##Clean-up dataset 
-numOverTen <- function(x) {sum(x > 10)} 
+numOverTen <- function(x) {sum(x > 1)} 
 ExpressionNum <- apply(counts4DE[2:10], 1, numOverTen) 
-# counts4DE <- counts4DE[which(ExpressionNum > 3),] #throw away data where more less than 3 samples have less than 10 counts 
+counts4DE <- counts4DE[which(ExpressionNum > 1),] #throw away data where more less than 3 samples have less than 10 counts 
 counts4DE <- distinct(counts4DE, target_id, .keep_all = TRUE) # Remove rows with duplicated gene names 
 
 
@@ -49,19 +50,48 @@ plotMA(DES, main = "Lazy and Active Differences in Gene Expression") #Differenit
 res = results(DES, contrast = c("Condition","lazy","active"))
 res = lfcShrink(DES, contrast = c("Condition","lazy","active"), res=res, type = 'normal') # This is for creating the volcanoplot
 
-# Volcanoplot
-
-EnhancedVolcano(res,
-                lab = rownames(res),
-                x = 'log2FoldChange',
-                y = 'pvalue',
-                xlim = c(-3, 3),
-                labSize = 5.0)
-
-
 res = as.data.frame(res) %>% rownames_to_column(., var = "target_id")
 res.significant <- res %>% filter(padj < 0.05)
 
 # Export result to txt
  write.table(res, file = "Figure_7/DEseq_analysis/F2_RNAseq_DEseq_resuts.tsv", sep = "\t", row.names = FALSE)
  write.table(res.significant, file = "Figure_7/DEseq_analysis/F2_RNAseq_DEseq_resuts_significant_genes.tsv", sep = "\t", row.names = FALSE)
+
+ ###############
+ # Volcanoplot #
+ ###############
+ EnhancedVolcano(res,
+                 lab = rownames(res),
+                 x = 'log2FoldChange',
+                 y = 'pvalue',
+                 xlim = c(-3, 3),
+                 labSize = 5.0)
+ 
+ #######
+ # PCA #
+ #######
+ 
+ # Theme for plotting
+ my.theme = theme_bw()+
+   theme(text = element_text(),
+         axis.text.x = element_text(size = 10, colour = "black"),
+         axis.text.y = element_text(size = 10, colour = "black")
+   )
+ 
+ 
+ pca = plotPCA(vsd, intgroup=c("Condition"), returnData = TRUE)
+ percentVar <- round(100 * attr(pca, "percentVar"))
+
+ p.pca = 
+ ggplot(pca, aes(x = PC1, y = PC2, colour = group))+
+   geom_point()+
+   geom_point(size=3) +
+   xlab(paste0("PC1: ",percentVar[1],"% variance")) +
+   ylab(paste0("PC2: ",percentVar[2],"% variance")) + 
+   coord_fixed()+
+   geom_label_repel(aes(label = row.names(pca), colour = group))+
+   my.theme
+ 
+ 
+ggsave(file = "Figure_7/DEseq_analysis/PCA.pdf", plot = p.pca, width = 5, height = 5)
+ 
