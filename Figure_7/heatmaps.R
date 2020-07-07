@@ -99,7 +99,8 @@ TPS = TPS %>% filter(structure == "functional") # Remove pseudogenes
 df_filtered_TPS <- inner_join(TPS,df_parsed, by = "target_id")
 df_filtered_TPS = df_filtered_TPS[order(df_filtered_TPS$annotation),] # order from low to high TPS number
 # transform into wide format 
-df_filtered_TPS_wide <- pivot_wider(df_filtered_TPS, id_cols = "target_id", names_from = "sample", values_from = "est_counts") 
+df_filtered_TPS_wide <- pivot_wider(df_filtered_TPS, names_from = "sample", values_from = "est_counts") %>%
+  
 
 # convert to matrix
 mat_TPS = as.data.frame(df_filtered_TPS_wide[,-1]) 
