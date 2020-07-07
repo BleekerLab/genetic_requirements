@@ -99,11 +99,11 @@ TPS = TPS %>% filter(structure == "functional") # Remove pseudogenes
 df_filtered_TPS <- inner_join(TPS,df_parsed, by = "target_id")
 df_filtered_TPS = df_filtered_TPS[order(df_filtered_TPS$annotation),] # order from low to high TPS number
 # transform into wide format 
-df_filtered_TPS_wide <- pivot_wider(df_filtered_TPS, names_from = "sample", values_from = "est_counts") %>%
+df_filtered_TPS_wide <- pivot_wider(df_filtered_TPS, names_from = "sample", values_from = "est_counts") 
   
 
 # convert to matrix
-mat_TPS = as.data.frame(df_filtered_TPS_wide[,-1]) 
+mat_TPS = as.data.frame(df_filtered_TPS_wide[,-(1:4)]) 
 row.names(mat_TPS) = df_filtered_TPS_wide$target_id
 
 mat_TPS_log2_scaled <- log2(mat_TPS + 1)
@@ -111,7 +111,7 @@ mat_TPS_log2_scaled <- mat_TPS_log2_scaled[,col_order]
 
 # heatmap
 # Order on localisation
-annotation_rows = left_join(df_filtered_TPS_wide, TPS, by = "target_id") %>% select(target_id, annotation, localisation) %>% column_to_rownames(var = "target_id")
+annotation_rows <- df_filtered_TPS_wide %>% select(target_id, annotation, localisation) %>% column_to_rownames(var = "target_id")
 annotation_rows = annotation_rows[order(annotation_rows$localisation),]
 mat_TPS_log2_scaled = mat_TPS_log2_scaled[row.names(annotation_rows),]
 
