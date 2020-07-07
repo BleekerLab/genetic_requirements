@@ -1,7 +1,7 @@
 target_id	annotation	structure 	localisation
 Solyc06g059910	TPS10	functional	cytosol
 Solyc06g059920	TPS10	functional	cytosol
-Solyc06g059930	TPS12	functional	cytosol
+Solyc06g059930	TPS_9_12	functional	cytosol
 Solyc09g092470	TPS14	functional	cytosol
 Solyc07g008680	TPS16	functional	cytosol
 Solyc07g008690	TPS16	functional	cytosol
@@ -38,7 +38,6 @@ Solyc07g052140	TPS52	functional	cytosol
 Solyc07g052150	TPS52	functional	cytosol
 Solyc01g105920	TPS7	functional	plastid
 Solyc01g105960	TPS8	functional	cytosol
-Solyc06g059930	TPS9	functional	cytosol
 Solyc01g101190	TPS34	pseudogene	
 Solyc01g101220	TPS30	pseudogene	
 Solyc01g105850	TPS1	pseudogene	
