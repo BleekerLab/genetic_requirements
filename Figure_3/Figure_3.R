@@ -123,6 +123,87 @@ p_fig3a
 
 ggsave(filename = "Figure_3/Figure3A.pdf", plot = p_fig3a, width =5, height = 3.5)
 
+
+#######################
+# Alternative plot 3A #
+#######################
+
+labels_for_legend = c(
+  "C2: 0",
+  "C3: 2-15",
+  "C4: 2-30",
+  "C5: 16-30", 
+  "C6: 30-65",
+  "C7: 45-90",
+  "C8: 60-105",
+  "C9: 80-125",
+  "C10:100-150"
+)
+
+p_fig3a_new = 
+  ggplot(df, aes(x = sum_type_VI, 
+                 y = log(zingiberene))) +
+  geom_boxplot(aes(fill = sum_type_VI), 
+               outlier.size = 0.5) +
+  geom_jitter(size = 0.5, 
+             width = 0.1, 
+             height = 0.1) +
+  ylab("7-epizingiberene (Log2 ion counts / leaflet)") +
+  xlab("Type-VI trichome-density class") +
+  my_theme +
+  ylim(0,16)+
+  scale_fill_brewer(name = "Class of trichome density",
+                    labels = labels_for_legend,
+                    palette = "Greys") 
+
+
+
+ggsave(filename = "Figure_3/Figure3A_new.pdf", plot = p_fig3a_new, width =5, height = 3.5)
+
+
+###############################
+# Alternative plot 3A barplot #
+###############################
+
+labels_for_legend = c(
+  "C2: 0",
+  "C3: 2-15",
+  "C4: 2-30",
+  "C5: 16-30", 
+  "C6: 30-65",
+  "C7: 45-90",
+  "C8: 60-105",
+  "C9: 80-125",
+  "C10:100-150"
+)
+
+df %>% dplyr::group_by(sum_type_VI) %>% dplyr::summarise(mean_zgb = mean(zingiberene), se = sd(zingiberene)/sqrt(n()), N = n()) %>%
+  ggplot()+
+  geom_bar(aes(x = sum_type_VI, 
+               y= mean_zgb,
+               fill = sum_type_VI,
+               colour = NULL),
+           stat = "identity")+
+  geom_errorbar(aes(x = sum_type_VI,
+                    ymin = mean_zgb - se,
+                    ymax = mean_zgb + se)
+                )+
+  geom_point(data = df,
+             aes(x = sum_type_VI,
+                 y = zingiberene))+
+  ylim(0,500000)+
+  ylab("7-epizingiberene (Log2 ion counts / leaflet)") +
+  xlab("Type-VI trichome-density class") +
+  my_theme +
+  scale_fill_brewer(name = "Class of trichome density",
+                    labels = labels_for_legend,
+                    palette = "Greys")
+
+
+
+ggsave(filename = "Figure_3/Figure3A_new.pdf", plot = p_fig3a_new, width =5, height = 3.5)
+
+
 +#################################################
 # Figure 3B: trichome densities versus zingiberene
 ##################################################
