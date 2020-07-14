@@ -142,7 +142,7 @@ labels_for_legend = c(
 
 p_fig3a_new = 
   ggplot(df, aes(x = sum_type_VI, 
-                 y = log(zingiberene))) +
+                 y = log(zingiberene+1))) +
   geom_boxplot(aes(fill = sum_type_VI), 
                outlier.size = 0.5) +
   geom_jitter(size = 0.5, 
@@ -151,7 +151,7 @@ p_fig3a_new =
   ylab("7-epizingiberene (Log2 ion counts / leaflet)") +
   xlab("Type-VI trichome-density class") +
   my_theme +
-  ylim(0,16)+
+  ylim(-10,16)+
   scale_fill_brewer(name = "Class of trichome density",
                     labels = labels_for_legend,
                     palette = "Greys") 
@@ -177,6 +177,7 @@ labels_for_legend = c(
   "C10:100-150"
 )
 
+p_bar = 
 df %>% dplyr::group_by(sum_type_VI) %>% dplyr::summarise(mean_zgb = mean(zingiberene), se = sd(zingiberene)/sqrt(n()), N = n()) %>%
   ggplot()+
   geom_bar(aes(x = sum_type_VI, 
@@ -201,7 +202,7 @@ df %>% dplyr::group_by(sum_type_VI) %>% dplyr::summarise(mean_zgb = mean(zingibe
 
 
 
-ggsave(filename = "Figure_3/Figure3A_new.pdf", plot = p_fig3a_new, width =5, height = 3.5)
+ggsave(filename = "Figure_3/Figure3A_bar.pdf", plot = p_bar, width =5, height = 3.5)
 
 
 +#################################################
