@@ -99,21 +99,26 @@ p.F2.insert =
   theme_bw()+
   theme(legend.position = "none", axis.title.y = element_blank(), axis.title.x = element_blank()) 
 
-########
+#############
+# Main plot #
+#############
 
-p.F2.ylim = # version with a limited y  
-volatiles %>% filter(., group == "F2") %>%
+p.F2.ylim = # only show the non-0 values - includes the statistics per bin 
+volatiles %>% filter(., group == "F2") %>% filter(zingiberene != 0) %>%
   ggplot(., aes(x = zingiberene))+
-  stat_bin(binwidth = 100000, colour = "black", fill = "black") +
+  #stat_bin(binwidth = 100000, colour="black", fill="white") +
+  geom_histogram(binwidth = 100000, colour="black", fill="lightgrey") +
+  stat_bin(binwidth = 100000, aes(y=..count.., label=..count..), geom="text", vjust = -1)+
   #facet_grid(~group) +
-  xlim(-100000,1500000)+
-  ylim(0,30)+
+  xlim(-100000,2000000)+
+  ylim(0,45)+
+  #ylim(0,30)+
   xlab("7-epizingiberene abundance (peak area)")+
   ylab("Number of F2 genotypes")+
   my.theme
-ggsave(filename = "Figure_2/plots/F2_zingiberene_histogram.pdf", plot = p.F2.ylim, width = 4, height = 2.5)
+ggsave(filename = "Figure_2/plots/F2_zingiberene_histogram_no_zeroes.pdf", plot = p.F2.ylim, width = 5, height = 4)
 
-
+# Calculate the mean value of the parents to show in plot
 sum <- volatiles.parents %>% dplyr::group_by(genotype) %>% dplyr::summarise(zingi_mean = mean(zingiberene))
 
 ########
