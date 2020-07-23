@@ -58,11 +58,12 @@ df.avg %>% filter(metabolite %in% c("7epiZ", "summed_terpenes")) %>%
            stat = "identity",
            color = "black", 
            fill = "black") +
+  scale_y_continuous(breaks = c(0, 200,400,600,800))+
   geom_errorbar(aes(x = genotype, 
                     ymin = mean_value - se, 
                     ymax = mean_value + se), 
                 width = 0.2)+
-  facet_wrap(~metabolite, scale = "free")+
+  facet_wrap(~metabolite)+
   my.theme +
   xlab(NULL) + 
   ylab(expression("Metabolite abundance (ng / mg fresh leaf)"))
