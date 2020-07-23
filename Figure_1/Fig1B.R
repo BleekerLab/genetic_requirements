@@ -85,7 +85,7 @@ p.type_VI = df_parsed  %>%
   xlab(NULL) + 
   ylab(expression("Leaf trichome density, trichomes/mm^2")) 
   
-ggsave(file = "Figure_1/Fig1B.pdf", plot = p.type_VI, width = 9, height = 6, units = "cm")
+ggsave(file = "Figure_1/Fig1B.pdf", plot = p.type_VI, width = 9, height = 5.5, units = "cm")
 
 
 #############
