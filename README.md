@@ -24,14 +24,22 @@ Fosmidomycin / Mevastatin treatment of "Active" / "Lazy" F2 lines + parent (prec
 
 ## Fig 6: to be filled.
 
-## Fig 7: RNA-seq analysis of F1 and F2s. 
+## Fig 7: Heatmaps of MEP/MVA pathway RNA-seq
 Heatmaps of MVA / MEP selected pathways.  
 
-## Fig.8: Allele-specific expressed genes  
+## Fig. 8: Differential gene expressions
 
-## Fig S1: All terpenes in F1 (+parents)  
 
-## Fig S2: Other classes of trichomes in F1  
+## Fig.9: Allele-specific expression patterns of MEP/MVA genes   
 
-## Fig S3: Zingiberene vs caryophyllene/humulene  
 
+## Supplementary Figure S1: Quantification of individual terpenes in the parents + F1
+## Supplementary Figure S2: Trichome densities of NG-and type-I/IV trichomes 
+## Supplementary Figure S3: Trichome density profiles of selected F2 plants versus 7-epizingibere levels on the leaf 
+## Supplementary Figure S4: Total terpenes in type-VI head-cells of selected F2 plants
+## Supplementary Figure S5: Cavity sizes of inhibitor experiment
+## Supplementary Figure S6: Barplots of read-counts RNA-seq MEP/MVA pathways
+## Supplementary Figure S7: Barplots of read-counts RNA-seq prenyltransferases
+## Supplementary Figure S8: Barplots of read-counts RNA-seq terpene synthases
+## Supplementary Figure S9: Heatmaps of glycolysis 
+## Supplementary Figure S10: Heatmaps of citrate shuttle
