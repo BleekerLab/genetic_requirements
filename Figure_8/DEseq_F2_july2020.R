@@ -56,13 +56,11 @@ res.significant <- res_df %>% filter(padj < 0.05)
                  lab = rownames(res),
                  x = 'log2FoldChange',
                  y = 'pvalue',
-                 xlim = c(-3, 3),
-                 labSize = 5.0)
+                 labSize = 3.0)
  
  #######
  # PCA #
  #######
- 
  # Theme for plotting
  my.theme = theme_bw()+
    theme(text = element_text(),
@@ -70,8 +68,8 @@ res.significant <- res_df %>% filter(padj < 0.05)
          axis.text.y = element_text(size = 10, colour = "black")
    )
  
- 
- pca = plotPCA(DES, groups="Condition", returnData = TRUE)
+ df.for.pca = rlog(DES) # normalise (log2) the data
+ pca = plotPCA(df.for.pca, intgroup="Condition", returnData = TRUE, ntop = NULL) #use the returnData = TRUE argument to enable pca to be imported in ggplot
  percentVar <- round(100 * attr(pca, "percentVar"))
 
  p.pca = 
@@ -85,5 +83,5 @@ res.significant <- res_df %>% filter(padj < 0.05)
    my.theme
  
  
-ggsave(file = "Figure_7/DEseq_analysis/PCA.pdf", plot = p.pca, width = 5, height = 5)
+ggsave(file = "Figure_8/PCA.pdf", plot = p.pca, width = 5, height = 5)
  
