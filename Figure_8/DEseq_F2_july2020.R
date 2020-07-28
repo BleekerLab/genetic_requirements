@@ -38,18 +38,20 @@ DES <- DESeq(DES, parallel = T) #creates a normalised dataset
 plotDispEsts(DES)
 plotMA(DES, main = "Lazy and Active Differences in Gene Expression") #Differenitally expressed genes
 
-# Export results
+# Get results of DE expressed genes
 res = results(DES, contrast = c("Condition","lazy","active"))
 res_for_volcano = lfcShrink(DES, contrast = c("Condition","lazy","active"), res=res, type = 'normal') # This is for creating the volcanoplot
 
 # Add annotations to the results dataframe
-res_df = as.data.frame(res) %>% rownames_to_column(., var = "target_id")
-annotations <- read.table(file= "Figure_8/ITAG4.1_descriptions.txt", header = F, sep = "\t") 
-annotations = separate(annotations, V1, sep = " ", c("target_id", "annotation"),extra = "merge") %>%
+annotations <- read.csv(file= "Figure_8/ITAG4.1_descriptions.txt", header = F, sep = "\t") 
+annotations <- separate(annotations, V1, sep = " ", c("target_id", "annotation"),extra = "merge") %>%
   mutate(target_id = substr(target_id, start = 1, stop = 14))
 
-res.significant <- res_df %>% filter(padj < 0.05)
-res.significant <- left_join(res.significant, annotations, by = "target_id")
+# filter significant DE genes from results and add the annotations
+res_df <- as.data.frame(res) %>% rownames_to_column(., var = "target_id")
+
+res.significant <- res_df %>% filter(padj < 0.05) %>%
+   left_join(annotations, by = "target_id")
 
 # Export result to txt
  write.table(res_df, file = "Figure_8/F2_RNAseq_DEseq_resuts.tsv", sep = "\t", row.names = FALSE)
@@ -83,14 +85,18 @@ res.significant <- left_join(res.significant, annotations, by = "target_id")
  
  # Fuse the active/lazy condition with the main df
 normalised.counts.tidy = left_join(normalised.counts.tidy, con, by = "genotype")
+
+# Fuse with the annotations
 normalised.counts.tidy = left_join(normalised.counts.tidy, annotations, by = "target_id")
+
+# Set genotypes in proper order
 normalised.counts.tidy$genotype = factor(normalised.counts.tidy$genotype, 
                                          levels = c("Elite_01", "PI127826_F1", "F2_151", "F2_411", "F2_445",
                                                     "PI127826", "F2_28", "F2_73", "F2_127"),
                                          ordered = TRUE)
  
  # Determin target genes 
- res.significant =  res.significant %>% arrange(res.significant$padj)
+ res.significant =  res.significant %>% arrange(padj,-(baseMean))
  diff.top10 <- res.significant[1:15,1]
  
  ######################
@@ -123,25 +129,21 @@ normalised.counts.tidy %>% filter(target_id %in% diff.top10) %>%
   geom_boxplot()+
   #geom_text_repel(aes(label = genotype)) +
   scale_fill_manual(values = c("lazy" = "grey", "active" = "black"))+
+  #geom_text(aes(label = annotation), check_overlap = T, size = 2)+
   facet_wrap(~target_id, scale = "free")+
   labs(x = "Sample" , y = "Gene expression (counts)")+
   my_theme
- 
- 
- 
- 
- 
- 
- 
- 
- d <- plotCounts(DES, gene= res$padj, intgroup="Condition", 
-                 returnData=TRUE)
- 
- ggplot(d, aes(x=Condition, y=count)) + 
-   geom_point(position=position_jitter(w=0.1,h=0))+
-   geom_text_repel(aes(label = rownames(d)))  
- 
- 
+
+# Overview of counts distribution (baseMean)
+
+ggplot(res_df, aes(x = res_df$baseMean))+
+   geom_histogram(binwidth = 100, fill = "white", colour = "black")+
+   xlim(0,10000)+
+   ylim(0,3000)+
+   geom_text(aes(x = 7000, y = 2000), label = "binwith = 100 counts")+
+   xlab("DEseq2 baseMean")+
+   ylab("number of genes")+
+   my_theme
  
  
  #######
