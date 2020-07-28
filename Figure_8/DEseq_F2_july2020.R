@@ -42,8 +42,14 @@ plotMA(DES, main = "Lazy and Active Differences in Gene Expression") #Differenit
 res = results(DES, contrast = c("Condition","lazy","active"))
 res_for_volcano = lfcShrink(DES, contrast = c("Condition","lazy","active"), res=res, type = 'normal') # This is for creating the volcanoplot
 
+# Add annotations to the results dataframe
 res_df = as.data.frame(res) %>% rownames_to_column(., var = "target_id")
+annotations <- read.table(file= "Figure_8/ITAG4.1_descriptions.txt", header = F, sep = "\t") 
+annotations = separate(annotations, V1, sep = " ", c("target_id", "annotation"),extra = "merge") %>%
+  mutate(target_id = substr(target_id, start = 1, stop = 14))
+
 res.significant <- res_df %>% filter(padj < 0.05)
+res.significant <- left_join(res.significant, annotations, by = "target_id")
 
 # Export result to txt
  write.table(res_df, file = "Figure_8/F2_RNAseq_DEseq_resuts.tsv", sep = "\t", row.names = FALSE)
@@ -57,6 +63,86 @@ res.significant <- res_df %>% filter(padj < 0.05)
                  x = 'log2FoldChange',
                  y = 'pvalue',
                  labSize = 3.0)
+ 
+ ######################
+ # Barplot sig. genes #
+ ######################
+ 
+ normalised.counts <- assay(DES) 
+ normalised.counts.tidy = 
+   normalised.counts %>% 
+   data.frame() %>%
+   rownames_to_column(var="target_id") %>% 
+   pivot_longer(-target_id, names_to = "genotype", values_to = "count") 
+
+ 
+ con = data.frame(genotype = c("Elite_01", "PI127826_F1", "F2_151", "F2_411", "F2_445",
+                             "PI127826", "F2_28", "F2_73", "F2_127"),
+                  condition = c("lazy","lazy","lazy","lazy","lazy",
+                                "active","active","active","active"))
+ 
+ # Fuse the active/lazy condition with the main df
+normalised.counts.tidy = left_join(normalised.counts.tidy, con, by = "genotype")
+normalised.counts.tidy = left_join(normalised.counts.tidy, annotations, by = "target_id")
+normalised.counts.tidy$genotype = factor(normalised.counts.tidy$genotype, 
+                                         levels = c("Elite_01", "PI127826_F1", "F2_151", "F2_411", "F2_445",
+                                                    "PI127826", "F2_28", "F2_73", "F2_127"),
+                                         ordered = TRUE)
+ 
+ # Determin target genes 
+ res.significant =  res.significant %>% arrange(res.significant$padj)
+ diff.top10 <- res.significant[1:15,1]
+ 
+ ######################
+ # Theme for plotting #
+ ######################
+ my_theme = theme_bw()+
+   theme(text = element_text(),
+         axis.text.x = element_text(size = 8, colour = "black", angle = 45, hjust = 1),
+         axis.text.y = element_text(size = 8, colour = "black"),
+         strip.background = element_blank(),
+         panel.grid.minor = element_blank(),
+         panel.border = element_rect(),
+         panel.background = element_rect(fill = NA, color = "black"),
+         strip.text.x = element_text(size=8, colour = "black"))
+
+# Barplot per genotype
+ 
+normalised.counts.tidy %>% filter(target_id %in% diff.top10) %>%
+   ggplot(aes(x = genotype, y = count, fill = condition))+
+   geom_bar(stat = "identity")+
+   scale_fill_manual(values = c("lazy" = "grey", "active" = "black"))+
+   facet_wrap(~target_id, scale = "free")+
+   labs(x = "Sample" , y = "Gene expression (counts)")+
+   my_theme
+
+# Boxplot per condition
+normalised.counts.tidy %>% filter(target_id %in% diff.top10) %>%
+  ggplot(aes(x=condition, y=count)) + 
+  geom_point(position=position_jitter(w=0.1,h=0))+
+  geom_boxplot()+
+  #geom_text_repel(aes(label = genotype)) +
+  scale_fill_manual(values = c("lazy" = "grey", "active" = "black"))+
+  facet_wrap(~target_id, scale = "free")+
+  labs(x = "Sample" , y = "Gene expression (counts)")+
+  my_theme
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ d <- plotCounts(DES, gene= res$padj, intgroup="Condition", 
+                 returnData=TRUE)
+ 
+ ggplot(d, aes(x=Condition, y=count)) + 
+   geom_point(position=position_jitter(w=0.1,h=0))+
+   geom_text_repel(aes(label = rownames(d)))  
+ 
+ 
+ 
  
  #######
  # PCA #
