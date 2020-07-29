@@ -190,7 +190,7 @@ ggsave(file = "Figure_8/plots/baseMean_distribution.pdf", plot = p.distribution,
  percentVar <- round(100 * attr(pca, "percentVar"))
 
  p.pca = 
- ggplot(pca, aes(x = PC3, y = PC2, colour = group))+
+ ggplot(pca, aes(x = PC1, y = PC2, colour = group))+
    geom_point()+
    geom_point(size=3) +
    xlab(paste0("PC1: ",percentVar[1],"% variance")) +
