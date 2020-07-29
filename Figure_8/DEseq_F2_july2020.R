@@ -68,15 +68,16 @@ left_join(annotations, by = "target_id")
  # Volcanoplot #
  ###############
  
- pcut = max(res.significant$pvalue)
- 
  p.volcano =
  EnhancedVolcano(res_for_volcano,
-                 lab = rownames(res),
-                 pCutoff = max(res.significant$pvalue),
                  x = 'log2FoldChange',
                  y = 'pvalue',
-                 labSize = 3.0)
+                 pCutoff = max(res.significant$pvalue),
+                 lab = rownames(res),
+                 labSize = 2.0,
+                 xlab =  bquote(~Log[2]~ "fold change"),
+                 ylab = bquote(~-Log[10]~italic(Pvalue))
+ )
  
  ggsave(file = "Figure_8/plots/volcanoplot.pdf", plot = p.volcano, width = 5, height = 5)
  
@@ -130,16 +131,21 @@ my_theme = theme_bw()+
 
 
  # Barplot per genotype
- normalised.counts.tidy %>% filter(target_id %in% diff.top10) %>%
+ p.barplot.top15 = 
+   normalised.counts.tidy %>% filter(target_id %in% diff.top10) %>%
    ggplot(aes(x = genotype, y = count, fill = condition))+
    geom_bar(stat = "identity")+
    scale_fill_manual(values = c("lazy" = "grey", "active" = "black"))+
    facet_wrap(~target_id, scale = "free")+
-   labs(x = "Sample" , y = "Gene expression (counts)")+
+   labs(x = "Sample" , y = "Gene expression (normalised counts)")+
    my_theme
+ 
+ ggsave(file = "Figure_8/plots/barplot_top15.pdf", plot = p.barplot.top15, width = 10, height = 10)
+
 
 # Boxplot per condition
-normalised.counts.tidy %>% filter(target_id %in% diff.top10) %>%
+ p.boxplot.top15 =
+  normalised.counts.tidy %>% filter(target_id %in% diff.top10) %>%
   ggplot(aes(x=condition, y=count)) + 
   geom_point(position=position_jitter(w=0.1,h=0))+
   geom_boxplot()+
@@ -147,8 +153,10 @@ normalised.counts.tidy %>% filter(target_id %in% diff.top10) %>%
   scale_fill_manual(values = c("lazy" = "grey", "active" = "black"))+
   #geom_text(aes(label = annotation), check_overlap = T, size = 2)+
   facet_wrap(~target_id, scale = "free")+
-  labs(x = "Sample" , y = "Gene expression (counts)")+
+  labs(x = "Sample" , y = "Gene expression (normalised counts)")+
   my_theme
+ ggsave(file = "Figure_8/plots/boxplot_top15.pdf", plot = p.boxplot.top15, width = 10, height = 10)
+ 
 
 ##################################################
 # Plot normalised counts distribution (baseMean) #
@@ -178,11 +186,11 @@ ggsave(file = "Figure_8/plots/baseMean_distribution.pdf", plot = p.distribution,
    )
  
  df.for.pca = rlog(DES) # normalise (log2) the data
- pca = plotPCA(df.for.pca, intgroup="Condition", returnData = TRUE, ntop = NULL) #use the returnData = TRUE argument to enable pca to be imported in ggplot
+ pca = plotPCA(df.for.pca, intgroup="Condition", returnData = TRUE, ntop = nrow(res_df)) #use the returnData = TRUE argument to enable pca to be imported in ggplot
  percentVar <- round(100 * attr(pca, "percentVar"))
 
  p.pca = 
- ggplot(pca, aes(x = PC1, y = PC2, colour = group))+
+ ggplot(pca, aes(x = PC3, y = PC2, colour = group))+
    geom_point()+
    geom_point(size=3) +
    xlab(paste0("PC1: ",percentVar[1],"% variance")) +
@@ -193,4 +201,27 @@ ggsave(file = "Figure_8/plots/baseMean_distribution.pdf", plot = p.distribution,
  
  
 ggsave(file = "Figure_8/plots/PCA.pdf", plot = p.pca, width = 5, height = 5)
- 
+
+#######################
+# Heatmap of DE genes #
+#######################
+
+df.for.heatmap <- 
+   log(
+   as.data.frame(normalised.counts) %>%
+   rownames_to_column(., "target_id") %>%
+   filter(target_id %in% res.significant$target_id) %>%
+   column_to_rownames(., var = "target_id") + 1
+   )
+
+pheatmap(df.for.heatmap,
+         scale = "none", 
+         cluster_rows = T, 
+         cluster_cols = T,
+         fontsize = 6,
+         cellwidth = 10,
+         cellheight = 5,
+         annotation_colors = my_colour,
+         gaps_col = 5,
+         filename = "Figure_8/plots/heatmap_sig_expressed.pdf"
+)
