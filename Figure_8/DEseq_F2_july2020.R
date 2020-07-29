@@ -4,28 +4,36 @@ library(pheatmap)
 library(ggrepel)
 library(EnhancedVolcano)
 
+##################
+# Import dataset #
+##################
 
 # Load reads
-counts = read.table("Figure_8/raw_counts.txt", header = TRUE, sep = "\t", check.names = FALSE) %>%
-  mutate(target_id = substr(Geneid, start = 6, stop = 19)) %>% select(target_id, PI127826, Elite_01,PI127826_F1, F2_28, F2_73, F2_127, F2_151, F2_411, F2_445) 
-#  pivot_longer(cols = -target_id, names_to = "genotype", values_to = "value")
-
+counts <- read.table("Figure_8/raw_counts.txt", header = TRUE, sep = "\t", check.names = FALSE) %>%
+  mutate(target_id = substr(Geneid, start = 6, stop = 19)) %>% 
+   select(target_id, PI127826, Elite_01,PI127826_F1, F2_28, F2_73, F2_127, F2_151, F2_411, F2_445)
 
 # Lazy / Active information on the samples
 sampleinfo <- data.frame(cbind(colnames(counts[,2:10]),
                                c("active","lazy","lazy","active","active","active","lazy","lazy","lazy")), stringsAsFactors = F)
 
-colnames(sampleinfo) = c("SampleName","Condition")
+colnames(sampleinfo) <- c("SampleName","Condition")
 
-#shape counts dataset to make it ready for DEseq
+#Create a df for DESeq2 and add sample names
 counts4DE <- counts
 colnames(counts4DE)[2:10] <- sampleinfo[,1] # Add samples names 
 
-##Clean-up dataset 
-numOverTen <- function(x) {sum(x > 1)} 
-ExpressionNum <- apply(counts4DE[2:10], 1, numOverTen) 
-counts4DE <- counts4DE[which(ExpressionNum > 1),] #throw away data where more less than 3 samples have less than 10 counts 
-counts4DE <- distinct(counts4DE, target_id, .keep_all = TRUE) # Remove rows with duplicated gene names 
+####################
+# Clean-up dataset #
+####################
+
+# create function to calculate how many samples have >10 counts per gene
+numOverTen <- function(x) {sum(x > 10)} 
+ExpressionNum <- apply(counts4DE[2:10], 1, numOverTen)
+counts4DE <- counts4DE[which(ExpressionNum > 1),] # Keep genes of which at least 2 samples have > 10 counts
+
+# Remove rows with duplicated gene names
+counts4DE <- distinct(counts4DE, target_id, .keep_all = TRUE)  
 
 
 ###################
@@ -36,40 +44,48 @@ DES <- DESeqDataSetFromMatrix(counts4DE, sampleinfo, ~ Condition, tidy = TRUE)
 head(DES)
 DES <- DESeq(DES, parallel = T) #creates a normalised dataset
 plotDispEsts(DES)
-plotMA(DES, main = "Lazy and Active Differences in Gene Expression") #Differenitally expressed genes
+plotMA(DES, main = "Lazy and Active Differences in Gene Expression") # Overview of differences in expression
 
-# Get results of DE expressed genes
+# Calculate the results of DEseq2 analysis
 res = results(DES, contrast = c("Condition","lazy","active"))
 res_for_volcano = lfcShrink(DES, contrast = c("Condition","lazy","active"), res=res, type = 'normal') # This is for creating the volcanoplot
 
-# Add annotations to the results dataframe
+# Import gene annotatoins
 annotations <- read.csv(file= "Figure_8/ITAG4.1_descriptions.txt", header = F, sep = "\t") 
 annotations <- separate(annotations, V1, sep = " ", c("target_id", "annotation"),extra = "merge") %>%
   mutate(target_id = substr(target_id, start = 1, stop = 14))
 
 # filter significant DE genes from results and add the annotations
 res_df <- as.data.frame(res) %>% rownames_to_column(., var = "target_id")
-
 res.significant <- res_df %>% filter(padj < 0.05) %>%
-   left_join(annotations, by = "target_id")
+left_join(annotations, by = "target_id")
 
-# Export result to txt
+# Export result to txt files
  write.table(res_df, file = "Figure_8/F2_RNAseq_DEseq_resuts.tsv", sep = "\t", row.names = FALSE)
  write.table(res.significant, file = "Figure_8/F2_RNAseq_DEseq_resuts_significant_genes.tsv", sep = "\t", row.names = FALSE)
 
  ###############
  # Volcanoplot #
  ###############
+ 
+ pcut = max(res.significant$pvalue)
+ 
+ p.volcano =
  EnhancedVolcano(res_for_volcano,
                  lab = rownames(res),
+                 pCutoff = max(res.significant$pvalue),
                  x = 'log2FoldChange',
                  y = 'pvalue',
                  labSize = 3.0)
  
- ######################
- # Barplot sig. genes #
- ######################
+ ggsave(file = "Figure_8/plots/volcanoplot.pdf", plot = p.volcano, width = 5, height = 5)
  
+ 
+ ##########################################
+ # Plotting significantly expressed genes #
+ ##########################################
+ 
+ # Extracting normalised counts from DEseq2 dataset
  normalised.counts <- assay(DES) 
  normalised.counts.tidy = 
    normalised.counts %>% 
@@ -77,7 +93,7 @@ res.significant <- res_df %>% filter(padj < 0.05) %>%
    rownames_to_column(var="target_id") %>% 
    pivot_longer(-target_id, names_to = "genotype", values_to = "count") 
 
- 
+ # set conditions per genotype
  con = data.frame(genotype = c("Elite_01", "PI127826_F1", "F2_151", "F2_411", "F2_445",
                              "PI127826", "F2_28", "F2_73", "F2_127"),
                   condition = c("lazy","lazy","lazy","lazy","lazy",
@@ -95,14 +111,9 @@ normalised.counts.tidy$genotype = factor(normalised.counts.tidy$genotype,
                                                     "PI127826", "F2_28", "F2_73", "F2_127"),
                                          ordered = TRUE)
  
- # Determin target genes 
- res.significant =  res.significant %>% arrange(padj,-(baseMean))
- diff.top10 <- res.significant[1:15,1]
  
- ######################
- # Theme for plotting #
- ######################
- my_theme = theme_bw()+
+ # Custom theme for plotting 
+my_theme = theme_bw()+
    theme(text = element_text(),
          axis.text.x = element_text(size = 8, colour = "black", angle = 45, hjust = 1),
          axis.text.y = element_text(size = 8, colour = "black"),
@@ -111,10 +122,15 @@ normalised.counts.tidy$genotype = factor(normalised.counts.tidy$genotype,
          panel.border = element_rect(),
          panel.background = element_rect(fill = NA, color = "black"),
          strip.text.x = element_text(size=8, colour = "black"))
-
-# Barplot per genotype
  
-normalised.counts.tidy %>% filter(target_id %in% diff.top10) %>%
+ 
+# Determine target genes to plot 
+ res.significant =  res.significant %>% arrange(padj,-(baseMean))
+ diff.top10 <- res.significant[1:15,1]
+
+
+ # Barplot per genotype
+ normalised.counts.tidy %>% filter(target_id %in% diff.top10) %>%
    ggplot(aes(x = genotype, y = count, fill = condition))+
    geom_bar(stat = "identity")+
    scale_fill_manual(values = c("lazy" = "grey", "active" = "black"))+
@@ -134,8 +150,11 @@ normalised.counts.tidy %>% filter(target_id %in% diff.top10) %>%
   labs(x = "Sample" , y = "Gene expression (counts)")+
   my_theme
 
-# Overview of counts distribution (baseMean)
+##################################################
+# Plot normalised counts distribution (baseMean) #
+##################################################
 
+p.distribution =
 ggplot(res_df, aes(x = res_df$baseMean))+
    geom_histogram(binwidth = 100, fill = "white", colour = "black")+
    xlim(0,10000)+
@@ -145,12 +164,14 @@ ggplot(res_df, aes(x = res_df$baseMean))+
    ylab("number of genes")+
    my_theme
  
+ggsave(file = "Figure_8/plots/baseMean_distribution.pdf", plot = p.distribution, width = 7, height = 5)
  
- #######
- # PCA #
- #######
+ ######################################
+ # Principle component analysis (PCA) #
+ ######################################
+
  # Theme for plotting
- my.theme = theme_bw()+
+ my.pca.theme = theme_bw()+
    theme(text = element_text(),
          axis.text.x = element_text(size = 10, colour = "black"),
          axis.text.y = element_text(size = 10, colour = "black")
@@ -168,8 +189,8 @@ ggplot(res_df, aes(x = res_df$baseMean))+
    ylab(paste0("PC2: ",percentVar[2],"% variance")) + 
    coord_fixed()+
    geom_label_repel(aes(label = row.names(pca), colour = group))+
-   my.theme
+   my.pca.theme
  
  
-ggsave(file = "Figure_8/PCA.pdf", plot = p.pca, width = 5, height = 5)
+ggsave(file = "Figure_8/plots/PCA.pdf", plot = p.pca, width = 5, height = 5)
  
