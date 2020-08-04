@@ -43,16 +43,16 @@ write.table(chroms, file = "Figure_8/Chromomap/chroms.txt",
 # ChromoMap #
 #############
 png(file = "Figure_8/Chromomap/Chr_map_diff_expression.png", width = 5, height = 10)
-  chromoMap("Figure_8/Chromomap/chroms.txt",
+ chromoMap("Figure_8/Chromomap/chroms.txt",
           "Figure_8/Chromomap/annotation_file.txt",
           data_based_color_map = TRUE,
           data_type = "numeric",
-          canvas_height = 1000,
-          canvas_width = 1500,
-          chr_length = 6,
-          chr_width = 8,
+          canvas_height = 1400,
+          canvas_width = 1200,
+          chr_length = 5,
+          chr_width = 15,
           ch_gap = 20,
-          labels = T,
+          labels = F,
           legend= T,
           lg_x = 20,
           lg_y = 20)
