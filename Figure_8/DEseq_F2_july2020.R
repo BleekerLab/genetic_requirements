@@ -28,7 +28,7 @@ colnames(counts4DE)[2:10] <- sampleinfo[,1] # Add samples names
 ####################
 
 # create function to calculate how many samples have >10 counts per gene
-numOverTen <- function(x) {sum(x > 10)} 
+numOverTen <- function(x) {sum(x > 150)} 
 ExpressionNum <- apply(counts4DE[2:10], 1, numOverTen)
 counts4DE <- counts4DE[which(ExpressionNum > 1),] # Keep genes of which at least 2 samples have > 10 counts
 
@@ -74,7 +74,6 @@ left_join(annotations, by = "target_id")
                  y = 'pvalue',
                  pCutoff = max(res.significant$pvalue),
                  lab = rownames(res),
-                 labSize = 2.0,
                  xlab =  bquote(~Log[2]~ "fold change"),
                  ylab = bquote(~-Log[10]~italic(Pvalue))
  )
@@ -136,7 +135,7 @@ my_theme = theme_bw()+
    ggplot(aes(x = genotype, y = count, fill = condition))+
    geom_bar(stat = "identity")+
    scale_fill_manual(values = c("lazy" = "grey", "active" = "black"))+
-   facet_wrap(~target_id, scale = "free")+
+   facet_wrap(~target_id,  scale = "free")+
    labs(x = "Sample" , y = "Gene expression (normalised counts)")+
    my_theme
  
@@ -214,10 +213,14 @@ df.for.heatmap <-
    column_to_rownames(., var = "target_id") + 1
    )
 
+col_order = c("Elite_01", "PI127826_F1", "F2_151", "F2_411", "F2_445",
+              "PI127826", "F2_28", "F2_73", "F2_127")
+df.for.heatmap <- df.for.heatmap[, col_order]
+
 pheatmap(df.for.heatmap,
          scale = "none", 
-         cluster_rows = T, 
-         cluster_cols = T,
+         cluster_rows = F, 
+         cluster_cols = F,
          fontsize = 6,
          cellwidth = 10,
          cellheight = 5,
