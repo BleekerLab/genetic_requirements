@@ -27,8 +27,8 @@ colnames(counts4DE)[2:10] <- sampleinfo[,1] # Add samples names
 # Clean-up dataset #
 ####################
 
-# create function to calculate how many samples have >10 counts per gene
-numOverTen <- function(x) {sum(x > 150)} 
+# create function to calculate how many samples have >200 counts per gene
+numOverTen <- function(x) {sum(x > 200)} 
 ExpressionNum <- apply(counts4DE[2:10], 1, numOverTen)
 counts4DE <- counts4DE[which(ExpressionNum > 1),] # Keep genes of which at least 2 samples have > 10 counts
 
