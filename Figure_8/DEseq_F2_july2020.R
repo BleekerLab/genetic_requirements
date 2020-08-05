@@ -43,8 +43,8 @@ counts4DE <- distinct(counts4DE, target_id, .keep_all = TRUE)
 DES <- DESeqDataSetFromMatrix(counts4DE, sampleinfo, ~ Condition, tidy = TRUE)
 head(DES)
 DES <- DESeq(DES, parallel = T) #creates a normalised dataset
-plotDispEsts(DES)
-plotMA(DES, main = "Lazy and Active Differences in Gene Expression") # Overview of differences in expression
+# plotDispEsts(DES)
+# plotMA(DES, main = "Lazy and Active Differences in Gene Expression") # Overview of differences in expression
 
 # Calculate the results of DEseq2 analysis
 res = results(DES, contrast = c("Condition","lazy","active"))
@@ -75,10 +75,11 @@ left_join(annotations, by = "target_id")
                  pCutoff = max(res.significant$pvalue),
                  lab = rownames(res),
                  xlab =  bquote(~Log[2]~ "fold change"),
-                 ylab = bquote(~-Log[10]~italic(Pvalue))
+                 ylab = bquote(~-Log[10]~italic(Pvalue)),
+                 labSize = 2
  )
  
- ggsave(file = "Figure_8/plots/volcanoplot.pdf", plot = p.volcano, width = 5, height = 5)
+ ggsave(file = "Figure_8/plots/volcanoplot.pdf", plot = p.volcano, width = 4, height = 5)
  
  
  ##########################################
@@ -126,12 +127,12 @@ my_theme = theme_bw()+
  
 # Determine target genes to plot 
  res.significant =  res.significant %>% arrange(padj,-(baseMean))
- diff.top10 <- res.significant[1:15,1]
+ diff.top <- res.significant[1:5,1]
 
 
  # Barplot per genotype
- p.barplot.top15 = 
-   normalised.counts.tidy %>% filter(target_id %in% diff.top10) %>%
+ p.barplot.top5 = 
+   normalised.counts.tidy %>% filter(target_id %in% diff.top) %>%
    ggplot(aes(x = genotype, y = count, fill = condition))+
    geom_bar(stat = "identity")+
    scale_fill_manual(values = c("lazy" = "grey", "active" = "black"))+
@@ -139,7 +140,7 @@ my_theme = theme_bw()+
    labs(x = "Sample" , y = "Gene expression (normalised counts)")+
    my_theme
  
- ggsave(file = "Figure_8/plots/barplot_top15.pdf", plot = p.barplot.top15, width = 10, height = 10)
+ ggsave(file = "Figure_8/plots/barplot_top5.pdf", plot = p.barplot.top5, width = 8, height = 5)
 
 
 # Boxplot per condition
