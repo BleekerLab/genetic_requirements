@@ -79,7 +79,7 @@ left_join(annotations, by = "target_id")
                  labSize = 2
  )
  
- ggsave(file = "Figure_8/plots/volcanoplot.pdf", plot = p.volcano, width = 4, height = 5)
+ ggsave(file = "Figure_8/plots/volcanoplot.pdf", plot = p.volcano, width = 6, height = 6)
  
  
  ##########################################
@@ -136,11 +136,11 @@ my_theme = theme_bw()+
    ggplot(aes(x = genotype, y = count, fill = condition))+
    geom_bar(stat = "identity")+
    scale_fill_manual(values = c("lazy" = "grey", "active" = "black"))+
-   facet_wrap(~target_id,  scale = "free")+
+   facet_wrap(~target_id,  scale = "free", ncol = 3)+
    labs(x = "Sample" , y = "Gene expression (normalised counts)")+
    my_theme
  
- ggsave(file = "Figure_8/plots/barplot_top5.pdf", plot = p.barplot.top5, width = 8, height = 5)
+ ggsave(file = "Figure_8/plots/barplot_top5.pdf", plot = p.barplot.top5, width = 7, height = 4)
 
 
 # Boxplot per condition
