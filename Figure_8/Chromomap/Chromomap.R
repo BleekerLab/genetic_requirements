@@ -55,7 +55,10 @@ png(file = "Figure_8/Chromomap/Chr_map_diff_expression.png", width = 5, height =
           labels = F,
           legend= T,
           lg_x = 20,
-          lg_y = 20)
+          lg_y = 20,
+          v_align = T,
+          chr_text = F,
+          chr_color = c("darkslategray"))
   dev.off()
 
 #############
