@@ -24,7 +24,7 @@ my.theme =
 #############
 
 volatiles_VI = read.csv(file = "Figure_2/type_VI_gland_terpenes_F2.csv", header = T, stringsAsFactors = T, check.names = F) %>% filter(., !genotype %in% c("LA1777", "PI127826xLA1777", "LA1777_F1", "CV_LA1777"))
-trichomes = read.csv("Figure_3/Leafwash vs Trichome density.csv",header = TRUE, check.names = FALSE) %>% dplyr::rename(., genotype = sample)
+trichomes = read.table("Figure_3/20200811_F2+parents_type VI_mm2.txt",header = TRUE, check.names = FALSE)
 
 ########################### 
 # Zingiberene per type- VI#
@@ -37,7 +37,7 @@ write.table(volatiles_VI %>% dplyr::group_by(.,genotype) %>% dplyr::summarise_at
 
 
 # Summarise data and make a barplot
-sum.volatiles = summarySE(volatiles_VI, measurevar = "total_volatiles", groupvars = c("genotype", "group"))
+sum.volatiles = summarySE(volatiles_VI, measurevar = "total_volatiles", groupvars = c("genotype"))
 
 p.volatiles = 
 ggplot(sum.volatiles, x = reorder(genotype, -total_volatiles), y = total_volatiles)+
@@ -79,7 +79,7 @@ integrate(zingi.scaled, -2.6,0.91)
 # Density vs. volatiles #
 #########################
 
-mean.trichomes = trichomes %>% dplyr::group_by(., genotype) %>% dplyr::summarise(., mean_type_VI = mean(Type_VI_mm))
+mean.trichomes = trichomes %>% dplyr::group_by(., group, genotype) %>% dplyr::summarise(., mean_type_VI = mean(type_VI_density_mm2))
 mean.volatiles = volatiles_VI %>% dplyr::group_by(., genotype) %>% dplyr::summarise(., mean_volatiles = mean(total_volatiles))
 
 mean.trichomes.sum.volatiles = inner_join(mean.trichomes, mean.volatiles, by = "genotype")
@@ -87,14 +87,15 @@ mean.trichomes.sum.volatiles = inner_join(mean.trichomes, mean.volatiles, by = "
 p.density.activity = 
 ggplot(mean.trichomes.sum.volatiles,
        aes(x = mean.trichomes.sum.volatiles$mean_type_VI, 
-           y = mean.trichomes.sum.volatiles$mean_volatiles))+ 
-  geom_point()+
+           y = mean.trichomes.sum.volatiles$mean_volatiles
+           ))+ 
+  geom_point(aes(color = group))+
+  scale_color_manual(values = c("darkgreen", "orange", "black", "red"))+
   ylab("Volatiles per type-VI gland (ng / gland)")+
   xlab("Type-VI trichome density (trichomes / mm2)")+
-  geom_text(aes(label=mean.trichomes.sum.volatiles$genotype),hjust=1.5, vjust=0.5, size = 2)+
   my.theme
 
-ggsave(file = "Figure_3/desnty_VS_acitivty.pdf", plot = p.density.activity, height = 4, width = 4)
+ggsave(file = "Figure_3/desnty_VS_acitivty.pdf", plot = p.density.activity, height = 3, width = 4)
 
 mean.trichomes.sum.volatiles$theoretical_leafwash <- mean.trichomes.sum.volatiles$mean_type_VI * mean.trichomes.sum.volatiles$mean_volatiles
 
