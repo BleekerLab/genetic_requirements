@@ -61,8 +61,8 @@ res.significant <- res_df %>% filter(padj < 0.05) %>%
 left_join(annotations, by = "target_id")
 
 # Export result to txt files
- write.table(res_df, file = "Figure_8/DEseq_without_F2-28/F2_RNAseq_DEseq_resuts.tsv", sep = "\t", row.names = FALSE)
- write.table(res.significant, file = "Figure_8/DEseq_without_F2-28/F2_RNAseq_DEseq_resuts_significant_genes.tsv", sep = "\t", row.names = FALSE)
+ write.table(res_df, file = "Figure_8/F2_RNAseq_DEseq_resuts.tsv", sep = "\t", row.names = FALSE)
+ write.table(res.significant, file = "Figure_8/F2_RNAseq_DEseq_resuts_significant_genes.tsv", sep = "\t", row.names = FALSE)
 
  ###############
  # Volcanoplot #
@@ -79,7 +79,7 @@ left_join(annotations, by = "target_id")
                  labSize = 2
  )
  
- ggsave(file = "Figure_8/DEseq_without_F2-28/volcanoplot.pdf", plot = p.volcano, width = 6, height = 6)
+ ggsave(file = "Figure_8/plots/volcanoplot.pdf", plot = p.volcano, width = 6, height = 6)
  
  
  ##########################################
@@ -140,7 +140,7 @@ my_theme = theme_bw()+
    labs(x = "Sample" , y = "Gene expression (normalised counts)")+
    my_theme
  
- ggsave(file = "Figure_8/DEseq_without_F2-28/barplot_top5.pdf", plot = p.barplot.top5, width = 7, height = 4)
+ ggsave(file = "Figure_8/plots/barplot_top5.pdf", plot = p.barplot.top5, width = 7, height = 4)
 
 
 # Boxplot per condition
@@ -155,7 +155,7 @@ my_theme = theme_bw()+
   facet_wrap(~target_id, scale = "free")+
   labs(x = "Sample" , y = "Gene expression (normalised counts)")+
   my_theme
- ggsave(file = "Figure_8/DEseq_without_F2-28/boxplot_top15.pdf", plot = p.boxplot.top15, width = 10, height = 10)
+ ggsave(file = "Figure_8/plots/boxplot_top15.pdf", plot = p.boxplot.top15, width = 10, height = 10)
  
 
 ##################################################
@@ -172,7 +172,7 @@ ggplot(res_df, aes(x = res_df$baseMean))+
    ylab("number of genes")+
    my_theme
  
-ggsave(file = "Figure_8/DEseq_without_F2-28/baseMean_distribution.pdf", plot = p.distribution, width = 7, height = 5)
+ggsave(file = "Figure_8/plots/baseMean_distribution.pdf", plot = p.distribution, width = 7, height = 5)
  
  ######################################
  # Principle component analysis (PCA) #
@@ -200,7 +200,7 @@ ggsave(file = "Figure_8/DEseq_without_F2-28/baseMean_distribution.pdf", plot = p
    my.pca.theme
  
  
-ggsave(file = "Figure_8/DEseq_without_F2-28/PCA.pdf", plot = p.pca, width = 5, height = 5)
+ggsave(file = "Figure_8/plots/PCA.pdf", plot = p.pca, width = 5, height = 5)
 
 #######################
 # Heatmap of DE genes #
@@ -215,7 +215,7 @@ df.for.heatmap <-
    )
 
 col_order = c("Elite_01", "PI127826_F1", "F2_151", "F2_411", "F2_445",
-              "PI127826", "F2_28", "F2_73", "F2_127")
+              "PI127826", "F2_73", "F2_127")
 df.for.heatmap <- df.for.heatmap[, col_order]
 
 pheatmap(df.for.heatmap,
@@ -227,5 +227,5 @@ pheatmap(df.for.heatmap,
          cellheight = 5,
          annotation_colors = my_colour,
          gaps_col = 5,
-         filename = "Figure_8/DEseq_without_F2-28/heatmap_sig_expressed.pdf"
+         filename = "Figure_8/plots/heatmap_sig_expressed.pdf"
 )
