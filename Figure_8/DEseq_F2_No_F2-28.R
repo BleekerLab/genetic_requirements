@@ -144,8 +144,9 @@ my_theme = theme_bw()+
 
 
 # Boxplot per condition
+ diff.top15 <- res.significant[1:15,1]
  p.boxplot.top15 =
-  normalised.counts.tidy %>% filter(target_id %in% diff.top10) %>%
+  normalised.counts.tidy %>% filter(target_id %in% diff.top15) %>%
   ggplot(aes(x=condition, y=count)) + 
   geom_point(position=position_jitter(w=0.1,h=0))+
   geom_boxplot()+
