@@ -1,6 +1,28 @@
 library(ggplot2)
 library(tidyverse)
-library(PMCMR)
+library(Rmisc)
+library(gridExtra)
+
+#############################
+# Custom theme for plotting #
+#############################
+
+my.theme = 
+  theme(text = element_text(),
+        axis.text.x = element_text(size = 8, colour = "black"),
+        axis.text.y = element_text(size = 8, colour = "black"),
+        strip.background = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(),
+        panel.background = element_rect(fill = NA, color = "black"),
+        strip.text.x = element_text(size=8, colour = "black")
+  )+
+  theme_bw()
+
+#############
+# Load data #
+#############
 
 df <- read.csv(file = "Figure_5/20190115_ng_trichome_all.csv", header = TRUE, check.names = FALSE)
 df$day = as.factor(df$day)
@@ -20,54 +42,52 @@ df.long$metabolite = as.factor(df.long$metabolite)
 df.long$level = as.numeric(df.long$level)
 df.long$genotype = factor(df.long$genotype, 
                           levels = c("PI127826", "73", "CV", "411"),
-                          ordered = TRUE)
+                        ordered = TRUE)
 
-my.theme =
-  theme_bw() + 
-  theme(text = element_text(),
-        axis.text.x = element_text(size = 10, colour = "black", angle = 30, hjust = 1),
-        axis.text.y = element_text(size = 10, colour = "black"),
-        strip.background = element_blank(),
-  
-   
-        panel.border = element_rect(),
-        panel.background = element_rect(fill = NA, color = "black"),
-        strip.text.x = element_text(size=8, colour = "black")
-  )
-  
 
-metabolite.labels = c("Plastidial terpenes", "Cytosolic terpenes")
-names(metabolite.labels) = c("total_MEP_terpenes", "total_MVA_terpenes")
+sum = summarySE(df.long, 
+                measurevar = "level", 
+                groupvars = c("genotype", "treatment", "day", "metabolite", "phenotype"))
 
-#Barplot
-p1 = 
-df.long %>% 
-  dplyr::group_by(genotype, phenotype, treatment, day, metabolite) %>%
-  dplyr::summarise(mean_level = mean(level), se = sd(level)/sqrt(n())) %>%
-  filter(metabolite %in% c("total_MVA_terpenes", "total_MEP_terpenes") & 
-         day == "14") %>%
-  
-  ggplot(aes(x=treatment, y=mean_level, fill = phenotype)) +
+#Filter data
+
+p.volatiles = 
+sum %>% filter(., 
+               sum$metabolite == "total_terpenes" & 
+                 sum$day == "14" &
+                 sum$treatment != "mevastatin" &
+                 sum$genotype == "PI127826") %>%
+  ggplot(., aes(x=treatment, y=level, fill = "black")) +
   geom_bar(stat = "identity", fill = "black")+
-  geom_errorbar(aes(x=treatment, ymin = mean_level- se, ymax = mean_level + se), width=0.1)+
-  facet_grid(genotype~metabolite, scale = "free",
-             labeller = labeller(metabolite = metabolite.labels)) +
-  labs(y = "Metabolite level (ng/gland)")+
+  geom_errorbar(aes(ymin = level- se, ymax = level + se), width=0.1)+
+  #facet_grid(genotype~metabolite, scale = "free") +
+  xlab("Volatiles")+
+  ylab("Total volatiles per type-VI gland (ng)")+
   my.theme
 
-ggsave(filename = "Figure_5/MVA_MEP terpenes day 14_barplot.pdf", plot = p1, width = 6, height = 6)
 
-###### Statistics #######
+##################
+# Cavity volumes #
+##################
 
-data.summary = df.long %>% 
-  filter(metabolite %in% c("total_MVA_terpenes", "total_MEP_terpenes") & 
-           day == "14")
-write.table(data.summary, file = "Figure_5/inhibitor_treatments_summary.tsv", row.names = FALSE, sep = "\t")
+cavities <- read.csv(file = "Figure_5/20180808_Cavity volumes_14_days_treatment.csv", header = TRUE, check.names = FALSE)
 
-KT = function(plant, what_metabolite){
-  df.parsed = df.long %>% 
-    filter(metabolite == what_metabolite & genotype == plant & day == "14")
-             
-  
-  return(posthoc.kruskal.nemenyi.test(df.parsed$value,df.parsed$treatment, method="Tukey"))
-}
+sum.cavities = summarySE(cavities, 
+                measurevar = "volume_um", 
+                groupvars = c("genotype", "treatment"))
+p.cavities = 
+sum.cavities %>% filter(., 
+                 sum.cavities$treatment != "Mevastatin" &
+                 sum.cavities$genotype == "PI127826") %>%
+  ggplot(., aes(x=treatment, y=volume_um, fill = "black")) +
+  geom_bar(stat = "identity", fill = "black")+
+  geom_errorbar(aes(ymin = volume_um- se, ymax = volume_um + se), width=0.1)+
+  xlab("Storage cavity")+
+  ylab("Type-VI gland storage-cavity volume (um)")+
+  my.theme
+
+###################################
+# Arrange both in 1 plot and save #
+###################################
+p.both = grid.arrange(p.volatiles, p.cavities, ncol = 2)
+ggsave(file = "Figure_4/plots/fosmidomycin_PI127826_phenotypes.pdf", plot = p.both, width = 5, height = 3)
