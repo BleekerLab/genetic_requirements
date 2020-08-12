@@ -72,18 +72,21 @@ sum %>% filter(.,
 
 cavities <- read.csv(file = "Figure_6/20180808_Cavity volumes_14_days_treatment.csv", header = TRUE, check.names = FALSE)
 
+# Calculatve volume of the cavitites in picoliter
+cavities$volume_pl = cavities$volume_um / 1000
+
 sum.cavities = summarySE(cavities, 
-                measurevar = "volume_um", 
+                measurevar = "volume_pl", 
                 groupvars = c("genotype", "treatment"))
 p.cavities = 
 sum.cavities %>% filter(., 
                  sum.cavities$treatment != "Mevastatin" &
                  sum.cavities$genotype == "PI127826") %>%
-  ggplot(., aes(x=treatment, y=volume_um, fill = "black")) +
+  ggplot(., aes(x=treatment, y=volume_pl, fill = "black")) +
   geom_bar(stat = "identity", fill = "black")+
-  geom_errorbar(aes(ymin = volume_um- se, ymax = volume_um + se), width=0.1)+
+  geom_errorbar(aes(ymin = volume_pl- se, ymax = volume_pl + se), width=0.1)+
   xlab("Storage cavity")+
-  ylab("Type-VI gland storage-cavity volume (um)")+
+  ylab("Type-VI gland storage-cavity volume (picoliter)")+
   my.theme
 
 ###################################
