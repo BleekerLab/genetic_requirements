@@ -75,8 +75,7 @@ left_join(annotations, by = "target_id")
                  pCutoff = max(res.significant$pvalue),
                  lab = rownames(res),
                  xlab =  bquote(~Log[2]~ "fold change"),
-                 ylab = bquote(~-Log[10]~italic(Pvalue)),
-                 labSize = 2
+                 ylab = bquote(~-Log[10]~italic(Pvalue))
  )
  
  ggsave(file = "Figure_8/plots/volcanoplot.pdf", plot = p.volcano, width = 6, height = 6)
