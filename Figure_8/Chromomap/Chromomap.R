@@ -52,7 +52,7 @@ png(file = "Figure_8/Chromomap/Chr_map_diff_expression.png", width = 5, height =
           data_based_color_map = TRUE,
           data_type = "numeric",
          # data_colors = c(1:10),
-          canvas_height = 1400,
+          canvas_height = 1500,
           canvas_width = 1000,
           chr_length = 5,
           chr_width = 15,
