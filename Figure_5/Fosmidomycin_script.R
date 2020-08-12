@@ -24,7 +24,7 @@ my.theme =
 # Load data #
 #############
 
-df <- read.csv(file = "Figure_5/20190115_ng_trichome_all.csv", header = TRUE, check.names = FALSE)
+df <- read.csv(file = "Figure_6/20190115_ng_trichome_all.csv", header = TRUE, check.names = FALSE)
 df$day = as.factor(df$day)
 df[is.na(df)] = 0
 
@@ -70,7 +70,7 @@ sum %>% filter(.,
 # Cavity volumes #
 ##################
 
-cavities <- read.csv(file = "Figure_5/20180808_Cavity volumes_14_days_treatment.csv", header = TRUE, check.names = FALSE)
+cavities <- read.csv(file = "Figure_6/20180808_Cavity volumes_14_days_treatment.csv", header = TRUE, check.names = FALSE)
 
 sum.cavities = summarySE(cavities, 
                 measurevar = "volume_um", 
@@ -90,4 +90,4 @@ sum.cavities %>% filter(.,
 # Arrange both in 1 plot and save #
 ###################################
 p.both = grid.arrange(p.volatiles, p.cavities, ncol = 2)
-ggsave(file = "Figure_4/plots/fosmidomycin_PI127826_phenotypes.pdf", plot = p.both, width = 5, height = 3)
+ggsave(file = "Figure_5/plots/fosmidomycin_PI127826_phenotypes.pdf", plot = p.both, width = 5, height = 3)
