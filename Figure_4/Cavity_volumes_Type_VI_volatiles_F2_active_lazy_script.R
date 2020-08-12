@@ -1,6 +1,6 @@
 library(Rmisc)
 library(tidyverse)
-library(ggplot2)
+
 
 #############################
 # Costum theme for plotting #
@@ -28,18 +28,20 @@ df$genotype = factor(df$genotype, levels = c("CV", "PI127826","F1", "151", "411"
 
 df$genotype = revalue(df$genotype, c("151" = "F2-151", "411" = "F2-411","445" = "F2-445","28" = "F2-28","73" = "F2-73", "127" = "F2-127"))
 
+# Calculate gland-volume in pico-liters 
+df$volume_pl = df$volume_um / 1000
 
-sum = summarySE(df, measurevar = "volume_um", groupvars = c("genotype", "phenotype"))
-write.table(sum, file = "cavity_volume_F2_summary_table.txt", sep = "\t", row.names = FALSE)
+sum = summarySE(df, measurevar = "volume_pl", groupvars = c("genotype", "phenotype"))
+write.table(sum, file = "Figure_4/cavity_volume_F2_summary_table.txt", sep = "\t", row.names = FALSE)
 
 p.cavity = 
-ggplot(sum, aes(x = genotype, y = volume_um, fill = phenotype)) +
-  geom_bar(aes(x = genotype, y = volume_um), stat = "identity") +
+ggplot(sum, aes(x = genotype, y = volume_pl, fill = phenotype)) +
+  geom_bar(aes(x = genotype, y = volume_pl), stat = "identity") +
   scale_fill_manual(values = c("black", "grey"))+
-  geom_errorbar(aes(ymin = volume_um - se, ymax = volume_um + se),
+  geom_errorbar(aes(ymin = volume_pl - se, ymax = volume_pl + se),
                 width = 0.1)+
   xlab(NULL)+
-  ylab("Storage-cavity volume (um3)")+
+  ylab("Storage-cavity volume (picoliter)")+
   my.theme +
   theme(legend.position = c(.8,.8), legend.background = element_rect(fill=NULL))
 
@@ -77,6 +79,9 @@ p.terpenes =
 ##############
 # SAVE PLOTS #
 ##############
+
+p.both = grid.arrange(p.cavity, p.terpenes, ncol = 1)
+ggsave(file = "Figure_4/plots/caviy_volume_terpenes.pdf", plot = p.both, height = 6, width = 5)
 
 ggsave(file = "Figure_4/plots/stoarage_cavity_volume.svg", plot = p.cavity, height = 3, width = 4)
 ggsave(file = "Figure_4/plots/terpenes_per_type_VI.svg", plot = p.terpenes, height = 3, width = 4)
