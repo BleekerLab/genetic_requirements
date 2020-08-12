@@ -5,8 +5,7 @@ library(RIdeogram)
 
 # load gff data with gene locations
 # Download link:ftp://ftp.solgenomics.net/tomato_genome/Heinz1706/annotation/ITAG4.0_release/
-
-gene.models <- read.gff(file = "/Volumes/Samsung_T5/F2_RNA_seq/ITAG4.0_gene_models.gff")
+  gene.models <- read.gff(file = "~/Downloads/ITAG4.0_gene_models.gff")
 
 # Shape datafile to cotain usefull info
 gene.models <- gene.models %>% filter(type == "gene") %>%
@@ -18,21 +17,26 @@ gene.models <- gene.models %>% filter(type == "gene") %>%
 DE <- read.delim(file = "Figure_8/F2_RNAseq_DEseq_resuts_significant_genes.tsv",
                  header = TRUE)
 
+# Rename gene column to use with Chromomap
 names(DE)[1] <- "attributes"
 
 # Filter gene.models dataset for DE genes
-
 annotation_file<- left_join(DE, gene.models, by = "attributes")
-annotation_file <- annotation_file %>% select(attributes, seqid, start, end, log2FoldChange)
-# Save aas annotation file
 
+# Add gene annotations 
+annotation_file <- annotation_file %>% select(attributes, seqid, start, end, log2FoldChange)
+
+# Save as annotation file
 write.table(annotation_file, "Figure_8/Chromomap/annotation_file.txt",
             sep = "\t", col.names = FALSE, row.names = FALSE, quote = FALSE)
 
+# Make a chromosome file Chromomap can read
+# Only do this once, the Chromomap readable .txt file will be saved 
 chroms <- read.delim(file = "Figure_8/Chromomap/S_lycopersicum_chromosomes.4.00.txt",
                      header = FALSE, sep = "\t")
 
-chroms = as.data.frame(chroms)
+# Remove chromosome 0 (-> hypothtical molecule)
+chroms <- as.data.frame(chroms[2:nrow(chroms),]) 
 
 write.table(chroms, file = "Figure_8/Chromomap/chroms.txt",
             sep = "\t", col.names = FALSE, row.names = FALSE,
@@ -47,8 +51,9 @@ png(file = "Figure_8/Chromomap/Chr_map_diff_expression.png", width = 5, height =
           "Figure_8/Chromomap/annotation_file.txt",
           data_based_color_map = TRUE,
           data_type = "numeric",
+         # data_colors = c(1:10),
           canvas_height = 1400,
-          canvas_width = 1200,
+          canvas_width = 1000,
           chr_length = 5,
           chr_width = 15,
           ch_gap = 20,
