@@ -78,7 +78,7 @@ left_join(annotations, by = "target_id")
                  ylab = bquote(~-Log[10]~italic(Pvalue))
  )
  
- ggsave(file = "Figure_8/plots/volcanoplot.pdf", plot = p.volcano, width = 6, height = 6)
+ ggsave(file = "Figure_8/plots/volcanoplot.png", plot = p.volcano, width = 6, height = 6, dpi =)
  
  
  ##########################################
@@ -128,18 +128,20 @@ my_theme = theme_bw()+
  res.significant =  res.significant %>% arrange(padj,-(baseMean))
  diff.top <- res.significant[1:5,1]
 
+ res.significant =  res.significant %>% arrange(log2FoldChange)
+diff.top <- c(diff.top, res.significant[1,1])
 
  # Barplot per genotype
- p.barplot.top5 = 
+ p.barplot.top = 
    normalised.counts.tidy %>% filter(target_id %in% diff.top) %>%
    ggplot(aes(x = genotype, y = count, fill = condition))+
    geom_bar(stat = "identity")+
    scale_fill_manual(values = c("lazy" = "grey", "active" = "black"))+
-   facet_wrap(~target_id,  scale = "free", ncol = 3)+
+   facet_wrap(~target_id,  scale = "free", ncol = 2)+
    labs(x = "Sample" , y = "Gene expression (normalised counts)")+
    my_theme
  
- ggsave(file = "Figure_8/plots/barplot_top5.pdf", plot = p.barplot.top5, width = 7, height = 4)
+ ggsave(file = "Figure_8/plots/barplot_top_genes.pdf", plot = p.barplot.top, width = 5, height = 6)
 
 
 # Boxplot per condition
