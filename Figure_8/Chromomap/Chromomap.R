@@ -84,7 +84,7 @@ chromosomes$Chr = as.character(chromosomes$Chr)
 # Get gene coordinates and their expression values #
 ####################################################
 
-gene.models <- read.gff(file = "/Volumes/Samsung_T5/F2_RNA_seq/ITAG4.0_gene_models.gff")
+gene.models <- read.gff(file = "~/Downloads/ITAG4.0_gene_models.gff")
 
 # Shape datafile to cotain usefull info
 gene.models <- gene.models %>% filter(type == "gene") %>%
@@ -103,8 +103,9 @@ genes.for.ideogram <- left_join(gene.expression, gene.models, by = "attributes")
 genes.for.ideogram  <- genes.for.ideogram  %>% select(seqid, start, end, log2FoldChange)
 colnames(genes.for.ideogram) <- c("Chr", "Start", "End", "Value")
 
-ideogram(karyotype = chromosomes, overlaid = genes.for.ideogram, label_type = "marker")
-convertSVG("chromosome.svg", device = "png")
+ideogram(karyotype = chromosomes, overlaid = genes.for.ideogram, 
+         label_type = "marker")
+convertSVG("chromosome.svg", device = "svg")
 
 
 
