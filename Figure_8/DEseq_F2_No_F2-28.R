@@ -57,7 +57,7 @@ annotations <- separate(annotations, V1, sep = " ", c("target_id", "annotation")
 
 # filter significant DE genes from results and add the annotations
 res_df <- as.data.frame(res) %>% rownames_to_column(., var = "target_id")
-res.significant <- res_df %>% filter(padj < 0.05) %>%
+res.significant <- res_df %>% filter(padj < 0.01) %>%
 left_join(annotations, by = "target_id")
 
 # Export result to txt files
