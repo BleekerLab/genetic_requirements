@@ -1,0 +1,29 @@
+"target_id"	"annotation"	"localisation"	"log2FoldChange"	"padj"
+"Solyc04g039670"	"alpha chain of ATP-dependent citrate lyase complex"	"cytosol"	-4.11351675781902	0.263991482496251
+"Solyc05g005160"	"alpha chain of ATP-dependent citrate lyase complex"	"cytosol"	-0.507912919216015	0.989080552008891
+"Solyc01g101040"	"alpha chain of ATP-dependent citrate lyase complex"	"cytosol"	0.276876396448366	0.998227020487924
+"Solyc01g059880"	"beta chain of ATP-dependent citrate lyase complex"	"cytosol"	-0.338304385550094	0.998227020487924
+"Solyc12g099260"	"beta chain of ATP-dependent citrate lyase complex"	"cytosol"	-0.987282433736349	0.929004262196249
+"Solyc09g090140"	"cytosolic NAD-dependent malate dehydrogenase"	"cytosol"	-0.461309396474819	0.971906111244173
+"Solyc01g090710"	"cytosolic NAD-dependent malate dehydrogenase"	"cytosol"	-1.4952170048819	0.927853672549584
+"Solyc05g050120"	"cytosolic NADP-dependent malic enzyme"	"cytosol"	-0.930546144543709	0.821225314540225
+"Solyc08g066360"	"cytosolic NADP-dependent malic enzyme"	"cytosol"	-0.209242767970403	0.998227020487924
+"Solyc12g044600"	"cytosolic NADP-dependent malic enzyme"	"cytosol"	-0.292101815061112	0.989080552008891
+"Solyc03g120990"	"cytosolic NADP-dependent malic enzyme"	"cytosol"	0.417915378269347	0.998227020487924
+"Solyc01g005620"	"mitochondrial dicarboxylate transporter"	"mitochondria"	-0.148514536641168	0.998227020487924
+"Solyc08g008420"	"mitochondrial pyruvate transporter"	"mitochondria"	0.905343414065976	0.998227020487924
+"Solyc08g082755"	"mitochondrial pyruvate transporter"	"mitochondria"	-0.744996124388241	0.971908459975447
+"Solyc06g071890"	"mitochondrial pyruvate transporter"	"mitochondria"	1.90257613405185	0.340329464525873
+"Solyc10g051120"	"mitochondrial pyruvate transporter"	"mitochondria"	0.0458595262260359	0.998227020487924
+"Solyc11g012080"	"mitochondrial pyruvate transporter"	"mitochondria"	-0.504107367539421	0.998227020487924
+"Solyc04g005080"	"subunit alpha of pyruvate dehydrogenase E1 component subcomplex"	"mitochondria"	0.0183059411523175	0.998227020487924
+"Solyc05g006520"	"subunit alpha of pyruvate dehydrogenase E1 component subcomplex"	"mitochondria"	-0.830962218670973	0.699096262612082
+"Solyc06g072580"	"subunit beta of pyruvate dehydrogenase E1 component subcomplex"	"mitochondria"	0.151281301553197	0.998227020487924
+"Solyc05g024160"	"subunit beta of pyruvate dehydrogenase E1 component subcomplex"	"mitochondria"	-0.359394064794762	0.998227020487924
+"Solyc03g097680"	"subunit beta of pyruvate dehydrogenase E1 component subcomplex"	"mitochondria"	-0.771597323789074	0.717061555710881
+"Solyc07g006790"	"component E2 of mitochondrial pyruvate dehydrogenase complex"	"mitochondria"	0.0331697982638299	0.998227020487924
+"Solyc11g007720"	"component E2 of mitochondrial pyruvate dehydrogenase complex"	"mitochondria"	0.0350011482203565	0.998227020487924
+"Solyc05g053300"	"component E3 of mitochondrial pyruvate dehydrogenase complex"	"mitochondria"	-0.391154441392663	0.989080552008891
+"Solyc12g099100"	"component E3 of mitochondrial pyruvate dehydrogenase complex"	"mitochondria"	-0.628774435301393	0.658905663702063
+"Solyc12g098930"	"pyruvate dehydrogenase kinase"	"mitochondria"	-0.49574537116227	0.998227020487924
+"Solyc01g057210"	"pyruvate dehydrogenase kinase"	"mitochondria"	-0.284087039265255	0.998227020487924
