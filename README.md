@@ -2,29 +2,15 @@
 
 Code and data for the figures of the "genetic requirement" paper.
 
-<!-- MarkdownTOC autolink="true" level="1,2" -->
+<!-- MarkdownTOC autolink="true" level = "1,2" -->
 
-- Figure List
-	- Fig 2: distribution volatiles F2
-	- Fig 3: trichome density relationship to volatile production
-	- Fig 4: active and lazy class
-	- Fig 5: inhibition of MEP and MVA pathwas
-	- Fig 6: to be filled.
-	- Fig 7: Heatmaps of MEP/MVA pathway RNA-seq
-	- Fig. 8: Differential gene expressions
-	- Fig.9: Allele-specific expression patterns of MEP/MVA genes
-	- Supplementary Figure S1: Quantification of individual terpenes in the parents + F1
-	- Supplementary Figure S2: Trichome densities of NG-and type-I/IV trichomes
-	- Supplementary Figure S3: Trichome density profiles of selected F2 plants versus 7-epizingibere levels on the leaf
-	- Supplementary Figure S4: Total terpenes in type-VI head-cells of selected F2 plants
-	- Supplementary Figure S5: Cavity sizes of inhibitor experiment
-	- Supplementary Figure S6: Barplots of read-counts RNA-seq MEP/MVA pathways
-	- Supplementary Figure S7: Barplots of read-counts RNA-seq prenyltransferases
-	- Supplementary Figure S8: Barplots of read-counts RNA-seq terpene synthases
-	- Supplementary Figure S9: Heatmaps of glycolysis
-	- Supplementary Figure S10: Heatmaps of citrate shuttle
+- [Figures](#figures)
+- [Supplemental figures](#supplemental-figures)
+- [Tables](#tables)
+- [Supplemental tables](#supplemental-tables)
 
 <!-- /MarkdownTOC -->
+
 
 
 # Figures
