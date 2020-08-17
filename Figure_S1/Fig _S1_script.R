@@ -25,19 +25,18 @@ my.theme =
 #########################
 
 #Create_dataframe
-df <- read.delim("Figure_1_F1_phenotypes/20170425_F1s leaf washes_peak area.txt", header = T, sep = "\t", dec = ".")
-df$total_terpenes = rowSums(df[,3:ncol(df)]) #make a new column and calculate total terpene ion counts
+df <- read.delim("Figure_1/20200722_F1s_leafwash_ng_mg_tissue.txt", header = T, sep = "\t", dec = ".", check.names = FALSE)
 df[,3:ncol(df)] = lapply(df[,3:ncol(df)], as.numeric)
 
 
 #Change to long ('tidy') format -> filter unwanted data (e.g. the LA1777-F1 measurements)
-df_long <- gather(df, metabolite, abundance, Bpinene:total_terpenes, -genotype,-genotype,factor_key=TRUE) %>% 
-  filter(., genotype != "CV_LA1777") %>% filter(., genotype != "F1_LA1777")
+df_long <- df %>% pivot_longer(., cols = -c(genotype, sample, replicate), names_to = "metabolite", values_to = "abundance") %>% 
+  filter(genotype %in% c("Elite", "PI127826", "F1", "F1_hab", "LA1777"))
 
 
 
 #Define variables 
-df_long$genotype <- factor(df_long$genotype, levels = c("CV", "PI127826", "F1", "F1_hab", "LA1777"),
+df_long$genotype <- factor(df_long$genotype, levels = c("Elite", "F1", "PI127826", "F1_hab", "LA1777"),
                               ordered = TRUE)
 
 #summarise data for barplot
@@ -48,7 +47,7 @@ sum = summarySE(df_long, measurevar = "abundance", groupvars = c("genotype", "me
 ###########
 
 p.leafwash =
-sum %>% filter(metabolite != "total_terpenes") %>%
+sum %>% filter(metabolite != "summed_terpenes") %>%
 ggplot(., aes(x = genotype, y = abundance)) +
   geom_bar(stat = "identity", color = "black", fill = "black") +
     geom_errorbar(aes(x = genotype, ymin=abundance-se, ymax=abundance+se), width=.2) +
@@ -59,11 +58,21 @@ ggplot(., aes(x = genotype, y = abundance)) +
 
 ggsave(filename = "Figure_S1/Fig_S1_leafwash.svg", plot = p.leafwash, width = 12, height = 12)
 
+p.leafwash.stacked =
+  sum %>% filter(metabolite != "summed_terpenes") %>%
+  ggplot(., aes(x = genotype, y = abundance)) +
+  geom_bar(aes(x = genotype, y = abundance, fill = metabolite), stat = "identity") + 
+  my.theme 
+
 ############### 
 # STATISCTICS #
 ###############
-df.log = df[df == 0] <- runif(n=1,min = 1, max = 2)
-df.log = df.log =  as.data.frame(c(df[1:2],log(select(df, -c(sample, genotype)))))
-apply(df.log[,3:ncol(df)], 2, shapiro.test)
 
+df.wide = sum %>% select(genotype, metabolite, abundance) %>% pivot_wider(names_from = metabolite, values_from = abundance)
 
+df.percentage <- (df.wide[,2:ncol(df.wide)] / df.wide$summed_terpenes) * 100
+rownames(df.percentage) <- df.wide$genotype
+df.percentage = round(df.percentage, digits = 1)
+df.percentage = rownames_to_column(df.percentage, var = "genotype")
+
+write.table(df.percentage, file = "Figure_S1/terpene_contributions_percentage.txt", row.names = FALSE, sep = "\t")
