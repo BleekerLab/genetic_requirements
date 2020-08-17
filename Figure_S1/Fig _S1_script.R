@@ -53,7 +53,7 @@ ggplot(., aes(x = genotype, y = abundance)) +
     geom_errorbar(aes(x = genotype, ymin=abundance-se, ymax=abundance+se), width=.2) +
     my.theme +
   facet_wrap(~metabolite, ncol =4, scale = "free")+
-  ylab("Metabolite abundance (ion counts / mg fresh leaf)")+
+  ylab("Metabolites (ng / mg fresh leaf tissue)")+
   xlab(NULL)
 
 ggsave(filename = "Figure_S1/Fig_S1_leafwash.svg", plot = p.leafwash, width = 12, height = 12)
