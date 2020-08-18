@@ -1,8 +1,8 @@
 library(ggplot2)
 library(tidyverse)
-library(PMCMR)
+library(PMCMRplus)
 
-df <- read.csv(file = "Figure_5/20190115_ng_trichome_all.csv", header = TRUE, check.names = FALSE)
+df <- read.csv(file = "Figure_6/20190115_ng_trichome_all.csv", header = TRUE, check.names = FALSE)
 df$day = as.factor(df$day)
 df[is.na(df)] = 0
 
@@ -55,7 +55,7 @@ df.long %>%
   labs(y = "Metabolite level (ng/gland)")+
   my.theme
 
-ggsave(filename = "Figure_5/MVA_MEP terpenes day 14_barplot.pdf", plot = p1, width = 6, height = 6)
+ggsave(filename = "Figure_6/MVA_MEP terpenes day 14_barplot.pdf", plot = p1, width = 4, height = 5)
 
 ###### Statistics #######
 
