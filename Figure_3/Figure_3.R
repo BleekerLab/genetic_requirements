@@ -246,7 +246,7 @@ df.density.terpenes$labels[ix_label] <- df.density.terpenes$genotype[ix_label]
 ############
 my.theme = 
   theme(text = element_text(),
-        axis.text.x = element_text(size = 8, colour = "black", angle = 90),
+        axis.text.x = element_text(size = 8, colour = "black"),
         axis.text.y = element_text(size = 8, colour = "black"),
         axis.title.y = element_text(size = 8, colour = "black"),
         strip.background = element_blank(),
@@ -261,7 +261,7 @@ my.theme =
 # Scatterplot trichome density versus total terpene levels
 p_fig3b  = 
   ggplot(df.density.terpenes, aes(x = avg_density, y = total_terpenes)) +
-  geom_point(size = 0.5) +
+  geom_point(size = 2) +
   geom_smooth(method = "lm", formula = y ~ x, alpha  = 0.2) + 
   ylab("Total terpenes (ng / mg fresh leaf)") +
   xlab("Type-VI trichome density (trichomes / mm2)") +
