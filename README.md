@@ -27,11 +27,17 @@ Code and data for the figures of the "genetic requirement" paper.
 	* (B) Quantification of storage cavities.   
 	* (C) Fosmidomycin on PI127826 = collapse of storage-cavity.    
 - __Figure 5:__ Storage-cavity volume depends on activity of the gland cells.
-	* Fosmidomycin and Mevastatin treatment of "Active" / "Lazy" F2 lines + parent (precursor flux is difference between wild and cultivated tomato with more transfer from plastid to cytosol in PI127826).  
+	* Fosmidomycin and Mevastatin treatment of "Active" / "Lazy" F2 lines + parent (precursor flux is difference between wild and cultivated tomato with more transfer from plastid to cytosol in PI127826). 
 - __Figure 6:__ Inhibitor treatment of active/lazy F2s
 - __Figure 7:__ Heatmaps of MEP/MVA pathway genes expression (scaled counts).
+    * (A) Heatmaps of MEP/MVA genes.
+    * (B) Heatmap of the allelic ratios of MEP/MVA genes. 
 - __Figure 8:__ Differential gene expression analysis of lazy / active lines.
-- __Figure 9:__ Allele-specific expression patterns of MEP/MVA genes. 
+    * (A) PCA plot of the lines according to their scaled gene expression.
+    * (B) Volvano plot of the DE genes.
+    * (C) Chromomap of the DE genes. 
+    * (D) Gene expression levels of the top candidates. 
+    * (E) Heatmap of the allelic ratios of DE genes. 
 
 
 # Supplemental figures   
