@@ -57,12 +57,12 @@ annotations <- separate(annotations, V1, sep = " ", c("target_id", "annotation")
 
 # filter significant DE genes from results and add the annotations
 res_df <- as.data.frame(res) %>% rownames_to_column(., var = "target_id")
-res.significant <- res_df %>% filter(padj < 0.05) %>%
+res.significant <- res_df %>% filter(padj < 0.01) %>%
 left_join(annotations, by = "target_id")
 
 # Export result to txt files
- write.table(res_df, file = "Figure_8/DEseq_without_F2-28/F2_RNAseq_DEseq_resuts.tsv", sep = "\t", row.names = FALSE)
- write.table(res.significant, file = "Figure_8/DEseq_without_F2-28/F2_RNAseq_DEseq_resuts_significant_genes.tsv", sep = "\t", row.names = FALSE)
+ write.table(res_df, file = "Figure_8/F2_RNAseq_DEseq_resuts.tsv", sep = "\t", row.names = FALSE)
+ write.table(res.significant, file = "Figure_8/F2_RNAseq_DEseq_resuts_significant_genes.tsv", sep = "\t", row.names = FALSE)
 
  ###############
  # Volcanoplot #
@@ -75,11 +75,10 @@ left_join(annotations, by = "target_id")
                  pCutoff = max(res.significant$pvalue),
                  lab = rownames(res),
                  xlab =  bquote(~Log[2]~ "fold change"),
-                 ylab = bquote(~-Log[10]~italic(Pvalue)),
-                 labSize = 2
+                 ylab = bquote(~-Log[10]~italic(Pvalue))
  )
  
- ggsave(file = "Figure_8/DEseq_without_F2-28/volcanoplot.pdf", plot = p.volcano, width = 6, height = 6)
+ ggsave(file = "Figure_8/plots/volcanoplot.png", plot = p.volcano, width = 6, height = 6, dpi =)
  
  
  ##########################################
@@ -129,23 +128,26 @@ my_theme = theme_bw()+
  res.significant =  res.significant %>% arrange(padj,-(baseMean))
  diff.top <- res.significant[1:5,1]
 
+ res.significant =  res.significant %>% arrange(log2FoldChange)
+diff.top <- c(diff.top, res.significant[1,1])
 
  # Barplot per genotype
- p.barplot.top5 = 
+ p.barplot.top = 
    normalised.counts.tidy %>% filter(target_id %in% diff.top) %>%
    ggplot(aes(x = genotype, y = count, fill = condition))+
    geom_bar(stat = "identity")+
    scale_fill_manual(values = c("lazy" = "grey", "active" = "black"))+
-   facet_wrap(~target_id,  scale = "free", ncol = 3)+
+   facet_wrap(~target_id,  scale = "free", ncol = 2)+
    labs(x = "Sample" , y = "Gene expression (normalised counts)")+
    my_theme
  
- ggsave(file = "Figure_8/DEseq_without_F2-28/barplot_top5.pdf", plot = p.barplot.top5, width = 7, height = 4)
+ ggsave(file = "Figure_8/plots/barplot_top_genes.pdf", plot = p.barplot.top, width = 5, height = 6)
 
 
 # Boxplot per condition
+ diff.top15 <- res.significant[1:15,1]
  p.boxplot.top15 =
-  normalised.counts.tidy %>% filter(target_id %in% diff.top10) %>%
+  normalised.counts.tidy %>% filter(target_id %in% diff.top15) %>%
   ggplot(aes(x=condition, y=count)) + 
   geom_point(position=position_jitter(w=0.1,h=0))+
   geom_boxplot()+
@@ -155,7 +157,7 @@ my_theme = theme_bw()+
   facet_wrap(~target_id, scale = "free")+
   labs(x = "Sample" , y = "Gene expression (normalised counts)")+
   my_theme
- ggsave(file = "Figure_8/DEseq_without_F2-28/boxplot_top15.pdf", plot = p.boxplot.top15, width = 10, height = 10)
+ ggsave(file = "Figure_8/plots/boxplot_top15.pdf", plot = p.boxplot.top15, width = 10, height = 10)
  
 
 ##################################################
@@ -172,7 +174,7 @@ ggplot(res_df, aes(x = res_df$baseMean))+
    ylab("number of genes")+
    my_theme
  
-ggsave(file = "Figure_8/DEseq_without_F2-28/baseMean_distribution.pdf", plot = p.distribution, width = 7, height = 5)
+ggsave(file = "Figure_8/plots/baseMean_distribution.pdf", plot = p.distribution, width = 7, height = 5)
  
  ######################################
  # Principle component analysis (PCA) #
@@ -200,7 +202,7 @@ ggsave(file = "Figure_8/DEseq_without_F2-28/baseMean_distribution.pdf", plot = p
    my.pca.theme
  
  
-ggsave(file = "Figure_8/DEseq_without_F2-28/PCA.pdf", plot = p.pca, width = 5, height = 5)
+ggsave(file = "Figure_8/plots/PCA.pdf", plot = p.pca, width = 5, height = 5)
 
 #######################
 # Heatmap of DE genes #
@@ -215,7 +217,7 @@ df.for.heatmap <-
    )
 
 col_order = c("Elite_01", "PI127826_F1", "F2_151", "F2_411", "F2_445",
-              "PI127826", "F2_28", "F2_73", "F2_127")
+              "PI127826", "F2_73", "F2_127")
 df.for.heatmap <- df.for.heatmap[, col_order]
 
 pheatmap(df.for.heatmap,
@@ -227,5 +229,5 @@ pheatmap(df.for.heatmap,
          cellheight = 5,
          annotation_colors = my_colour,
          gaps_col = 5,
-         filename = "Figure_8/DEseq_without_F2-28/heatmap_sig_expressed.pdf"
+         filename = "Figure_8/plots/heatmap_sig_expressed.pdf"
 )

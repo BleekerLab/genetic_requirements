@@ -19,7 +19,7 @@ library(pheatmap)
 
 # scaled counts data preparation
 df <- read_tsv("figure_7/abundance_tidy.tsv", col_names = TRUE)
-df = df %>% filter(!sample %in% c("Elite_02", "F1-hab", "LA1777_F1", "LA1777"))
+df = df %>% filter(!sample %in% c("Elite_02", "F1-hab", "LA1777_F1", "LA1777", "F2-28"))
 
 # create a locus/gene column to prepare future filtering using precursor_genes 
 df_parsed = df %>% mutate(target_id = substr(target_id, start = 1, stop = 14))
@@ -28,7 +28,7 @@ df_parsed = df %>% mutate(target_id = substr(target_id, start = 1, stop = 14))
 ## Step two: importing the sample information and re-ordering it
 samples <- read_tsv("Figure_7/samples.tsv", col_names = TRUE )[c("sample", "condition")]
 samples$condition <- with(samples, factor(condition, levels = c("elite","F1","wild","F2"))) 
-samples = samples %>% filter(!sample %in% c("Elite_02", "F1-hab", "LA1777_F1", "LA1777"))
+samples = samples %>% filter(!sample %in% c("Elite_02", "F1-hab", "LA1777_F1", "LA1777","F2-28"))
 
 ################
 # target genes #
@@ -39,7 +39,7 @@ samples = samples %>% filter(!sample %in% c("Elite_02", "F1-hab", "LA1777_F1", "
 ###########################
 
 annotation_cols = as.data.frame(samples)
-col_order = c("F2-151", "F2-411", "F2-445", "PI127826_F1","Elite_01", "PI127826", "F2-28", "F2-73", "F2-127")
+col_order = c("F2-151", "F2-411", "F2-445", "PI127826_F1","Elite_01", "PI127826", "F2-73", "F2-127")
 row.names(annotation_cols) <- samples$sample
 annotation_cols$sample <- NULL
 

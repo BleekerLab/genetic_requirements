@@ -212,60 +212,71 @@ ggsave(filename = "Figure_3/Figure3A_bar.pdf", plot = p_bar, width =5, height = 
 ###########
 # Load data
 ###########
-df = read.csv("Figure_3/Leafwash vs Trichome density.csv",
+df.density <- read.delim("Figure_3/20170620_Selected_F2_type VI_mm2.txt",
               header = TRUE, 
-              stringsAsFactors = T, 
+              stringsAsFactors = TRUE,
+              sep = "\t",
               check.names = FALSE)
 
+# Calculate average density over the replicates and adaxial / abaxixal surface
+df.density.avg <- df.density %>% dplyr::group_by(genotype) %>% 
+  dplyr::summarise(avg_density = mean(type_VI_density_mm2))
 
-# Change to long ('tidy') format. 
-# First the volatiles (df.long) 
-# and then also the trichomes (df.long2)
-df.long = gather(
-  data = df,
-  key = "metabolite",
-  value = level,
-  -sample, -group, -Type_VI_mm2_Abaxial,-Type_VI_mm2_Adaxial,-Type_VI_mm)
+# load volatile data
+df.terpenes <- read.delim(file = "Figure_3/20200818_leafwash_volatiles_F2.txt",
+                           header = TRUE, 
+                           stringsAsFactors = TRUE,
+                           sep = "\t",
+                           check.names = FALSE)
 
-df.long2 = gather(
-  data = df.long,
-  key = "trichome_position",
-  value = density,
-  -sample,-metabolite,-group,-level)
+df.total.terpenes = df.terpenes %>% select(genotype, group, total_terpenes)
 
+# Fuse datasets
+df.density.terpenes <- inner_join(df.total.terpenes, df.density.avg, by = "genotype")
 
-# Filter datafile on total_volatiles and type_VI_trichomes both abaxial and adaxial
-df.parsed = df.long2 %>% 
-  filter(metabolite == "total_volatiles" & trichome_position == "Type_VI_mm") %>% 
-  filter(., !sample == "250")
+# Create labels for plotting
 
-df.parsed$metabolite = as.factor(df.parsed$metabolite)
-df.parsed$trichome_position = as.factor(df.parsed$trichome_position)
+df.density.terpenes$labels = ""
+
+ix_label <- c(26,27,28)
+df.density.terpenes$labels[ix_label] <- df.density.terpenes$genotype[ix_label]
 
 ############
 # Statistics
 ############
+my.theme = 
+  theme(text = element_text(),
+        axis.text.x = element_text(size = 8, colour = "black"),
+        axis.text.y = element_text(size = 8, colour = "black"),
+        axis.title.y = element_text(size = 8, colour = "black"),
+        strip.background = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(),
+        panel.background = element_rect(fill = NA, color = "black"),
+        strip.text.x = element_text(size=8, colour = "black")
+  )+
+  theme_bw()
 
 # Scatterplot trichome density versus total terpene levels
 p_fig3b  = 
-  ggplot(df.parsed, aes(x = density, y = level)) +
-  my_theme +
-  geom_point(size = 0.5) +
+  ggplot(df.density.terpenes, aes(x = avg_density, y = total_terpenes)) +
+  geom_point(size = 2) +
   geom_smooth(method = "lm", formula = y ~ x, alpha  = 0.2) + 
-  ylab("Summed terpenes (ng / mg fresh leaf)") +
+  ylab("Total terpenes (ng / mg fresh leaf)") +
   xlab("Type-VI trichome density (trichomes / mm2)") +
-  geom_text_repel(aes(label = df.parsed$sample), size = 3) +
-  stat_regline_equation(
-    label.x.npc = 0,
-    label.y.npc = 1) + 
+  geom_text_repel(aes(label = df.density.terpenes$labels)) +
   stat_cor(
     method = "pearson",
+    label.x = 7,
+    label.y = 250,
     label.x.npc = 0, 
-    label.y.npc = 0.9)
+    label.y.npc = 0.9) +
+    my.theme
   
 p_fig3b
 
-ggsave(filename = "Figure_3/Figure3B.pdf", plot = p_fig3b, width =3, height = 3.5)
+ggsave(filename = "Figure_3/Figure3B.pdf", plot = p_fig3b, width =3.5, height = 3.5)
 
 
 
