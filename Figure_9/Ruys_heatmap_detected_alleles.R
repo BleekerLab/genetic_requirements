@@ -6,7 +6,7 @@ df <- read.delim(file = "Figure_9/DE_genes_detected_alleles.txt",
                  check.names = FALSE)
 # Make df tidy
 df <- pivot_longer(df, 
-                   cols = -target_id,
+                   cols = -c(target_id, chromosome),
                    names_to = "genotype",
                    values_to = "allele")
 
