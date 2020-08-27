@@ -1,5 +1,6 @@
 library(Rmisc)
 library(tidyverse)
+library(gridExtra)
 
 
 #############################
@@ -53,7 +54,7 @@ ggplot(sum, aes(x = genotype, y = volume_pl, fill = phenotype)) +
 # load data
 df2 = read.csv(file = "Figure_4/20190807_Type_VI_volatiles_High_Low_F2s.csv",
                 header = TRUE)
-df2 = df2 %>% filter(., genotype != "F1_hab")
+df2 = df2 %>% filter(., genotype != "F1_hab") %>% filter(!sample %in% c("151-1","151-2","151-3"))
 df2$genotype = factor(df2$genotype, levels = c("CV", "PI127826","F1", "151", "411","445","28","73", "127"),
                      ordered = TRUE)
 
