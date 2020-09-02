@@ -119,7 +119,21 @@ volatiles %>% filter(., group == "F2") %>% filter(zingiberene != 0) %>%
 ggsave(filename = "Figure_2/plots/F2_zingiberene_histogram_no_zeroes.pdf", plot = p.F2.ylim, width = 5, height = 4)
 
 # Calculate the mean value of the parents to show in plot
-sum <- volatiles.parents %>% dplyr::group_by(genotype) %>% dplyr::summarise(zingi_mean = mean(zingiberene))
+sum <- volatiles.parents %>% dplyr::group_by(genotype) %>% 
+  dplyr::summarise(zingi_mean = mean(zingiberene), zingi_std = sd(zingiberene))
+
+##############################
+# Zingiberene vs derivatives #
+##############################
+
+volatiles %>% filter(., group == "F2")  %>% filter(zingiberene != 0) %>% filter(zingiberene < 1000000) %>%
+  ggplot(., aes(x = zingiberene, y = `epoxy-zingiberenol`))+
+  geom_point()+
+  geom_smooth(method = "lm", formula = y ~ x)+
+  stat_cor(
+    method = "pearson")
+
+
 
 ########
 p.all = grid.arrange(p.cultivar, p.F1,p.PI127826,p.F2, ncol = 1)
