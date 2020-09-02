@@ -10,7 +10,7 @@ source("Figure_1/full_ptable.R")
 ############################
 my.theme = 
   theme(text = element_text(),
-        axis.text.x = element_text(size = 8, colour = "black", angle = 90),
+        axis.text.x = element_text(size = 8, colour = "black", angle = 45),
         axis.text.y = element_text(size = 8, colour = "black"),
         axis.title.y = element_text(size = 8, colour = "black"),
         strip.background = element_blank(),
@@ -59,7 +59,7 @@ df_parsed$surface= factor(df_parsed$surface,levels = c("adaxial", "abaxial"),
 
 
 # Plot only type-VI trichomes (average of abaxial / adaxial side)
-df_parsed  %>% 
+p.ng.typeI <- df_parsed  %>% 
   filter(!type %in% c("type_VI", "sum_glandular")) %>%
   ggplot(., aes(x = genotype,
                 y = density_mm2)) +
@@ -75,4 +75,6 @@ df_parsed  %>%
   facet_grid(surface~type, scales = "fixed") +
   my.theme +
   xlab(NULL) + 
-  ylab(expression("Leaf trichome density, trichomes/mm^2"))
+  ylab("Trichome density (trichomes/mm2)")
+
+ggsave(file = "Figure_S2/Density_NG_typeIIV.pdf", plot = p.ng.typeI, height = 7, width = 12, units = "cm")
