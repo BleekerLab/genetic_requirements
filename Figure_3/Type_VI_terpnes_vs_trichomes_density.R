@@ -7,9 +7,9 @@ library(Rmisc)
 # Theme for plotting #
 ######################
 
-my.theme = 
+my.theme = theme_bw()+ 
   theme(text = element_text(),
-        axis.text.x = element_text(size = 8, colour = "black"),
+        axis.text.x = element_text(size = 8, colour = "black", angle = 90, vjust = 0.6),
         axis.text.y = element_text(size = 8, colour = "black"),
         axis.title.y = element_text(size = 8, colour = "black"),
         strip.background = element_blank(),
@@ -18,25 +18,36 @@ my.theme =
         panel.border = element_rect(),
         panel.background = element_rect(fill = NA, color = "black"),
         strip.text.x = element_text(size=8, colour = "black")
-  )+
-  theme_bw()
+  )
 
 
 
 
 
-df.terpenes = read.csv(file = "Figure_2/type_VI_gland_terpenes_F2.csv", header = T, stringsAsFactors = T, check.names = F) %>% 
+df.terpenes <-read.csv(file = "Figure_2/type_VI_gland_terpenes_F2.csv", header = T, stringsAsFactors = T, check.names = F) %>% 
   filter(., !genotype %in% c("LA1777", "PI127826xLA1777", "LA1777_F1", "CV_LA1777"))
 
+###########
+# BARPLOT #
+###########
+sum.terpenes <- summarySE(df.terpenes, measurevar = "total_volatiles", groupvars = c("genotype", "group")) %>%
+  select(genotype, total_volatiles, group) 
+
+p.bar = 
+ggplot(sum.terpenes, aes(x = reorder(genotype, -total_volatiles), y = total_volatiles, group = group))+
+  geom_bar(stat = "identity", aes(fill = group, color = group)) +
+  scale_fill_manual(values = c("darkgreen", "yellow", "grey", "red"))+
+  scale_color_manual(values = c("black", "black", "black", "black"))+
+  ylab("Total terpenes (ng/ type-VI gland)")+
+  xlab(NULL)+
+  my.theme
+
+ggsave(filename = "Figure_3/type_VI_volatiles_barplot.pdf", plot = p.bar, height = 4, width = 5.5)
 
 
-
-#Remane the F2-plants
-df.terpenes$genotype = revalue(df.terpenes$genotype, c("151" = "F2-151", "411" = "F2-411","445" = "F2-445","28" = "F2-28","73" = "F2-73", "127" = "F2-127"))
-
-# BARPLOT
-sum.terpenes = summarySE(df.terpenes, measurevar = "total_volatiles", groupvars = c("genotype", "group")) %>%
-  select(genotype, total_volatiles)
+#######################################
+# Gland volatiles vs trichome density #
+#######################################
 
 df.density <- read.delim("Figure_3/20170620_Selected_F2_type VI_mm2.txt",
                          header = TRUE, 
@@ -73,7 +84,7 @@ df.terpenes.density = left_join(df.terpenes.density, df.names, by = "genotype")
  # geom_text_repel(aes(label = df.terpenes.density$label)) +
   stat_cor(
     method = "pearson",
-    label.x = 17,
+    label.x = 10,
     label.y =30,
     label.x.npc = 0, 
     label.y.npc = 0.9) +
