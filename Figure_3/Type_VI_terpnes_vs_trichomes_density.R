@@ -32,7 +32,7 @@ df.terpenes = read.csv(file = "Figure_2/type_VI_gland_terpenes_F2.csv", header =
 
 
 #Remane the F2-plants
-df2$genotype = revalue(df.terpenes$genotype, c("151" = "F2-151", "411" = "F2-411","445" = "F2-445","28" = "F2-28","73" = "F2-73", "127" = "F2-127"))
+df.terpenes$genotype = revalue(df.terpenes$genotype, c("151" = "F2-151", "411" = "F2-411","445" = "F2-445","28" = "F2-28","73" = "F2-73", "127" = "F2-127"))
 
 # BARPLOT
 sum.terpenes = summarySE(df.terpenes, measurevar = "total_volatiles", groupvars = c("genotype", "group")) %>%
@@ -70,7 +70,7 @@ df.terpenes.density = left_join(df.terpenes.density, df.names, by = "genotype")
   geom_smooth(method = "lm", formula = y ~ x, alpha  = 0.2) + 
   ylab("Total terpenes (ng / mg fresh leaf)") +
   xlab("Type-VI trichome density (trichomes / mm2)") +
-  geom_text_repel(aes(label = df.terpenes.density$label)) +
+ # geom_text_repel(aes(label = df.terpenes.density$label)) +
   stat_cor(
     method = "pearson",
     label.x = 17,
