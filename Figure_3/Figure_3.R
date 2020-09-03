@@ -124,7 +124,86 @@ p_fig3a
 ggsave(filename = "Figure_3/Figure3A.pdf", plot = p_fig3a, width =5, height = 3.5)
 
 
-+#################################################
+############################################################
+# Calculate and plot the percentage of genotypes per class # 
+# in which zingiberene is detected / undetected            #
+############################################################
+
+df = read.delim("Figure_3/volatiles_and_trichomes.tsv", 
+                header = T, 
+                stringsAsFactors = F)
+
+df.zeros = df %>% 
+  filter(zingiberene == 0) %>%  # keep only lines with non-null 7-epizingiberene 
+  dplyr::group_by(sample, zingiberene) %>% 
+  # take the sum of abaxial + adaxial surface (leaf wash)
+  dplyr::summarise(., sum_type_VI = sum(type_VI)) %>% 
+  filter(sum_type_VI <= 10)                    # maximum class value
+
+
+
+df.zeros$sum_type_VI = as.factor(df.zeros$sum_type_VI)  # convert int to factor
+
+# to create C2 to C10 classes of trichome counts
+levels(df.zeros$sum_type_VI) = paste("C",
+                               levels(df.zeros$sum_type_VI),
+                               sep = "") 
+
+# number of measurements per trichome density class
+n_per_class = df.zeros %>% group_by(sum_type_VI) %>% tally() 
+colnames(n_per_class) = c("class", "n_zeros")
+n_per_class$class = as.factor(n_per_class$class)
+
+
+####################################
+# Now do the same for non-0 values #
+####################################
+
+df.non.zero = df %>% 
+  filter(zingiberene > 0) %>%  # keep only lines with non-null 7-epizingiberene 
+  dplyr::group_by(sample, zingiberene) %>% 
+  # take the sum of abaxial + adaxial surface (leaf wash)
+  dplyr::summarise(., sum_type_VI = sum(type_VI)) %>% 
+  filter(sum_type_VI <= 10)                    # maximum class value
+
+
+
+df.non.zero$sum_type_VI = as.factor(df.non.zero$sum_type_VI)  # convert int to factor
+
+# to create C2 to C10 classes of trichome counts
+levels(df.non.zero$sum_type_VI) = paste("C",
+                                     levels(df.non.zero$sum_type_VI),
+                                     sep = "")
+
+n_non_zero = df.non.zero %>% group_by(sum_type_VI) %>% tally() %>% dplyr::rename(class = sum_type_VI) %>% dplyr::rename(n_non_zero = n)
+n_per_class = left_join(n_per_class, n_non_zero, by = "class")
+n_per_class[is.na(n_per_class)] <- 0
+
+#########################
+# Calculate percentages #
+#########################
+
+n_per_class$total_n <- n_per_class$n_zeros + n_per_class$n_non_zero
+n_per_class$perc_zero <- (n_per_class$n_zeros / n_per_class$total_n)*100
+n_per_class$perc_non_zero <- 100 - n_per_class$perc_zero
+
+n_per_class.long <- pivot_longer(n_per_class,
+                                 cols = -class,
+                                 names_to = "zingiberene_measured",
+                                 values_to = "number_of_genotypes")
+
+########
+# Plot #
+########
+
+n_per_class.long %>% 
+  filter(zingiberene_measured %in% c("perc_non_zero", "perc_zero")) %>%
+ggplot(aes(x = class, y = number_of_genotypes, group = zingiberene_measured))+
+  geom_line(aes(color = zingiberene_measured))+
+  geom_point(aes(color = zingiberene_measured))
+
+
+#################################################
 # Figure 3B: trichome densities versus zingiberene
 ##################################################
 
