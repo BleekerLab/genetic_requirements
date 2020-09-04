@@ -133,6 +133,13 @@ volatiles %>% filter(., group == "F2")  %>% filter(zingiberene != 0) %>% filter(
   stat_cor(
     method = "pearson")
 
+volatiles %>% filter(., group == "F2") %>%  filter(zingiberene != 0) %>%
+  ggplot(., aes(x = zingiberene, y = caryophyllene))+
+  geom_point()+
+  geom_smooth(method = "lm", formula = y ~ x)+
+  stat_cor(
+    method = "pearson")
+
 
 
 ########
