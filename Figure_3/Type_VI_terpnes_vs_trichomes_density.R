@@ -13,7 +13,6 @@ my.theme = theme_bw()+
         axis.text.y = element_text(size = 8, colour = "black"),
         axis.title.y = element_text(size = 8, colour = "black"),
         strip.background = element_blank(),
-        panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         panel.border = element_rect(),
         panel.background = element_rect(fill = NA, color = "black"),
@@ -75,13 +74,15 @@ df.terpenes.density = left_join(df.terpenes.density, df.names, by = "genotype")
 ########
 
 # Scatterplot trichome density versus total terpene levels
-
-  ggplot(df.terpenes.density, aes(x = avg_density, y = total_volatiles)) +
-  geom_point(size = 2) +
+p.density.terpenes = 
+df.terpenes.density  %>%
+  ggplot(aes(x = avg_density, y = total_volatiles, group = group)) +
+  geom_point(size = 2, aes(color = group)) +
   geom_smooth(method = "lm", formula = y ~ x, alpha  = 0.2) + 
   ylab("Total terpenes (ng / mg fresh leaf)") +
   xlab("Type-VI trichome density (trichomes / mm2)") +
- # geom_text_repel(aes(label = df.terpenes.density$label)) +
+  #geom_text_repel(aes(label = df.terpenes.density$genotype)) +
+  scale_color_manual(values = c("darkgreen", "yellow", "black", "red"))+
   stat_cor(
     method = "pearson",
     label.x = 10,
@@ -90,4 +91,5 @@ df.terpenes.density = left_join(df.terpenes.density, df.names, by = "genotype")
     label.y.npc = 0.9) +
   my.theme
 
+ggsave(filename = "Figure_3/type_VI_terpenes_vs_density.pdf", plot = p.density.terpenes, height = 4, width = 5.5)
 
