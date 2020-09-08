@@ -94,3 +94,24 @@ sum.cavities %>% filter(.,
 ###################################
 p.both = grid.arrange(p.volatiles, p.cavities, ncol = 2)
 ggsave(file = "Figure_5/plots/fosmidomycin_PI127826_phenotypes.pdf", plot = p.both, width = 5, height = 3)
+
+
+################################################
+# Plot Terpenes seperately supplemental Figure #
+################################################
+
+p.facet.metabolites =
+sum %>% filter(genotype == "PI127826",
+               treatment != "mevastatin",
+               day == "14",
+               !metabolite %in% c("RF_candidate", "TMA", "total_MEP_terpenes", "Total_Monoterpenes", "total_MVA_terpenes", "Total_sesquiterpenes", "total_terpenes","Total_zingiberene_and_derivatives",
+                                  "B_pinene", "Geraniol", "Linalool", "Nerolidol", "R-curcumene")
+) %>%
+  ggplot(aes(x = treatment, y = level))+
+  geom_bar(stat = "identity")+
+  geom_errorbar(aes(x= treatment, ymin = level - se, ymax = level+se),
+                width = 0.3)+
+  facet_wrap(~metabolite, scale = "free", nrow = 4)+
+  my.theme
+ggsave(file = "Figure_5/plots/fosmidomycin_PI127826_facetted_metabolites.pdf", plot = p.facet.metabolites, width = 6, height = 7)
+
