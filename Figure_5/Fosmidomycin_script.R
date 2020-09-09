@@ -69,6 +69,15 @@ sum %>% filter(.,
 # Statisctics #
 ###############
 
+# Filter DF 
+df.long.parsed <- df.long %>% filter(genotype == "PI127826", 
+                                     day == "14", 
+                                     metabolite == "total_terpenes",
+                                     treatment != "mevastatin") %>% droplevels()
+
+# Check normality and perform T-test
+shapiro.test(log(df.long.parsed$level))
+t.terpenes <- t.test(log(df.long.parsed$level) ~ df.long.parsed$treatment)
 
 ##################
 # Cavity volumes #
@@ -79,9 +88,21 @@ cavities <- read.csv(file = "Figure_6/20180808_Cavity volumes_14_days_treatment.
 # Calculatve volume of the cavitites in picoliter
 cavities$volume_pl = cavities$volume_um / 1000
 
+# Summarise data and perform statistics 
 sum.cavities = summarySE(cavities, 
                 measurevar = "volume_pl", 
                 groupvars = c("genotype", "treatment"))
+
+cavities.parsed <- cavities %>% filter(genotype == "PI127826", treatment != "Mevastatin") %>% droplevels()
+ggplot(cavities.parsed, aes(x = volume_pl))+
+  geom_density()+
+  facet_grid(~treatment)
+
+t.cavities <- t.test(cavities.parsed$volume_pl ~ cavities.parsed$treatment)
+
+########
+# Plot #
+########
 p.cavities = 
 sum.cavities %>% filter(., 
                  sum.cavities$treatment != "Mevastatin" &
@@ -96,6 +117,8 @@ sum.cavities %>% filter(.,
 ###############
 # Statisctics #
 ###############
+
+
 
 
 ###################################
