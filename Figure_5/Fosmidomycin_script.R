@@ -76,8 +76,8 @@ df.long.parsed <- df.long %>% filter(genotype == "PI127826",
                                      treatment != "mevastatin") %>% droplevels()
 
 # Check normality and perform T-test
-shapiro.test(log(df.long.parsed$level))
-t.terpenes <- t.test(log(df.long.parsed$level) ~ df.long.parsed$treatment)
+shapiro.test(log(df.long.parsed$level+1))
+t.terpenes <- t.test(log(df.long.parsed$level+1) ~ df.long.parsed$treatment)
 
 ##################
 # Cavity volumes #
@@ -113,13 +113,6 @@ sum.cavities %>% filter(.,
   xlab("Storage cavity")+
   ylab("Type-VI gland storage-cavity volume (picoliter)")+
   my.theme
-
-###############
-# Statisctics #
-###############
-
-
-
 
 ###################################
 # Arrange both in 1 plot and save #
