@@ -69,11 +69,11 @@ sum %>% filter(.,
 # Statisctics #
 ###############
 
-# keep only MEP and MVa derived terpenes
+# keep only MEP and MVA derived terpenes
 df.long.parsed <- df.long %>% filter(metabolite %in% c("total_MEP_terpenes", "total_MVA_terpenes")) %>% droplevels()
 
-
-# Create a dataframe per genotype
+# STEPS to do the statistics: 
+# Create a dataframe per genotype - only use the data from day 14
 # Then perform an ANOVA test per metabolite, testing the effect of the treatments
 # Then perform a Tukey HSD test per metabolite to see the effect of individual treatments
 
