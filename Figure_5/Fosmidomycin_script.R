@@ -69,46 +69,6 @@ sum %>% filter(.,
 # Statisctics #
 ###############
 
-# keep only MEP and MVA derived terpenes
-df.long.parsed <- df.long %>% filter(metabolite %in% c("total_MEP_terpenes", "total_MVA_terpenes")) %>% droplevels()
-
-# STEPS to do the statistics: 
-# Create a dataframe per genotype - only use the data from day 14
-# Then perform an ANOVA test per metabolite, testing the effect of the treatments
-# Then perform a Tukey HSD test per metabolite to see the effect of individual treatments
-
-# PI127826
-df.long.PI = df.long.parsed %>% filter(genotype == "PI127826", day == "14")
-oav.PI = lapply(split(df.long.PI, 
-             df.long.PI$metabolite), 
-             function(d) {aov(log(level+1) ~ treatment, data=d) })
-TukeyHSD(oav.PI$total_MEP_terpenes)
-TukeyHSD(oav.PI$total_MVA_terpenes)
-
-# F2-73
-df.long.73 = df.long.parsed %>% filter(genotype == "73", day == "14")
-oav.73 = lapply(split(df.long.73, 
-                     df.long.73$metabolite), 
-               function(d) { aov(log(level+1) ~ treatment, data=d) })
-TukeyHSD(oav.73$total_MEP_terpenes)
-TukeyHSD(oav.73$total_MVA_terpenes)
-
-# Elite line
-df.long.CV = df.long.parsed %>% filter(genotype == "CV", day == "14")
-oav.CV = lapply(split(df.long.CV, 
-                     df.long.CV$metabolite), 
-               function(d) { aov(log(level+1) ~ treatment, data=d) })
-TukeyHSD(oav.CV$total_MEP_terpenes)
-TukeyHSD(oav.CV$total_MVA_terpenes)
-
-# F2-411
-df.long.411 = df.long.parsed %>% filter(genotype == "411", day == "14")
-oav.411 = lapply(split(df.long.411, 
-                     df.long.411$metabolite), 
-               function(d) { aov(log(level+1) ~ treatment, data=d) })
-TukeyHSD(oav.411$total_MEP_terpenes)
-TukeyHSD(oav.411$total_MVA_terpenes)
-
 
 ##################
 # Cavity volumes #
@@ -132,6 +92,11 @@ sum.cavities %>% filter(.,
   xlab("Storage cavity")+
   ylab("Type-VI gland storage-cavity volume (picoliter)")+
   my.theme
+
+###############
+# Statisctics #
+###############
+
 
 ###################################
 # Arrange both in 1 plot and save #
