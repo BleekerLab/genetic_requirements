@@ -47,8 +47,8 @@ DES <- DESeq(DES, parallel = T) #creates a normalised dataset
 # plotMA(DES, main = "Lazy and Active Differences in Gene Expression") # Overview of differences in expression
 
 # Calculate the results of DEseq2 analysis
-res = results(DES, contrast = c("Condition","lazy","active"))
-res_for_volcano = lfcShrink(DES, contrast = c("Condition","lazy","active"), res=res, type = 'normal') # This is for creating the volcanoplot
+res = results(DES, contrast = c("Condition","active","lazy"))
+res_for_volcano = lfcShrink(DES, contrast = c("Condition","active","lazy"), res=res, type = 'normal') # This is for creating the volcanoplot
 
 # Import gene annotatoins
 annotations <- read.csv(file= "Figure_8/ITAG4.1_descriptions.txt", header = F, sep = "\t") 
@@ -79,6 +79,7 @@ left_join(annotations, by = "target_id")
  )
  
  ggsave(file = "Figure_8/plots/volcanoplot.png", plot = p.volcano, width = 6, height = 6, dpi =)
+ ggsave(file = "Figure_8/plots/volcanoplot.pdf", plot = p.volcano, width = 6, height = 6, dpi =150)
  
  
  ##########################################
@@ -91,7 +92,10 @@ left_join(annotations, by = "target_id")
    normalised.counts %>% 
    data.frame() %>%
    rownames_to_column(var="target_id") %>% 
-   pivot_longer(-target_id, names_to = "genotype", values_to = "count") 
+   pivot_longer(-target_id, names_to = "genotype", values_to = "count")
+ 
+ # Export normalised counts
+ write.table(normalised.counts.tidy, file = "Figure_8/normalised_counts_by_DEseq2.tsv", sep = "\t")
 
  # set conditions per genotype
  con = data.frame(genotype = c("Elite_01", "PI127826_F1", "F2_151", "F2_411", "F2_445",
