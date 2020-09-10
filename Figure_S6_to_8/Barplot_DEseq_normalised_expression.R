@@ -43,9 +43,10 @@ df$genotype = factor(df$genotype, levels = c("Elite_01", "PI127826_F1", "F2_151"
 ##################################################
 
 diff <- read.delim(file = "Figure_8/F2_RNAseq_DEseq_resuts_significant_genes.tsv", header = TRUE) %>% 
-  dplyr::arrange(diff$log2FoldChange)
+  dplyr::arrange(pvalue)
 
-diff.top10 <- diff[1:10,1]
+diff.top10 <- diff[1:10,1] # top 10 diff expressed genes
+diff.top10 <- c(diff.top10, "Solyc08g079840")
 
 #####################################################
 # Filter dataframe by diff expressed genes and plot #
@@ -61,6 +62,42 @@ diff.top10 <- diff[1:10,1]
 
 ggsave(file = "Figure_7/plots/top10_diff_expressed.pdf", plot = p.top10)
 
+###########
+# Heatmap #
+###########
+
+#create the df for pheatmap
+
+diff.top25 <- diff[1:25,1] # top 25 diff expressed genes
+
+# Create df for include annotation of the genes in hetmap
+annotation.top.25 <- diff[1:25,c(1,8)] 
+rownames(annotation.top.25) <- annotation.top.25$target_id # annotations for the heatmap
+annotation.top.25 = annotation.top.25 %>% select(-target_id)
+
+df.heatmap <- df %>% filter(target_id %in% diff.top25) %>%
+                    select(-condition) %>%
+                    pivot_wider(names_from = genotype,
+                                values_from = count) %>%
+                    column_to_rownames(var = "target_id")
+
+df.heatmap <- df.heatmap[, c("F2_151", "F2_411", "F2_445", "PI127826_F1","Elite_01", "PI127826", "F2_73", "F2_127")]
+log.df.heatmap <- log(df.heatmap+1)
+
+###################
+# Layout heatmap  #
+###################
+
+
+
+
+pheatmap(log.df.heatmap,
+         cluster_rows = FALSE,
+         cluster_cols = FALSE,
+         fontsize = 8,
+         annotation_row = annotation.top.25,
+         fontsize_row = 6
+         )
 ###########################################
 # Load Target genes list for barplotting  #
 ###########################################
@@ -86,7 +123,7 @@ precursors.expression$genotype= factor(precursors.expression$genotype, levels = 
 
 p.mep =
 precursors.expression %>% filter(pathway == "MEP")%>%
-  ggplot(aes(x = genotype, y = count, fill = condition))+
+  ggplot(aes(x = genotype, y = log(count), fill = condition))+
   geom_bar(stat = "identity")+
   scale_fill_manual(values = c("lazy" = "steelblue", "active" = "darkred"))+
   facet_wrap(~name, scale = "free")+
