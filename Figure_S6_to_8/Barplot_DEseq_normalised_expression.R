@@ -123,14 +123,14 @@ precursors.expression$genotype= factor(precursors.expression$genotype, levels = 
 
 p.mep =
 precursors.expression %>% filter(pathway == "MEP")%>%
-  ggplot(aes(x = genotype, y = log(count), fill = condition))+
+  ggplot(aes(x = genotype, y = count, fill = condition))+
   geom_bar(stat = "identity")+
   scale_fill_manual(values = c("lazy" = "steelblue", "active" = "darkred"))+
   facet_wrap(~name, scale = "free")+
-  labs(x = "Sample" , y = "Gene expression (counts)")+
+  labs(x = "Sample" , y = "Gene expression (normalised counts)")+
   my_theme
 
-ggsave(file = "Figure_7/plots/MEP_genes_barplot.pdf", plot = p.mep)
+ggsave(file = "Figure_S6_to_8/MEP_genes_barplot.pdf", plot = p.mep)
 
 # plot MVA genes  
 
@@ -140,10 +140,10 @@ p.mva =
   geom_bar(stat = "identity")+
   scale_fill_manual(values = c("lazy" = "steelblue", "active" = "darkred"))+
   facet_wrap(~name, scale = "free")+
-  labs(x = "Sample" , y = "Gene expression (counts)")+
+  labs(x = "Sample" , y = "Gene expression (normalised counts)")+
   my_theme
 
-ggsave(file = "Figure_7/plots/MVA_genes_barplot.pdf", plot = p.mva)
+ggsave(file = "Figure_S6_to_8/MVA_genes_barplot.pdf", plot = p.mva)
 
 ######################
 # Prenyltransferases #
@@ -169,7 +169,7 @@ p.prenyl =
   labs(x = "Sample" , y = "Gene expression (counts)")+
   my_theme
 
-ggsave(file = "Figure_7/plots/prenyltransferases_genes_barplot.pdf", plot = p.prenyl)
+ggsave(file = "Figure_S6_to_8/prenyltransferases_genes_barplot.pdf", plot = p.prenyl)
 
 
 
@@ -198,6 +198,6 @@ p.tps =
   labs(x = "Sample" , y = "Gene expression (counts)")+
   my_theme
 
-ggsave(file = "Figure_7/plots/TPS_genes_free_scale_barplot.pdf", width = 12, height = 12, plot = p.tps)
+ggsave(file = "Figure_S6_to_8/TPS_genes_free_scale_barplot.pdf", width = 12, height = 12, plot = p.tps)
 
 
