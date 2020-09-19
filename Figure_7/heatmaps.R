@@ -15,20 +15,21 @@ library(pheatmap)
 #############
 
 
-## Step 1: filtering scaled counts using target genes
-
-# scaled counts data preparation
-df <- read_tsv("figure_7/abundance_tidy.tsv", col_names = TRUE)
-df = df %>% filter(!sample %in% c("Elite_02", "F1-hab", "LA1777_F1", "LA1777", "F2-28"))
-
-# create a locus/gene column to prepare future filtering using precursor_genes 
-df_parsed = df %>% mutate(target_id = substr(target_id, start = 1, stop = 14))
+## Step 1: Import scaled counts from the RNA seq (scaled according to the DEseq2 method) and
+## shape the dataframe
+df <- read.delim("Supplemental_data_RNA-seq/scaled_counts.tsv", sep = "\t", check.names = FALSE) %>% 
+  mutate(gene = substr(gene, start = 6, stop = 19)) %>%
+  rename(target_id = gene,
+         "F2-127" = F2.127,
+         "F2-151" = F2.151,
+         "F2-28" = F2.28,
+         "F2-411" = F2.411,
+         "F2-445" = F2.445,
+         "F2-73" = F2.73)
 
 
 ## Step two: importing the sample information and re-ordering it
-samples <- read_tsv("Figure_7/samples.tsv", col_names = TRUE )[c("sample", "condition")]
-samples$condition <- with(samples, factor(condition, levels = c("elite","F1","wild","F2"))) 
-samples = samples %>% filter(!sample %in% c("Elite_02", "F1-hab", "LA1777_F1", "LA1777","F2-28"))
+samples <- read.delim("Supplemental_data_RNA-seq/samples.tsv")[c("sample", "condition")]
 
 ################
 # target genes #
@@ -39,7 +40,7 @@ samples = samples %>% filter(!sample %in% c("Elite_02", "F1-hab", "LA1777_F1", "
 ###########################
 
 annotation_cols = as.data.frame(samples)
-col_order = c("F2-151", "F2-411", "F2-445", "PI127826_F1","Elite_01", "PI127826", "F2-73", "F2-127")
+col_order = c("F2-151", "F2-411", "F2-445", "Elite_02","PI127826_F1", "PI127826", "F2-73", "F2-127", "F2-28")
 row.names(annotation_cols) <- samples$sample
 annotation_cols$sample <- NULL
 
@@ -54,16 +55,15 @@ precursor_genes <- read.delim("figure_7/precursor_genes.tsv", header = T, string
 # Remove (putative) Nudix and IPK genes as this is still unclear in tomato
 # precursor_genes = precursor_genes %>% filter(!name %in% c("Nudix", "IPK"))
 # filter the scaled counts using the target genes
-df_filtered <- inner_join(precursor_genes,df_parsed, by = "target_id")
+df_filtered <- inner_join(precursor_genes,df, by = "target_id")
 df_filtered <- df_filtered[order(df_filtered$pathway),]
-# transform into wide format 
-df_filtered_wide <- pivot_wider(df_filtered, id_cols = "target_id", names_from = "sample", values_from = "est_counts") 
 
 
-# Prepare df for heatmap
-mat = as.data.frame(df_filtered_wide[,-1]) 
-row.names(mat) = df_filtered_wide$target_id
+# create matrix for heatmap
+mat = as.data.frame(df_filtered[,4:ncol(df_filtered)]) 
+row.names(mat) = df_filtered$target_id
 
+# Log scale the counts
 mat_log2_scaled <- log2(mat + 1)
 mat_log2_scaled = mat_log2_scaled[,col_order] 
 # heatmap
@@ -83,8 +83,9 @@ row.names(annotation_rows) <- precursor_genes$target_id # Connect genes to row a
          annotation_col = annotation_cols, 
          annotation_row = annotation_rows,
          annotation_colors = my_colour,
-         gaps_row = 10,
-         gaps_col = 5 ,filename = "Figure_7/heatmaps/MEP_MVA_heatmap.pdf")
+         gaps_row = 12,
+         gaps_col = 5,
+         filename = "Figure_7/heatmaps/MEP_MVA_heatmap.pdf")
         
 
         
