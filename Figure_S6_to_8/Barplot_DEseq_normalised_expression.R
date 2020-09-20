@@ -20,22 +20,31 @@ my_theme = theme_bw()+
 # Load and parse data #
 #######################
 
-# Load normalised_counts dataset from DEseq2 analysis
-df = read.delim(file = "Figure_8/normalised_counts_by_DEseq2.tsv", header = T)
-
+# Load normalised_counts dataset
+df <- read.delim("Supplemental_data_RNA-seq/scaled_counts.tsv", sep = "\t", check.names = FALSE) %>% 
+  mutate(gene = substr(gene, start = 6, stop = 19)) %>%
+  rename(target_id = gene,
+         "F2-127" = F2.127,
+         "F2-151" = F2.151,
+         "F2-28" = F2.28,
+         "F2-411" = F2.411,
+         "F2-445" = F2.445,
+         "F2-73" = F2.73) %>%
+  pivot_longer(-target_id, names_to = "genotype", values_to = "count") %>%
+  filter(!genotype == "F2-28") %>% droplevels()
 
 # Create df with active/lazy condition per samples
-con = data.frame(genotype = c("Elite_01", "PI127826_F1", "F2_151", "F2_411", "F2_445",
-                            "PI127826", "F2_73", "F2_127"),
+con <- data.frame(genotype = c("Elite_02", "PI127826_F1", "F2-151", "F2-411", "F2-445",
+                            "PI127826", "F2-73", "F2-127"),
                  condition = c("lazy","lazy","lazy","lazy","lazy",
                                "active","active","active"))
 
 # Fuse the active/lazy condition with the main df
-df = left_join(df, con, by = "genotype")
+df <- left_join(df, con, by = "genotype")
 
 # Custom order of the samples
-df$genotype = factor(df$genotype, levels = c("Elite_01", "PI127826_F1", "F2_151", "F2_411", "F2_445",
-                                             "PI127826", "F2_73", "F2_127"),
+df$genotype = factor(df$genotype, levels = c("Elite_02", "PI127826_F1", "F2-151", "F2-411", "F2-445",
+                                             "PI127826", "F2-73", "F2-127"),
                           ordered = TRUE)
 
 ##################################################
@@ -115,8 +124,8 @@ precursors <- read.delim(file = "Figure_7/precursor_genes.tsv", header = TRUE) %
 precursors.expression <- left_join(precursors, df, by = "target_id")
 
 # Make sure order of samples is OK
-precursors.expression$genotype= factor(precursors.expression$genotype, levels = c("Elite_01", "PI127826_F1", "F2_151", "F2_411", "F2_445",
-                                                       "PI127826", "F2_73", "F2_127"),
+precursors.expression$genotype= factor(precursors.expression$genotype, levels = c("Elite_02", "PI127826_F1", "F2-151", "F2-411", "F2-445",
+                                                       "PI127826", "F2-73", "F2-127"),
                           ordered = TRUE)
 
 # plot MEP genes
@@ -155,8 +164,8 @@ prenyl <- read.delim(file = "Figure_7/trans_prenyltransferases_zhou2020.tsv", he
 
 prenyl.expression <- left_join(prenyl, df, by = "target_id")
 
-prenyl.expression$genotype = factor(prenyl.expression$genotype, levels = c("Elite_01", "PI127826_F1", "F2_151", "F2_411", "F2_445",
-                                                                               "PI127826", "F2_73", "F2_127"),
+prenyl.expression$genotype = factor(prenyl.expression$genotype, levels = c("Elite_02", "PI127826_F1", "F2-151", "F2-411", "F2-445",
+                                                                           "PI127826", "F2-73", "F2-127"),
                                       ordered = TRUE)
 
 p.prenyl =
@@ -184,8 +193,8 @@ TPS <- read.delim(file = "Figure_7/terpene_synthases_zhou2020.tsv", header = TRU
 
 TPS.expression <- left_join(TPS, df, by = "target_id")
 
-TPS.expression$genotype = factor(TPS.expression$genotype, levels = c("Elite_01", "PI127826_F1", "F2_151", "F2_411", "F2_445",
-                                                                       "PI127826", "F2_73", "F2_127"),
+TPS.expression$genotype = factor(TPS.expression$genotype, levels = c("Elite_02", "PI127826_F1", "F2-151", "F2-411", "F2-445",
+                                                                      "PI127826", "F2-73", "F2-127"),
                                   ordered = TRUE)
 
 p.tps =
