@@ -32,11 +32,11 @@ Results are plotted on a log10 axis (with an offset of 1 to avoid -Inf for gene 
 
 ## Boxplots
 
-<img src="raw_vs_scaled_boxplot_counts.png" width="100%">
+<img src="raw_vs_scaled_boxplot_counts.png" width="60%">
 
 ## Scatterplots
 
-<img src="scatterplots_raw_vs_scaled.png" width="100%">
+<img src="scatterplots_raw_vs_scaled.png" width="60%">
 
 # Code and data used
 
