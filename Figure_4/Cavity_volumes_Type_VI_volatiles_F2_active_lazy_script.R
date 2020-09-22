@@ -1,6 +1,7 @@
 library(Rmisc)
 library(tidyverse)
 library(gridExtra)
+library(multcomp)
 
 
 #############################
@@ -46,6 +47,20 @@ ggplot(sum, aes(x = genotype, y = volume_pl, fill = phenotype)) +
   my.theme +
   theme(legend.position = c(.8,.8), legend.background = element_rect(fill=NULL))
 
+##############
+# Statistics #
+##############
+
+aov.cavity <- aov(data = df, volume_pl ~ genotype)
+summary(aov.cavity)
+
+TK.cavity <- TukeyHSD(aov.cavity)
+write.table(TK.cavity$genotype, file = "Figure_4/TukeyHSD_cavities.tsv", sep = "\t")
+
+# Get letters from multcomp
+TK.cavity2 <- glht(aov.cavity, linfct=mcp(genotype="Tukey"))
+cld(TK.cavity2)
+
 
 ##############################
 # Volatles type VI trichomes #
@@ -76,6 +91,19 @@ p.terpenes =
   ylab("Terpenes per type-VI trichome-gland (ng)")+
   my.theme +
   theme(legend.position = "none")
+
+##############
+# Statistics #
+##############
+
+aov.terpenes <- aov(data = df2, total_terpenes ~ genotype)
+summary(aov.terpenes)
+TK.terpenes <- TukeyHSD(aov.terpenes)
+write.table(TK.terpenes$genotype, file = "Figure_4/TukeyHSD_terpenes.txt", sep = "\t")
+
+TK.terpenes2 <- glht(aov.terpenes, linfct=mcp(genotype="Tukey"))
+cld(TK.terpenes2)
+
 
 ##############
 # SAVE PLOTS #
