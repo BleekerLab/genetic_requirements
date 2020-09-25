@@ -126,6 +126,7 @@ volatiles %>% filter(., group == "F2") %>%  filter(zingiberene != 0) %>%
 ##############################
 # Distribution of trichomes  #
 ##############################
+p.dist.trichomes = 
 trichomes %>% 
   filter(group == "F2") %>% 
   dplyr::group_by(genotype) %>% 
@@ -136,6 +137,9 @@ ggplot(aes( x= sum_type_VI)) +
   stat_bin(binwidth = 1, aes(y=..count.., label=..count..), geom="text", vjust = -1)+
   ylim(0, 90)+
   my.theme
+
+ggsave(filename = "Figure_2/plots/trichome_class_istribution.pdf", plot = p.dist.trichomes, width = 5, height = 4)
+
 
 # Calculate AVG group values for the parents
 trichomes %>% filter(group != "F2") %>%
