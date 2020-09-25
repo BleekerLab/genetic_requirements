@@ -18,15 +18,13 @@ library(pheatmap)
 ## Step 1: filtering scaled counts using target genes
 
 # scaled counts data preparation
-df <- read_tsv("figure_7/abundance_tidy.tsv", col_names = TRUE)
-df = df %>% filter(!sample %in% c("Elite_02", "F1-hab", "LA1777_F1", "LA1777", "F2-28"))
+df <- read.delim(file = "Figure_8/normalised_counts_by_DEseq2.tsv", header = T)
 
-# create a locus/gene column to prepare future filtering using precursor_genes 
-df_parsed = df %>% mutate(target_id = substr(target_id, start = 1, stop = 14))
 
+df = df %>% filter(!genotype %in% c("Elite_02", "F1_hab", "LA1777_F1", "LA1777", "F2_28"))
 
 ## Step two: importing the sample information and re-ordering it
-samples <- read_tsv("Figure_7/samples.tsv", col_names = TRUE )[c("sample", "condition")]
+samples <- read_tsv("Figure_7/samples.tsv", col_names = TRUE )[c("genotype", "condition")]
 samples$condition <- with(samples, factor(condition, levels = c("elite","F1","wild","F2"))) 
 samples = samples %>% filter(!sample %in% c("Elite_02", "F1-hab", "LA1777_F1", "LA1777","F2-28"))
 
@@ -39,7 +37,7 @@ samples = samples %>% filter(!sample %in% c("Elite_02", "F1-hab", "LA1777_F1", "
 ###########################
 
 annotation_cols = as.data.frame(samples)
-col_order = c("F2-151", "F2-411", "F2-445", "PI127826_F1","Elite_01", "PI127826", "F2-73", "F2-127")
+col_order = c("F2_151", "F2_411", "F2_445", "PI127826_F1","Elite_01", "PI127826", "F2_73", "F2_127")
 row.names(annotation_cols) <- samples$sample
 annotation_cols$sample <- NULL
 
@@ -54,10 +52,10 @@ precursor_genes <- read.delim("figure_7/precursor_genes.tsv", header = T, string
 # Remove (putative) Nudix and IPK genes as this is still unclear in tomato
 # precursor_genes = precursor_genes %>% filter(!name %in% c("Nudix", "IPK"))
 # filter the scaled counts using the target genes
-df_filtered <- inner_join(precursor_genes,df_parsed, by = "target_id")
+df_filtered <- inner_join(precursor_genes,df, by = "target_id")
 df_filtered <- df_filtered[order(df_filtered$pathway),]
 # transform into wide format 
-df_filtered_wide <- pivot_wider(df_filtered, id_cols = "target_id", names_from = "sample", values_from = "est_counts") 
+df_filtered_wide <- pivot_wider(df_filtered, id_cols = "target_id", names_from = "genotype", values_from = "count") 
 
 
 # Prepare df for heatmap
@@ -80,11 +78,11 @@ row.names(annotation_rows) <- precursor_genes$target_id # Connect genes to row a
          fontsize = 10,
          cellwidth = 15,
          cellheight = 15,
-         annotation_col = annotation_cols, 
+         #annotation_col = annotation_cols, 
          annotation_row = annotation_rows,
-         annotation_colors = my_colour,
-         gaps_row = 10,
-         gaps_col = 5 ,filename = "Figure_7/heatmaps/MEP_MVA_heatmap.pdf")
+         nnotation_colors = my_colour,
+         gaps_row = 12,
+         gaps_col = 5 ,filename = "Figure_7/heatmaps/MEP_MVA_heatmap_normalised_counts.pdf")
         
 
         
