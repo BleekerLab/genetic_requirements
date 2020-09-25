@@ -19,6 +19,8 @@ Code and data for the figures of the "genetic requirement" paper.
     * (A) Metabolite levels of F1 + F1-hab + parents in leaf-wash.
     * (B) Trichome density of F1, F1-_hab_ and their parents.
 - __Figure 2:__ Distribution of 7-epizingiberene levels in the F2 population.
+    * (A) Distribution of 7-epiZ among the F2
+    * (B) Trichome-density classes versus 7-epizingiberene
 - __Figure 3:__ Trichome density vs 7-epizingiberene levels.
 	* (A) Trichome-density classes F2 VS zingiberene content.   
 	* (B) Scatterplot volatiles per type/VI gland VS trichome density.
