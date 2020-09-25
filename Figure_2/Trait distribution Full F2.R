@@ -143,5 +143,7 @@ ggsave(filename = "Figure_2/plots/trichome_class_istribution.pdf", plot = p.dist
 
 # Calculate AVG group values for the parents
 trichomes %>% filter(group != "F2") %>%
+  dplyr::group_by(genotype, group) %>%
+  dplyr::summarise(sum_type_VI = sum(type_VI)) %>%
   dplyr::group_by(group) %>%
-  dplyr::summarise(mean_class = mean(type_VI), se = sd(type_VI)/sqrt(n()))
+  dplyr::summarise(mean_class = mean(sum_type_VI), se = sd(sum_type_VI)/sqrt(n()))
