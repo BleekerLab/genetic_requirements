@@ -3,6 +3,7 @@ library(RColorBrewer)
 library(multcompView)
 library(Rmisc)
 library(FSA)
+library(ggpubr)
 #############################
 # Custom theme for plotting #
 #############################
@@ -42,8 +43,33 @@ df$genotype = as.factor(df$genotype)
 ########################################
 # Plot distribution of ZGB over the F2 #
 ########################################
+#############
+# Main plot #
+#############
 
+p.F2.ylim = # only show the non-0 values - includes the statistics per bin 
+  volatiles %>% filter(., group == "F2") %>% filter(zingiberene != 0) %>%
+  ggplot(., aes(x = zingiberene))+
+  #stat_bin(binwidth = 100000, colour="black", fill="white") +
+  geom_histogram(binwidth = 100000, colour="black", fill="lightgrey") +
+  stat_bin(binwidth = 100000, aes(y=..count.., label=..count..), geom="text", vjust = -1)+
+  #facet_grid(~group) +
+  xlim(-100000,2000000)+
+  ylim(0,45)+
+  #ylim(0,30)+
+  xlab("7-epizingiberene abundance (peak area)")+
+  ylab("Number of F2 genotypes")+
+  my.theme
+ggsave(filename = "Figure_2/plots/F2_zingiberene_histogram_no_zeroes.pdf", plot = p.F2.ylim, width = 5, height = 4)
+
+# Calculate the mean value of the parents to show in plot
+sum <- volatiles.parents %>% dplyr::group_by(genotype) %>% 
+  dplyr::summarise(zingi_mean = mean(zingiberene), zingi_std = sd(zingiberene))
 # Plot different genotype groups seperatly
+
+#########################################
+# plot ZGB content seperately per group #
+#########################################
 
 #p.F2 = 
   volatiles %>% filter(., group == "F2") %>%
@@ -77,57 +103,13 @@ p.PI127826 =
   xlim(-100000,1500000)+
   my.theme  + theme(legend.position = "none", axis.title.y = element_blank(), axis.title.x = element_blank()) 
 
-# Create an "zoom-in" figure for low frequent F2 bins
-
-p.F2.insert = 
-  volatiles %>% filter(., group == "F2") %>%
-  ggplot(., aes(x = zingiberene))+
-  stat_bin(binwidth = 100000, colour = "black", fill = "black") +
-  #facet_grid(~group) +
-  xlim(100000,2500000)+
-  ylim(0,10)+
-  theme(text = element_text(),
-        axis.text.x = element_text(size = 6, colour = "black"),
-        axis.text.y = element_text(size = 4, colour = "black"),
-        strip.background = element_blank(),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        panel.border = element_rect(),
-        panel.background = element_rect(fill = NA, color = "black"),
-        strip.text.x = element_text(size=8, colour = "black")
-  )+
-  theme_bw()+
-  theme(legend.position = "none", axis.title.y = element_blank(), axis.title.x = element_blank()) 
-
-#############
-# Main plot #
-#############
-
-p.F2.ylim = # only show the non-0 values - includes the statistics per bin 
-volatiles %>% filter(., group == "F2") %>% filter(zingiberene != 0) %>%
-  ggplot(., aes(x = zingiberene))+
-  #stat_bin(binwidth = 100000, colour="black", fill="white") +
-  geom_histogram(binwidth = 100000, colour="black", fill="lightgrey") +
-  stat_bin(binwidth = 100000, aes(y=..count.., label=..count..), geom="text", vjust = -1)+
-  #facet_grid(~group) +
-  xlim(-100000,2000000)+
-  ylim(0,45)+
-  #ylim(0,30)+
-  xlab("7-epizingiberene abundance (peak area)")+
-  ylab("Number of F2 genotypes")+
-  my.theme
-ggsave(filename = "Figure_2/plots/F2_zingiberene_histogram_no_zeroes.pdf", plot = p.F2.ylim, width = 5, height = 4)
-
-# Calculate the mean value of the parents to show in plot
-sum <- volatiles.parents %>% dplyr::group_by(genotype) %>% 
-  dplyr::summarise(zingi_mean = mean(zingiberene), zingi_std = sd(zingiberene))
 
 ##############################
 # Zingiberene vs derivatives #
 ##############################
 
 volatiles %>% filter(., group == "F2")  %>% filter(zingiberene != 0) %>% filter(zingiberene < 1000000) %>%
-  ggplot(., aes(x = zingiberene, y = `epoxy-zingiberenol`))+
+  ggplot(., aes(x = log(zingiberene), y = log(`epoxy-zingiberenol`)))+
   geom_point()+
   geom_smooth(method = "lm", formula = y ~ x)+
   stat_cor(
@@ -141,29 +123,21 @@ volatiles %>% filter(., group == "F2") %>%  filter(zingiberene != 0) %>%
     method = "pearson")
 
 
+##############################
+# Distribution of trichomes  #
+##############################
+trichomes %>% 
+  filter(group == "F2") %>% 
+  dplyr::group_by(genotype) %>% 
+  dplyr::summarise(sum_type_VI = sum(type_VI)) %>%
+  filter(sum_type_VI < 11) %>%
+ggplot(aes( x= sum_type_VI)) +
+  geom_histogram(bins = 9, binwidth = 1, colour = "black", fill = "lightgrey")+
+  stat_bin(binwidth = 1, aes(y=..count.., label=..count..), geom="text", vjust = -1)+
+  ylim(0, 90)+
+  my.theme
 
-########
-p.all = grid.arrange(p.cultivar, p.F1,p.PI127826,p.F2, ncol = 1)
-
-ggsave("Figure_2/ZGB_distribution_Full_F2.pdf", plot = p.all, height = 6, width = 3.5)
-ggsave("Figure_2/F2-insert.pdf", plot = p.F2.insert, height = 1, width = 2)
-
-
-
-#######################################
-# Alternativly -> Barplot of volaties #
-#######################################
-
-#Barplot volatiles
-volatiles %>% dplyr::group_by(., genotype, group) %>% dplyr::summarise(., mean_zingiberene = mean(zingiberene)) %>% filter(genotype != "14830-144") %>%
-  ggplot(., aes(x = reorder(genotype, -mean_zingiberene),
-                y = mean_zingiberene, fill= group))+
-  geom_bar(stat = "identity")+
-  theme_bw()+
-  theme(text = element_text(),
-        axis.text.x = element_text(size = 3, angle = 90, colour = "black"))
-
-
-
-
-
+# Calculate AVG group values for the parents
+trichomes %>% filter(group != "F2") %>%
+  dplyr::group_by(group) %>%
+  dplyr::summarise(mean_class = mean(type_VI), se = sd(type_VI)/sqrt(n()))
