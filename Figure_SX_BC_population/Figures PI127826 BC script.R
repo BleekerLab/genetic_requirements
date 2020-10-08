@@ -3,11 +3,10 @@ library(tidyr)
 library(dplyr)
 library(car)
 
-df = read.table(file = "20160905_BC lines GCMS_area_mg_leaf.csv", header = T, sep = ",")
-str(df)
+df = read.table(file = "Figure_SX_BC_population/20160905_BC lines GCMS_area_mg_leaf.csv", header = T, sep = ",")
 
 df$cutting <- as.factor(df$cutting)
-df$genotype= factor(df$genotype, levels= c("CV", "PI127826", "F1", "PHS", "PHS + 00205", "ZIS", "ZIS + 00205"))
+df$genotype= factor(df$genotype, levels= c("CV",  "F1","PI127826", "PHS", "PHS + 00205", "ZIS", "ZIS + 00205"))
 #Change to long ('tidy') format
 df_long = gather(
   data = df,
@@ -17,14 +16,17 @@ df_long = gather(
 head(df_long)
 str(df_long)
 df_long$metabolite = factor(df_long$metabolite, levels = c("zingiberene", "zingiberenol", "epoxy_zingiberenol"))
-df_long$genotype= factor(df_long$genotype, levels= c("CV", "PI127826", "F1", "PHS", "PHS + 00205", "ZIS", "ZIS + 00205"))
-#Filter if you want
-#df_zingiberene_class3_4 <- filter(df_long, metabolite == "zingiberene" & class %in% c("3", "4"))
+df_long$genotype= factor(df_long$genotype, levels= c("CV",  "F1","PI127826", "PHS", "PHS + 00205", "ZIS", "ZIS + 00205"),
+                         ordered = TRUE)
 
-#Plotting
-ggplot(data = df_long, aes(x = genotype, y = abundance)) +
+############
+# Plotting #
+############
+
+# Boxplot
+ggplot(data = df_long, aes(x = BC1_progeny, y = abundance)) +
   geom_point()+
-  geom_boxplot(fill="grey")+
+  geom_boxplot(aes(fill=genotype))+
 
 theme_classic() +
   theme_linedraw() +
@@ -38,6 +40,23 @@ theme_classic() +
         panel.grid.minor = element_blank()) +
   labs(y = "Relative metabolite abundance (ion counts / mg fresh leaf", x = "Genotype") +
   ggsave("Zingiberene&derivatives_BC_population.svg", device = "svg", scale = 1, width = 28, height = 10, units = "cm", dpi = 300)
+
+###########
+# Barplot #
+###########
+p.bar = 
+df_long %>%
+  dplyr::group_by(BC1_progeny, metabolite, genotype) %>% dplyr::summarise(mean_abundance = mean(abundance), se = sd(abundance)/sqrt(n())) %>%
+  ggplot(aes(x = reorder(BC1_progeny, -mean_abundance),  y = mean_abundance))+
+  geom_bar(aes(fill  = genotype), stat = "identity")+
+  geom_errorbar(aes(x = BC1_progeny, ymax = mean_abundance +se, ymin = mean_abundance - se))+
+  facet_wrap(~metabolite, ncol = 1, scale = "free") + 
+  theme_bw()+
+  theme(axis.text.x = element_text(size = 12, angle = 90))+
+  ylab("Metabolite abundance (ion counts / mg FW)")+
+  xlab(NULL)
+
+ggsave("Figure_SX_BC_population/zingiberene&derivatives_BC1_barplot.pdf", plot = p.bar, width = 6, height = 6)
 
 
 ## ANOVA Volatiles
