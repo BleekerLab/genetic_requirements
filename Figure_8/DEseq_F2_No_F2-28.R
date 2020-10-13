@@ -9,13 +9,16 @@ library(EnhancedVolcano)
 ##################
 
 # Load reads
-counts <- read.table("Figure_8/raw_counts.txt", header = TRUE, sep = "\t", check.names = FALSE) %>%
-  mutate(target_id = substr(Geneid, start = 6, stop = 19)) %>% 
-   select(target_id, PI127826, Elite_01,PI127826_F1, F2_73, F2_127, F2_151, F2_411, F2_445)
+counts <- read.delim("Supplemental_data_RNA-seq/raw_counts.tsv", header = TRUE, sep = "\t", check.names = FALSE) %>%
+   mutate(Geneid = substr(Geneid, start = 6, stop = 19)) %>%
+   dplyr::rename("target_id" = Geneid) %>% select(-"F2-28")
+ #  pivot_longer(-target_id, names_to = "genotype", values_to = "count") %>%
+  # filter(!genotype == "F2-28") %>% droplevels()
+
 
 # Lazy / Active information on the samples
 sampleinfo <- data.frame(cbind(colnames(counts[,2:9]),
-                               c("active","lazy","lazy","active","active","lazy","lazy","lazy")), stringsAsFactors = F)
+                               c("lazy","lazy","active","active","lazy","lazy","lazy","active")), stringsAsFactors = F)
 
 colnames(sampleinfo) <- c("SampleName","Condition")
 
@@ -98,8 +101,8 @@ left_join(annotations, by = "target_id")
  write.table(normalised.counts.tidy, file = "Figure_8/normalised_counts_by_DEseq2.tsv", sep = "\t")
 
  # set conditions per genotype
- con = data.frame(genotype = c("Elite_01", "PI127826_F1", "F2_151", "F2_411", "F2_445",
-                             "PI127826", "F2_73", "F2_127"),
+ con = data.frame(genotype = c("Elite_02", "PI127826_F1", "F2.151", "F2.411", "F2.445",
+                             "PI127826", "F2.73", "F2.127"),
                   condition = c("lazy","lazy","lazy","lazy","lazy",
                                 "active","active","active"))
  
@@ -111,8 +114,8 @@ normalised.counts.tidy = left_join(normalised.counts.tidy, annotations, by = "ta
 
 # Set genotypes in proper order
 normalised.counts.tidy$genotype = factor(normalised.counts.tidy$genotype, 
-                                         levels = c("Elite_01", "PI127826_F1", "F2_151", "F2_411", "F2_445",
-                                                    "PI127826", "F2_73", "F2_127"),
+                                         levels = c("Elite_02", "PI127826_F1", "F2.151", "F2.411", "F2.445",
+                                                    "PI127826", "F2.73", "F2.127"),
                                          ordered = TRUE)
  
  
