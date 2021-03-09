@@ -1,0 +1,10 @@
+Module	Section	Sample Name	Source
+fastp	all_sections	F2-151_fastp	/Users/mgalland/Documents/workspace/genetic_requirements/Supplemental_data_RNA-seq/results/fastp/F2-151_fastp.json
+fastp	all_sections	F2-28_fastp	/Users/mgalland/Documents/workspace/genetic_requirements/Supplemental_data_RNA-seq/results/fastp/F2-28_fastp.json
+fastp	all_sections	Elite_02_fastp	/Users/mgalland/Documents/workspace/genetic_requirements/Supplemental_data_RNA-seq/results/fastp/Elite_02_fastp.json
+fastp	all_sections	F2-127_fastp	/Users/mgalland/Documents/workspace/genetic_requirements/Supplemental_data_RNA-seq/results/fastp/F2-127_fastp.json
+fastp	all_sections	PI127826_fastp	/Users/mgalland/Documents/workspace/genetic_requirements/Supplemental_data_RNA-seq/results/fastp/PI127826_fastp.json
+fastp	all_sections	PI127826_F1_fastp	/Users/mgalland/Documents/workspace/genetic_requirements/Supplemental_data_RNA-seq/results/fastp/PI127826_F1_fastp.json
+fastp	all_sections	F2-411_fastp	/Users/mgalland/Documents/workspace/genetic_requirements/Supplemental_data_RNA-seq/results/fastp/F2-411_fastp.json
+fastp	all_sections	F2-445_fastp	/Users/mgalland/Documents/workspace/genetic_requirements/Supplemental_data_RNA-seq/results/fastp/F2-445_fastp.json
+fastp	all_sections	F2-73_fastp	/Users/mgalland/Documents/workspace/genetic_requirements/Supplemental_data_RNA-seq/results/fastp/F2-73_fastp.json

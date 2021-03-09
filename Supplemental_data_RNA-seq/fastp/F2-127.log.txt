@@ -1,0 +1,41 @@
+Read1 before filtering:
+total reads: 26634280
+total bases: 4021776280
+Q20 bases: 3771434783(93.7754%)
+Q30 bases: 3560943208(88.5416%)
+
+Read1 after filtering:
+total reads: 25763854
+total bases: 3883030779
+Q20 bases: 3671820321(94.5607%)
+Q30 bases: 3474272027(89.4732%)
+
+Read2 before filtering:
+total reads: 26634280
+total bases: 4021776280
+Q20 bases: 3710807864(92.2679%)
+Q30 bases: 3498118994(86.9795%)
+
+Read2 aftering filtering:
+total reads: 25763854
+total bases: 3882959439
+Q20 bases: 3635865406(93.6365%)
+Q30 bases: 3437590069(88.5302%)
+
+Filtering result:
+reads passed filter: 51527708
+reads failed due to low quality: 1717028
+reads failed due to too many N: 12878
+reads failed due to too short: 10946
+reads with adapter trimmed: 522300
+bases trimmed due to adapters: 14100761
+
+Duplication rate: 19.235%
+
+Insert size peak (evaluated by paired-end reads): 271
+
+JSON report: results/fastp/F2-127.json
+HTML report: results/fastp/F2-127.html
+
+fastp --thread 10 --html results/fastp/F2-127.html --json results/fastp/F2-127.json --qualified_quality_phred 15 --in1 /zfs/omics/personal/mgallan1/workspace/rnaseq-analysis-kallisto-sleuth/fastq/F2-127_R1.fastq.gz --in2 /zfs/omics/personal/mgallan1/workspace/rnaseq-analysis-kallisto-sleuth/fastq/F2-127_R2.fastq.gz --out1 temp/F2-127_R1_trimmed.fq.gz --out2 temp/F2-127_R2_trimmed.fq.gz 
+fastp v0.19.5, time used: 269 seconds
