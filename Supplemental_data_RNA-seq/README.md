@@ -53,5 +53,5 @@ Snakemake mRNA-seq pipeline based on Kallisto: [link](https://zenodo.org/record/
 ## Genomic references
 The tomato annotation ITAG4.0 was used. Specifally the cDNA fasta file was used.   
 
-[SOL Genomics link](ftp://ftp.solgenomics.net/tomato_genome/annotation/ITAG4.0_release/ITAG4.0_cDNA.fasta)  
-[Custom Zenodo record](https://10.5281/zenodo.4321000)
+- [SOL Genomics link](ftp://ftp.solgenomics.net/tomato_genome/annotation/ITAG4.0_release/ITAG4.0_cDNA.fasta)    
+- [Custom Zenodo record for the tomato genomic references](https://10.5281/zenodo.4321000)
