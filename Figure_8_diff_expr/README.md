@@ -1,23 +1,21 @@
 # Differential expression
 
-![Figure 8](./figure8.png)
+
+The description of the fastq mRNA-seq to Kallisto pseudoalignments is described in the [`Supplemental_data_RNA-seq/` folder.](../Supplemental_data_RNA-seq/)  
+
+The complete Kallisto/Sleuth analysis can be found in the [`kallisto_sleuth_analysis.RData` R object.](./kallisto_sleuth_analysis.RData)
+
+# PCA analysis
+
+## Sample score plots
+
+<img src="./PCA_pc1_vs_pc2.png" alt="PC1 vs PC2" width="600px">
+
+<img src="./PCA_pc2_vs_pc3.png" alt="PC1 vs PC2" width="600px">
 
 
-# Data provenance
+## Gene loadings
 
-## Derived data: count tables
-The `raw_counts.txt` are derived from mRNA-seq fastq files (see "mRNA-seq fastq files" below) using a dedicated pipeline
-(see "Software" section below). 
-These files contain raw counts based on _S. lycopersicum_ Heinz1706 genome ITAG4.0.
+A combination of genes from PC1 and PC2 could perhaps distinguish some lines from the others. 
 
-The `raw_counts.txt` is available on [Zenodo](https://doi.org/10.5281/zenodo.3959143).
-
-## Raw data: mRNA-seq fastq files
-
-mRNA-seq fastq files archives:
-* _S. lycopersicum_ and _S. habrochaites_ parental lines and F1s: [Link to Zenodo archive](https://zenodo.org/record/3610267).  
-* Selected F2 "active" and "lazy" lines from a cross between _S. lycopersicum_ Elite x _S. habrochaites_ PI127826: [Link to Zenodo archive](https://zenodo.org/record/3610279).
-
-## Software
-A pipeline to go from RNA-seq fastq files to counts was used and can be found on [GitHub](https://github.com/BleekerLab/snakemake_rnaseq_to_counts/releases/tag/v0.3.0).
-
+For instance, a high negative loading on PC1 _and_ PC2 

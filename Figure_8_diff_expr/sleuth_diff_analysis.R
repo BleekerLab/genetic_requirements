@@ -1,6 +1,11 @@
 library("checkpoint")
 checkpoint("2020-01-01")
-library("tidyverse")
+library("tidyr")
+library("ggplot2")
+library("dplyr")
+library("tibble")
+library("ggrepel")
+source("Figure_8_diff_expr/mypca.R")
 
 # v0.29.0 (because 0.30.0 has bugs)
 # devtools::install_github(repo = "pachterlab/sleuth",
@@ -29,7 +34,7 @@ samples2condition <- read.delim(file = "Supplemental_data_RNA-seq/config/samples
   
 so <- sleuth_prep(samples2condition, 
                   full_model = ~ condition, 
-                  extra_bootstrap_summary = TRUE)
+                  extra_bootstrap_summary = FALSE)
 
 ###############################
 # Fit model + perform Wald test
@@ -48,7 +53,7 @@ all_genes_wald <- sleuth_results(so,
                             test_type = "wt",
                             show_all = TRUE) 
 
-significant_genes <- filter(all_genes, 
+significant_genes_wald <- filter(all_genes_wald, 
                             qval <= 0.05) %>% 
   rename("gene" = "target_id")
 
@@ -83,6 +88,59 @@ significant_genes_annotated <- inner_join(significant_genes_wald,
 
 
 save(so, file = "Figure_8_diff_expr/kallisto_sleuth_analysis.RData")
+
+###########################
+# Extract normalised counts
+###########################
+
+scaled_counts <- kallisto_table(so, use_filtered = TRUE, normalized = TRUE) %>% 
+  rename("gene" = "target_id") %>% 
+  select(- tpm, - eff_len) %>% 
+  pivot_wider(id_cols = "gene", names_from = "sample", values_from = "est_counts") %>% 
+  column_to_rownames("gene") %>% 
+  t(.) # for compatibility with mypca() function
+
+write.csv(x = scaled_counts, 
+          file = "Figure_8_diff_expr/scaled_counts.csv", 
+          row.names = TRUE, 
+          quote = FALSE)
+
+###########################
+# PCA analysis
+###########################  
+pca_results <- mypca(scaled_counts)
+
+### Scree plot
+df_explained_variance <- data.frame(
+  exp_var = pca_results$explained_var$exp_var
+) %>% 
+  rownames_to_column("PC") %>% 
+  mutate(PC = factor(PC,levels = unique(PC)))
+
+### Sample score plot
+scores <- pca_results$scores %>% 
+  rownames_to_column("sample") %>% 
+  inner_join(., y = samples2condition, by = "sample") %>% 
+  select(- path) 
+
+pc1_vs_pc2 <- ggplot(scores, aes(label = sample)) + 
+  geom_point(aes(x = PC1, y = PC2, shape = condition, col = condition), size = 3) + 
+  xlab(paste0('PC1 (',df_explained_variance[1,2],'% explained variance)')) + 
+  ylab(paste0('PC2 (',df_explained_variance[2,2],'% explained variance)')) + 
+  ggtitle('PCA score plot: PC1 versus PC2') +
+  geom_text_repel(aes(x = PC1, y = PC2))
+pc1_vs_pc2 
+
+pc2_vs_pc3 <- ggplot(scores, aes(label = sample)) + 
+  geom_point(aes(x = PC2, y = PC3, shape = condition, col = condition), size = 3) + 
+  xlab(paste0('PC2 (',df_explained_variance[2,2],'% explained variance)')) + 
+  ylab(paste0('PC3 (',df_explained_variance[3,2],'% explained variance)')) + 
+  ggtitle('PCA score plot: PC2 versus PC3') +
+  geom_text_repel(aes(x = PC2, y = PC3))
+pc2_vs_pc3
+
+ggsave(filename = "Figure_8_diff_expr/PCA_pc1_vs_pc2.png", plot = pc1_vs_pc2)
+ggsave(filename = "Figure_8_diff_expr/PCA_pc2_vs_pc3.png", plot = pc2_vs_pc3)
 
 #########################################
 # Sleuth live for interactive exploration
