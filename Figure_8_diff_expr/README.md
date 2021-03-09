@@ -13,9 +13,3 @@ The complete Kallisto/Sleuth analysis can be found in the [`kallisto_sleuth_anal
 
 <img src="./PCA_pc2_vs_pc3.png" alt="PC1 vs PC2" width="600px">
 
-
-## Gene loadings
-
-A combination of genes from PC1 and PC2 could perhaps distinguish some lines from the others. 
-
-For instance, a high negative loading on PC1 _and_ PC2 
