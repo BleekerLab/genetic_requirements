@@ -87,6 +87,11 @@ significant_genes_annotated <- inner_join(significant_genes_wald,
                                           by = "gene")
 
 
+write.csv(x = significant_genes_annotated, 
+          file = "Figure_8_diff_expr/sleuth_differential_genes.csv", 
+          row.names = F, 
+          quote = F)
+
 save(so, file = "Figure_8_diff_expr/kallisto_sleuth_analysis.RData")
 
 ###########################
