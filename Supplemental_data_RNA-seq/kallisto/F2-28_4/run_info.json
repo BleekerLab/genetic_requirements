@@ -1,0 +1,13 @@
+{
+	"n_targets": 34075,
+	"n_bootstraps": 100,
+	"n_processed": 20954998,
+	"n_pseudoaligned": 16468452,
+	"n_unique": 15807107,
+	"p_pseudoaligned": 78.6,
+	"p_unique": 75.4,
+	"kallisto_version": "0.44.0",
+	"index_version": 10,
+	"start_time": "Wed Mar 17 12:22:05 2021",
+	"call": "kallisto quant -i temp/index/kallisto_index.kidx -o results/kallisto/F2-28_4/ --single -l 90 -s 30 -b 100 --threads 10 temp/F2-28_4_R1_trimmed.fq.gz"
+}

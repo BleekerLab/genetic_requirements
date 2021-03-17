@@ -8,6 +8,6 @@
 	"p_unique": 66.6,
 	"kallisto_version": "0.44.0",
 	"index_version": 10,
-	"start_time": "Mon Mar  8 10:15:57 2021",
+	"start_time": "Wed Mar 17 12:25:03 2021",
 	"call": "kallisto quant -i temp/index/kallisto_index.kidx -o results/kallisto/F2-28/ --single -l 90 -s 30 -b 100 --threads 10 temp/F2-28_R1_trimmed.fq.gz"
 }

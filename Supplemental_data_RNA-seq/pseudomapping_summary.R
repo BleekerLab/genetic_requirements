@@ -1,3 +1,5 @@
+library("checkpoint")
+checkpoint("2020-01-01")
 library("rjson")
 suppressPackageStartupMessages(library("tidyverse"))
 

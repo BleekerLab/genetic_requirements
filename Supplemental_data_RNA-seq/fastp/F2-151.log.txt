@@ -32,10 +32,10 @@ bases trimmed due to adapters: 11666117
 
 Duplication rate: 22.707%
 
-Insert size peak (evaluated by paired-end reads): 268
+Insert size peak (evaluated by paired-end reads): 271
 
 JSON report: results/fastp/F2-151.json
 HTML report: results/fastp/F2-151.html
 
 fastp --thread 10 --html results/fastp/F2-151.html --json results/fastp/F2-151.json --qualified_quality_phred 15 --in1 /zfs/omics/personal/mgallan1/workspace/rnaseq-analysis-kallisto-sleuth/fastq/F2-151_R1.fastq.gz --in2 /zfs/omics/personal/mgallan1/workspace/rnaseq-analysis-kallisto-sleuth/fastq/F2-151_R2.fastq.gz --out1 temp/F2-151_R1_trimmed.fq.gz --out2 temp/F2-151_R2_trimmed.fq.gz 
-fastp v0.19.5, time used: 233 seconds
+fastp v0.19.5, time used: 254 seconds

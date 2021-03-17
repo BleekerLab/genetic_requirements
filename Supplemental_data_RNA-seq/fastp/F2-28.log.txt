@@ -27,4 +27,4 @@ JSON report: results/fastp/F2-28.json
 HTML report: results/fastp/F2-28.html
 
 fastp --thread 10 --html results/fastp/F2-28.html --json results/fastp/F2-28.json --qualified_quality_phred 15 --in1 /zfs/omics/personal/mgallan1/workspace/rnaseq-analysis-kallisto-sleuth/fastq/F2-28.fastq.gz --out1 temp/F2-28_R1_trimmed.fq.gz temp/F2-28_R2_trimmed.fq.gz results/fastp/F2-28.html results/fastp/F2-28.json 
-fastp v0.19.5, time used: 317 seconds
+fastp v0.19.5, time used: 349 seconds
