@@ -1,7 +1,10 @@
 library("checkpoint")
 checkpoint("2020-01-01")
 library("rjson")
-suppressPackageStartupMessages(library("tidyverse"))
+library(magrittr)
+library(tibble)
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(dplyr))
 
 # Import JSON pseudomapping statistics
 dirs_with_json_files <- list.dirs(path = "Supplemental_data_RNA-seq/kallisto", full.names = TRUE, recursive = FALSE)
@@ -28,3 +31,4 @@ plot_pseudomapping <-
   theme(axis.text.x = element_text(angle = 40, hjust = 1))
 plot_pseudomapping
 ggsave(filename = "Supplemental_data_RNA-seq/mapping_summary.png", plot = plot_pseudomapping)
+
