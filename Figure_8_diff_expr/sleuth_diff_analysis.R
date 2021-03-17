@@ -6,14 +6,6 @@ library("dplyr")
 library("tibble")
 library("ggrepel")
 source("Figure_8_diff_expr/mypca.R")
-
-# v0.29.0 (because 0.30.0 has bugs)
-# devtools::install_github(repo = "pachterlab/sleuth",
-#                         ref = "2cbb28749875eaf7dcafb30f9a795313c481fcb1", 
-#                           dependencies = TRUE, 
-#                           upgrade = TRUE, 
-#                           quiet = TRUE,
-#                           force = TRUE)
 library("sleuth")  
 
 ###############################
