@@ -1,6 +1,6 @@
 # RNA-seq analysis
 
-This folder contains the `raw_counts.tsv` and the `scaled_counts.tsv` that are used for the differential expression analysis and other representations (PCA, heatmaps) for this paper. 
+This folder contains the supplemental RNA-seq processed data used for the differential expression analysis and other representations (PCA, heatmaps) for this paper. 
 
 <!-- MarkdownTOC autolink="true" levels="1,2" -->
 
