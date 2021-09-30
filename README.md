@@ -12,7 +12,6 @@ Code and data for the figures of the "genetic requirement" paper.
 <!-- /MarkdownTOC -->
 
 
-
 # Figures
 
 - __Figure 1:__ Terpene levels and type-VI trichome density of CVxPI127826 F1 cross.
