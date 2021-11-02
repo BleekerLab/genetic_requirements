@@ -5,10 +5,10 @@ Q20 bases: 4854047253(98.3058%)
 Q30 bases: 4759307268(96.3871%)
 
 Read1 after filtering:
-total reads: 47839301
-total bases: 4779865476
-Q20 bases: 4716546457(98.6753%)
-Q30 bases: 4632755603(96.9223%)
+total reads: 46700397
+total bases: 4666040337
+Q20 bases: 4619868919(99.0105%)
+Q30 bases: 4549937306(97.5117%)
 
 Read2 before filtering:
 total reads: 49376993
@@ -17,15 +17,15 @@ Q20 bases: 4743148547(96.0599%)
 Q30 bases: 4642836164(94.0283%)
 
 Read2 aftering filtering:
-total reads: 47839301
-total bases: 4779865476
-Q20 bases: 4693146974(98.1858%)
-Q30 bases: 4604820443(96.3379%)
+total reads: 46700397
+total bases: 4666040337
+Q20 bases: 4609622752(98.7909%)
+Q30 bases: 4542053775(97.3428%)
 
 Filtering result:
-reads passed filter: 95678602
-reads failed due to low quality: 3059288
-reads failed due to too many N: 16096
+reads passed filter: 93400794
+reads failed due to low quality: 5342092
+reads failed due to too many N: 11100
 reads failed due to too short: 0
 reads with adapter trimmed: 809348
 bases trimmed due to adapters: 8172612
@@ -34,8 +34,8 @@ Duplication rate: 37.0563%
 
 Insert size peak (evaluated by paired-end reads): 162
 
-JSON report: results/fastp/Elite_2017.json
-HTML report: results/fastp/Elite_2017.html
+JSON report: /scratch/mgalland/fastp/Elite_2017_fastp.json
+HTML report: /scratch/mgalland/fastp/Elite_2017_fastp.html
 
-fastp --thread 10 --html results/fastp/Elite_2017.html --json results/fastp/Elite_2017.json --qualified_quality_phred 15 --in1 /zfs/omics/personal/mgallan1/workspace/rnaseq-analysis-kallisto-sleuth/fastq/PI26_P1_cv_i_AGCGATAG-CCTATCCT_L006_R1_001.fastq.gz --in2 /zfs/omics/personal/mgallan1/workspace/rnaseq-analysis-kallisto-sleuth/fastq/PI26_P1_cv_i_AGCGATAG-CCTATCCT_L006_R2_001.fastq.gz --out1 temp/Elite_2017_R1_trimmed.fq.gz --out2 temp/Elite_2017_R2_trimmed.fq.gz 
-fastp v0.19.5, time used: 475 seconds
+fastp --thread 10 --html /scratch/mgalland/fastp/Elite_2017_fastp.html --json /scratch/mgalland/fastp/Elite_2017_fastp.json --qualified_quality_phred 30 --in1 /zfs/omics/personal/mgallan1/gls/ruy/PI26_P1_cv_i_AGCGATAG-CCTATCCT_L006_R1_001.fastq.gz --in2 /zfs/omics/personal/mgallan1/gls/ruy/PI26_P1_cv_i_AGCGATAG-CCTATCCT_L006_R2_001.fastq.gz --out1 /scratch/mgalland/trimmed/Elite_2017_R1_trimmed.fq.gz --out2 /scratch/mgalland/trimmed/Elite_2017_R2_trimmed.fq.gz 
+fastp v0.19.5, time used: 436 seconds

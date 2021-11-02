@@ -5,10 +5,10 @@ Q20 bases: 4101880694(93.9566%)
 Q30 bases: 3876883898(88.8029%)
 
 Read1 after filtering:
-total reads: 27980463
-total bases: 4218549032
-Q20 bases: 3997271955(94.7547%)
-Q30 bases: 3786153626(89.7501%)
+total reads: 26666261
+total bases: 4020275103
+Q20 bases: 3846227130(95.6707%)
+Q30 bases: 3657299202(90.9714%)
 
 Read2 before filtering:
 total reads: 28912049
@@ -17,25 +17,25 @@ Q20 bases: 4046538664(92.6889%)
 Q30 bases: 3821598217(87.5365%)
 
 Read2 aftering filtering:
-total reads: 27980463
-total bases: 4218453683
-Q20 bases: 3967525896(94.0517%)
-Q30 bases: 3758116433(89.0875%)
+total reads: 26666261
+total bases: 4020191982
+Q20 bases: 3827310938(95.2022%)
+Q30 bases: 3643099445(90.62%)
 
 Filtering result:
-reads passed filter: 55960926
-reads failed due to low quality: 1836974
-reads failed due to too many N: 14452
-reads failed due to too short: 11746
+reads passed filter: 53332522
+reads failed due to low quality: 4467722
+reads failed due to too many N: 12824
+reads failed due to too short: 11030
 reads with adapter trimmed: 466824
 bases trimmed due to adapters: 12391285
 
 Duplication rate: 25.3141%
 
-Insert size peak (evaluated by paired-end reads): 271
+Insert size peak (evaluated by paired-end reads): 268
 
-JSON report: results/fastp/F2-445.json
-HTML report: results/fastp/F2-445.html
+JSON report: /scratch/mgalland/fastp/F2-445_fastp.json
+HTML report: /scratch/mgalland/fastp/F2-445_fastp.html
 
-fastp --thread 10 --html results/fastp/F2-445.html --json results/fastp/F2-445.json --qualified_quality_phred 15 --in1 /zfs/omics/personal/mgallan1/workspace/rnaseq-analysis-kallisto-sleuth/fastq/F2-445_R1.fastq.gz --in2 /zfs/omics/personal/mgallan1/workspace/rnaseq-analysis-kallisto-sleuth/fastq/F2-445_R2.fastq.gz --out1 temp/F2-445_R1_trimmed.fq.gz --out2 temp/F2-445_R2_trimmed.fq.gz 
-fastp v0.19.5, time used: 340 seconds
+fastp --thread 10 --html /scratch/mgalland/fastp/F2-445_fastp.html --json /scratch/mgalland/fastp/F2-445_fastp.json --qualified_quality_phred 30 --in1 /zfs/omics/personal/mgallan1/gls/ruy/F2-445_R1.fastq.gz --in2 /zfs/omics/personal/mgallan1/gls/ruy/F2-445_R2.fastq.gz --out1 /scratch/mgalland/trimmed/F2-445_R1_trimmed.fq.gz --out2 /scratch/mgalland/trimmed/F2-445_R2_trimmed.fq.gz 
+fastp v0.19.5, time used: 315 seconds

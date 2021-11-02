@@ -4,15 +4,44 @@ Code and data for the figures of the "genetic requirement" paper.
 
 <!-- MarkdownTOC autolink="true" level = "1,2" -->
 
+- [Trichome phenotypes](#trichome-phenotypes)
 - [Figures](#figures)
-- [Supplemental figures](#supplemental-figures)
+    - [Main figures](#main-figures)
+    - [Supplemental figures](#supplemental-figures)
 - [Tables](#tables)
-- [Supplemental tables](#supplemental-tables)
+    - [Main tables](#main-tables)
+    - [Supplemental tables](#supplemental-tables)
 
 <!-- /MarkdownTOC -->
 
+# Trichome phenotypes
 
-# Figures
+| Genotype          | trichome class|
+|---------------    |-----------    |
+| PI127826_F1       | lazy          |
+| Elite_2017        | lazy          |
+| PI127826_2017     | active        |
+| Elite_2021        | lazy          |
+| PI127826_2021     | active        |
+| F2-28             | active        |
+| F2-28_1           | active        |
+| F2-28_2           | active        |
+| F2-28_3           | active        |
+| F2-28_4           | active        |
+| F2-127            | active        |
+| F2-73             | active        |
+| F2-151            | lazy          |
+| F2-411            | lazy          |
+| F2-445            | lazy          |
+
+
+F2-28 corresponds to the pooling of the distinct F2-28_1, F2-28_2, etc.   
+
+PI127826_F1 is the cross between a _S. lycopersicum_ elite line and _S. habrochaites_ PI127826.
+
+# Figures 
+
+## Main figures
 
 - __Figure 1:__ Terpene levels and type-VI trichome density of CVxPI127826 F1 cross.
     * (A) Metabolite levels of F1 + F1-hab + parents in leaf-wash.
@@ -41,7 +70,7 @@ Code and data for the figures of the "genetic requirement" paper.
     * (E) Heatmap of the allelic ratios of DE genes. 
 
 
-# Supplemental figures   
+## Supplemental figures   
 
 - __Supplementary Figure S1:__ Quantification of individual terpenes in the parents + F1.
 - __Supplementary Figure S2:__ Trichome densities of NG-and type-I/IV trichomes 
@@ -56,5 +85,7 @@ Code and data for the figures of the "genetic requirement" paper.
 
 # Tables
 
-# Supplemental tables
+## Main tables
+
+## Supplemental tables
 
