@@ -1,0 +1,37 @@
+,attribute,/zfs/omics/personal/mgallan1/gls/ruy/results/star/Elite_2020,/zfs/omics/personal/mgallan1/gls/ruy/results/star/F2-28_concat,/zfs/omics/personal/mgallan1/gls/ruy/results/star/PI127826_2020
+0,                                 Started job on |,Oct 18 10:33:50,Oct 18 10:33:50,Oct 18 10:33:50
+1,                             Started mapping on |,Oct 18 10:33:51,Oct 18 10:33:51,Oct 18 10:33:51
+2,                                    Finished on |,Oct 18 10:35:12,Oct 18 10:39:59,Oct 18 10:35:41
+3,"       Mapping speed, Million of reads per hour |",881.26,813.11,613.73
+4,                          Number of input reads |,19828365,83118240,18752904
+5,                      Average input read length |,75,75,75
+6,                                    UNIQUE READS:,,,
+7,                   Uniquely mapped reads number |,18055736,61661853,14198867
+8,                        Uniquely mapped reads % |,91.06%,74.19%,75.72%
+9,                          Average mapped length |,75.93,75.97,75.94
+10,                       Number of splices: Total |,2884753,9859004,2184309
+11,            Number of splices: Annotated (sjdb) |,2657391,9134650,2021184
+12,                       Number of splices: GT/AG |,2848414,9700348,2143184
+13,                       Number of splices: GC/AG |,27981,92798,22373
+14,                       Number of splices: AT/AC |,876,2987,710
+15,               Number of splices: Non-canonical |,7482,62871,18042
+16,"                      Mismatch rate per base, % |",0.48%,1.15%,1.55%
+17,                         Deletion rate per base |,0.01%,0.07%,0.09%
+18,                        Deletion average length |,1.68,2.03,2.14
+19,                        Insertion rate per base |,0.01%,0.03%,0.04%
+20,                       Insertion average length |,1.49,1.72,1.75
+21,                             MULTI-MAPPING READS:,,,
+22,        Number of reads mapped to multiple loci |,768089,3757232,1700643
+23,             % of reads mapped to multiple loci |,3.87%,4.52%,9.07%
+24,        Number of reads mapped to too many loci |,4801,10938,2723
+25,             % of reads mapped to too many loci |,0.02%,0.01%,0.01%
+26,                                  UNMAPPED READS:,,,
+27,  Number of reads unmapped: too many mismatches |,445826,5091357,1666717
+28,       % of reads unmapped: too many mismatches |,2.25%,6.13%,8.89%
+29,            Number of reads unmapped: too short |,276153,4291129,928705
+30,                 % of reads unmapped: too short |,1.39%,5.16%,4.95%
+31,                Number of reads unmapped: other |,277760,8305731,255249
+32,                     % of reads unmapped: other |,1.40%,9.99%,1.36%
+33,                                  CHIMERIC READS:,,,
+34,                       Number of chimeric reads |,0,0,0
+35,                            % of chimeric reads |,0.00%,0.00%,0.00%
