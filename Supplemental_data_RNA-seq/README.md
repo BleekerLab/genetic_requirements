@@ -35,11 +35,11 @@ The F2-28 replicates 1 to 4 were pooled together to constitute one unique F2-28 
 The md5 checksum of the pooled F2-28 sample is `74032ef1726a9013bf4b53f7475fbc2f`. 
 
 ## Software 
-Snakemake mRNA-seq pipeline based on Kallisto: [link](https://zenodo.org/record/4091104)
+Snakemake mRNA-seq pipeline v0.3.8 based on STAR: [link](https://github.com/BleekerLab/snakemake_rnaseq/releases/tag/v0.3.8)
 
 
 ## Genomic references
-The tomato annotation ITAG4.0 was used. Specifally the cDNA fasta file was used.   
+The tomato annotation ITAG2.4 was used. Specifally the cDNA fasta file was used.   
 
-- [SOL Genomics link](ftp://ftp.solgenomics.net/tomato_genome/annotation/ITAG4.0_release/ITAG4.0_cDNA.fasta)    
-- [Custom Zenodo record for the tomato genomic references](https://10.5281/zenodo.4321000)
+- [SOL Genomics link](https://solgenomics.net/organism/Solanum_lycopersicum/genome). Go to "FTP Site" then "annotation" and "ITAG2.4" for the "ITAG2.4_gene_models.gff3".     
+- [Custom Zenodo record for the tomato genomic references](https://zenodo.org/record/5578601). The genome is "S_lycopersicum_chromosomes.2.50.fa.gz" and the annotation "ITAG2.4_gene_models.gff".  
