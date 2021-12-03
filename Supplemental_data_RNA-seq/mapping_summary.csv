@@ -1,37 +1,37 @@
-,attribute,/zfs/omics/personal/mgallan1/gls/ruy/results/star/Elite_2020,/zfs/omics/personal/mgallan1/gls/ruy/results/star/F2-28_concat,/zfs/omics/personal/mgallan1/gls/ruy/results/star/PI127826_2020
-0,                                 Started job on |,Oct 18 10:33:50,Oct 18 10:33:50,Oct 18 10:33:50
-1,                             Started mapping on |,Oct 18 10:33:51,Oct 18 10:33:51,Oct 18 10:33:51
-2,                                    Finished on |,Oct 18 10:35:12,Oct 18 10:39:59,Oct 18 10:35:41
-3,"       Mapping speed, Million of reads per hour |",881.26,813.11,613.73
-4,                          Number of input reads |,19828365,83118240,18752904
-5,                      Average input read length |,75,75,75
-6,                                    UNIQUE READS:,,,
-7,                   Uniquely mapped reads number |,18055736,61661853,14198867
-8,                        Uniquely mapped reads % |,91.06%,74.19%,75.72%
-9,                          Average mapped length |,75.93,75.97,75.94
-10,                       Number of splices: Total |,2884753,9859004,2184309
-11,            Number of splices: Annotated (sjdb) |,2657391,9134650,2021184
-12,                       Number of splices: GT/AG |,2848414,9700348,2143184
-13,                       Number of splices: GC/AG |,27981,92798,22373
-14,                       Number of splices: AT/AC |,876,2987,710
-15,               Number of splices: Non-canonical |,7482,62871,18042
-16,"                      Mismatch rate per base, % |",0.48%,1.15%,1.55%
-17,                         Deletion rate per base |,0.01%,0.07%,0.09%
-18,                        Deletion average length |,1.68,2.03,2.14
-19,                        Insertion rate per base |,0.01%,0.03%,0.04%
-20,                       Insertion average length |,1.49,1.72,1.75
-21,                             MULTI-MAPPING READS:,,,
-22,        Number of reads mapped to multiple loci |,768089,3757232,1700643
-23,             % of reads mapped to multiple loci |,3.87%,4.52%,9.07%
-24,        Number of reads mapped to too many loci |,4801,10938,2723
-25,             % of reads mapped to too many loci |,0.02%,0.01%,0.01%
-26,                                  UNMAPPED READS:,,,
-27,  Number of reads unmapped: too many mismatches |,445826,5091357,1666717
-28,       % of reads unmapped: too many mismatches |,2.25%,6.13%,8.89%
-29,            Number of reads unmapped: too short |,276153,4291129,928705
-30,                 % of reads unmapped: too short |,1.39%,5.16%,4.95%
-31,                Number of reads unmapped: other |,277760,8305731,255249
-32,                     % of reads unmapped: other |,1.40%,9.99%,1.36%
-33,                                  CHIMERIC READS:,,,
-34,                       Number of chimeric reads |,0,0,0
-35,                            % of chimeric reads |,0.00%,0.00%,0.00%
+attribute,Elite_2017,Elite_2020,F1,F2-127,F2-151,F2-28_concat,F2-411,F2-445,F2-73,PI127826_2017,PI127826_2020
+                                 Started job on |,01/12/2002 16:25,01/12/2002 16:35,01/12/2002 16:32,01/12/2002 16:27,01/12/2002 16:28,01/12/2002 16:28,01/12/2002 16:14,01/12/2002 16:14,01/12/2002 16:14,01/12/2002 16:14,01/12/2002 16:37
+                             Started mapping on |,01/12/2002 16:25,01/12/2002 16:36,01/12/2002 16:32,01/12/2002 16:27,01/12/2002 16:28,01/12/2002 16:28,01/12/2002 16:14,01/12/2002 16:14,01/12/2002 16:14,01/12/2002 16:14,01/12/2002 16:37
+                                    Finished on |,01/12/2002 16:32,01/12/2002 16:37,01/12/2002 16:40,01/12/2002 16:39,01/12/2002 16:37,01/12/2002 16:35,01/12/2002 16:28,01/12/2002 16:25,01/12/2002 16:28,01/12/2002 16:27,01/12/2002 16:38
+"       Mapping speed, Million of reads per hour |",416.14,915.16,244.5,121.4,145.27,663.47,125.26,148.37,119.76,224.03,695.98
+                          Number of input reads |,46700397,19828365,31377108,24481511,22153589,83118240,28113938,26666261,26845756,46672187,18752904
+                      Average input read length |,199,75,199,301,301,75,301,301,301,199,75
+                                    UNIQUE READS:,,,,,,,,,,,
+                   Uniquely mapped reads number |,43539567,18055736,24516782,13903127,14520202,61661853,17166477,16582640,16269195,28662598,14198867
+                        Uniquely mapped reads % |,93.23%,91.06%,78.14%,56.79%,65.54%,74.19%,61.06%,62.19%,60.60%,61.41%,75.72%
+                          Average mapped length |,199.81,75.93,199.72,301.24,301.35,75.97,301.35,301.41,301.31,199.65,75.94
+                       Number of splices: Total |,27914684,2884753,17593699,15298047,15020934,9859004,18006511,16875184,17622763,21351950,2184309
+            Number of splices: Annotated (sjdb) |,25030066,2657391,16259166,14535153,13983070,9134650,17006042,15958042,16757179,19991291,2021184
+                       Number of splices: GT/AG |,27614306,2848414,17377607,15104656,14758223,9700348,17735976,16632977,17388881,21078224,2143184
+                       Number of splices: GC/AG |,253290,27981,170493,153844,183523,92798,204028,175959,187042,189300,22373
+                       Number of splices: AT/AC |,8174,876,7807,5680,6519,2987,6190,6094,6035,7475,710
+               Number of splices: Non-canonical |,38914,7482,37792,33867,72669,62871,60317,60154,40805,76951,18042
+"                      Mismatch rate per base, % |",0.18%,0.48%,0.52%,0.56%,0.43%,1.15%,0.50%,0.50%,0.51%,1.00%,1.55%
+                         Deletion rate per base |,0.01%,0.01%,0.04%,0.05%,0.03%,0.07%,0.04%,0.04%,0.04%,0.08%,0.09%
+                        Deletion average length |,1.52,1.68,2.36,2.61,2.38,2.03,2.53,2.43,2.73,2.69,2.14
+                        Insertion rate per base |,0.01%,0.01%,0.04%,0.04%,0.03%,0.03%,0.03%,0.03%,0.04%,0.07%,0.04%
+                       Insertion average length |,1.43,1.49,2.34,3.19,2.8,1.72,2.98,2.86,3.58,3.33,1.75
+                             MULTI-MAPPING READS:,,,,,,,,,,,
+        Number of reads mapped to multiple loci |,328446,768089,295668,184709,156739,3757232,193716,162315,246439,457113,1700643
+             % of reads mapped to multiple loci |,0.70%,3.87%,0.94%,0.75%,0.71%,4.52%,0.69%,0.61%,0.92%,0.98%,9.07%
+        Number of reads mapped to too many loci |,4838,4801,1915,297,497,10938,493,357,249,668,2723
+             % of reads mapped to too many loci |,0.01%,0.02%,0.01%,0.00%,0.00%,0.01%,0.00%,0.00%,0.00%,0.00%,0.01%
+                                  UNMAPPED READS:,,,,,,,,,,,
+  Number of reads unmapped: too many mismatches |,2171833,445826,5319065,9003700,6429509,5091357,9448421,8722489,9114793,15038073,1666717
+       % of reads unmapped: too many mismatches |,4.65%,2.25%,16.95%,36.78%,29.02%,6.13%,33.61%,32.71%,33.95%,32.22%,8.89%
+            Number of reads unmapped: too short |,539454,276153,972186,1210218,942550,4291129,1186831,1054981,1126312,2358839,928705
+                 % of reads unmapped: too short |,1.16%,1.39%,3.10%,4.94%,4.25%,5.16%,4.22%,3.96%,4.20%,5.05%,4.95%
+                Number of reads unmapped: other |,116259,277760,271492,179460,104092,8305731,118000,143479,88768,154896,255249
+                     % of reads unmapped: other |,0.25%,1.40%,0.87%,0.73%,0.47%,9.99%,0.42%,0.54%,0.33%,0.33%,1.36%
+                                  CHIMERIC READS:,,,,,,,,,,,
+                       Number of chimeric reads |,0,0,0,0,0,0,0,0,0,0,0
+                            % of chimeric reads |,0.00%,0.00%,0.00%,0.00%,0.00%,0.00%,0.00%,0.00%,0.00%,0.00%,0.00%

@@ -27,4 +27,4 @@ JSON report: /scratch/mgalland/fastp/Elite_2020_fastp.json
 HTML report: /scratch/mgalland/fastp/Elite_2020_fastp.html
 
 fastp --thread 10 --html /scratch/mgalland/fastp/Elite_2020_fastp.html --json /scratch/mgalland/fastp/Elite_2020_fastp.json --qualified_quality_phred 30 --in1 /zfs/omics/personal/mgallan1/gls/ruy/Elite_line.fastq.gz --out1 /scratch/mgalland/trimmed/Elite_2020_R1_trimmed.fq.gz 
-fastp v0.19.5, time used: 76 seconds
+fastp v0.19.5, time used: 89 seconds

@@ -38,4 +38,4 @@ JSON report: /scratch/mgalland/fastp/F2-151_fastp.json
 HTML report: /scratch/mgalland/fastp/F2-151_fastp.html
 
 fastp --thread 10 --html /scratch/mgalland/fastp/F2-151_fastp.html --json /scratch/mgalland/fastp/F2-151_fastp.json --qualified_quality_phred 30 --in1 /zfs/omics/personal/mgallan1/gls/ruy/F2-151_R1.fastq.gz --in2 /zfs/omics/personal/mgallan1/gls/ruy/F2-151_R2.fastq.gz --out1 /scratch/mgalland/trimmed/F2-151_R1_trimmed.fq.gz --out2 /scratch/mgalland/trimmed/F2-151_R2_trimmed.fq.gz 
-fastp v0.19.5, time used: 253 seconds
+fastp v0.19.5, time used: 221 seconds

@@ -32,10 +32,10 @@ bases trimmed due to adapters: 14100761
 
 Duplication rate: 19.235%
 
-Insert size peak (evaluated by paired-end reads): 269
+Insert size peak (evaluated by paired-end reads): 270
 
 JSON report: /scratch/mgalland/fastp/F2-127_fastp.json
 HTML report: /scratch/mgalland/fastp/F2-127_fastp.html
 
 fastp --thread 10 --html /scratch/mgalland/fastp/F2-127_fastp.html --json /scratch/mgalland/fastp/F2-127_fastp.json --qualified_quality_phred 30 --in1 /zfs/omics/personal/mgallan1/gls/ruy/F2-127_R1.fastq.gz --in2 /zfs/omics/personal/mgallan1/gls/ruy/F2-127_R2.fastq.gz --out1 /scratch/mgalland/trimmed/F2-127_R1_trimmed.fq.gz --out2 /scratch/mgalland/trimmed/F2-127_R2_trimmed.fq.gz 
-fastp v0.19.5, time used: 322 seconds
+fastp v0.19.5, time used: 314 seconds

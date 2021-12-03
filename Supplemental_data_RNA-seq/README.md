@@ -23,7 +23,7 @@ Open the [MultiQC report](./multiqc_report.html) in a web browser.
 
 ## Mapping report
 
-See [mapping summary table](./mapping_results.csv)
+See [mapping summary table](./mapping_summary.csv)
 
 # Code and data used
 
