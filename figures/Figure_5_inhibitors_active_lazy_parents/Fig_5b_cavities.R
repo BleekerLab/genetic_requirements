@@ -51,7 +51,7 @@ sum %>% filter(., genotype != "F2-303") %>%
 # Save plot #
 #############
 
-ggsave(file = "Figure_5/cavity_volumes_inhibitors.pdf", plot = p.cavity, width = 4, height = 2.5)
+ggsave(file = "figures/Figure_5_inhibitors_active_lazy_parents/cavity_volumes_inhibitors.pdf", plot = p.cavity, width = 4, height = 2.5)
 
 shapiro.test(log(df$volume_um))
 ggplot(df, aes(x = log(volume_um+1)))+
