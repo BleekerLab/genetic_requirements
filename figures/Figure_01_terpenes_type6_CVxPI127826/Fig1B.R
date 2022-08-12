@@ -19,6 +19,7 @@ my.theme =
         strip.text.x = element_text(size=8, colour = "black")
   )+
   theme_bw()
+
 #########################
 # Import and shape data #
 #########################
