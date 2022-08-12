@@ -18,7 +18,7 @@ my.theme =
 
 #######
 
-df <- read.delim("Figure_1/20200722_F1s_leafwash_ng_mg_tissue.txt", 
+df <- read.delim("data/20200722_F1s_leafwash_ng_mg_tissue.txt", 
                        header = T, 
                        sep = "\t", 
                        dec = ".", 
@@ -41,9 +41,6 @@ df.long = df %>% pivot_longer(cols = 4:ncol(df), names_to = "metabolite", values
 # calculate average values for each metabolite
 
 df.avg = df.long %>% dplyr::group_by(genotype, metabolite) %>% dplyr::summarise(mean_value = mean(value), se = sd(value)/sqrt(3)) 
-
-# Write average values to a table
-write.table(df.avg, file = "Figure_1/average_metabolte_values.tsv", sep = "\t", row.names = FALSE)
 
 #####################################################
 # Fig 1A: plot 7-epizingiberene and summed_terpenes #
@@ -69,26 +66,3 @@ df.avg %>% filter(metabolite %in% c("7epiZ", "summed_terpenes")) %>%
   ylab(expression("Metabolite abundance (ng / mg fresh leaf)"))
 
 ggsave(file = "Figure_1/Fig1A.pdf", plot = p.fig1a, width = 9, height = 5.5, units = "cm")
-
-##########################################
-# Supplemental Fig S1: plot all terpenes #
-##########################################
-p.figS1 = 
-df.avg %>%
-  ggplot(., aes(x = genotype,
-                y = mean_value)) +
-  geom_bar(aes(x = genotype, 
-               y = mean_value), 
-           stat = "identity",
-           color = "black", 
-           fill = "black") +
-  geom_errorbar(aes(x = genotype, 
-                    ymin = mean_value - se, 
-                    ymax = mean_value + se), 
-                width = 0.2)+
-  facet_wrap(~metabolite, scale = "free", ncol = 4)+
-  my.theme +
-  xlab(NULL) + 
-  ylab(expression("Metabolite abundance (ng / mg fresh leaf)"))
-
-ggsave(file = "Figure_1/FigS1.pdf", plot = p.figS1, width = 18, height = 25, units = "cm")

@@ -5,8 +5,6 @@
 # More info: https://rdrr.io/cran/checkpoint/
 ###########
 
-library("checkpoint")
-#checkpoint("2020-01-01") # all package versions are from that date
 
 
 library(tidyverse)
@@ -36,7 +34,7 @@ my.theme =
 # Import and shape data #
 #########################
 
-df = read.csv(file = "Figure_1/F1_trichome_density.csv", 
+df = read.csv(file = "data/F1_trichome_density.csv", 
               header = T, 
               stringsAsFactors = T)
 
@@ -85,7 +83,7 @@ p.type_VI = df_parsed  %>%
   xlab(NULL) + 
   ylab(expression("Leaf trichome density, trichomes/mm^2")) 
   
-ggsave(file = "Figure_1/Fig1B.pdf", plot = p.type_VI, width = 9, height = 6, units = "cm")
+ggsave(file = "Figure_1/Fig1B.pdf", plot = p.type_VI, width = 9, height = 5.5, units = "cm")
 
 
 #############
