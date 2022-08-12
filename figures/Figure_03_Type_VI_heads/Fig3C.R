@@ -21,7 +21,7 @@ my.theme =
   )+
   theme_bw()
 
-df = read_csv(file = "Figure_04_storage_cavity_active_lazy/20190807_cavity_volumes_selected_Active_Lazy_F2.csv")
+df = read_csv(file = "data/20190807_cavity_volumes_selected_Active_Lazy_F2.csv")
 
 df = df %>% filter(., genotype != "F1_hab") #Remove F1_hab from the dataset
 
@@ -34,7 +34,6 @@ df$genotype = revalue(df$genotype, c("151" = "F2-151", "411" = "F2-411","445" = 
 df$volume_pl = df$volume_um / 1000
 
 sum = summarySE(df, measurevar = "volume_pl", groupvars = c("genotype", "phenotype"))
-write.table(sum, file = "Figure_04_storage_cavity_active_lazy/cavity_volume_F2_summary_table.txt", sep = "\t", row.names = FALSE)
 
 p.cavity = 
 ggplot(sum, aes(x = genotype, y = volume_pl, fill = phenotype)) +
@@ -64,7 +63,7 @@ cld(TK.cavity2)
 ##############################
 
 # load data
-df2 = read.csv(file = "Figure_04_storage_cavity_active_lazy/20190807_Type_VI_volatiles_High_Low_F2s.csv",
+df2 = read.csv(file = "data/20190807_Type_VI_volatiles_High_Low_F2s.csv",
                 header = TRUE)
 df2 = df2 %>% filter(., genotype != "F1_hab") %>% filter(!sample %in% c("151-1","151-2","151-3"))
 df2$genotype = factor(df2$genotype, levels = c("CV", "PI127826","F1", "151", "411","445","28","73", "127"),
@@ -105,7 +104,7 @@ cld(TK.terpenes2)
 ##############
 
 p.both = grid.arrange(p.cavity, p.terpenes, ncol = 1)
-ggsave(file = "Figure_4/plots/caviy_volume_terpenes.pdf", plot = p.both, height = 6, width = 5)
+ggsave(file = "figures/Figure_03_Type_VI_heads/3C_activy_lazy_cavities.pdf", plot = p.both, height = 6, width = 5)
 
 
 
