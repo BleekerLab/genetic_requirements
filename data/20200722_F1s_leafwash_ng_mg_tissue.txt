@@ -1,4 +1,4 @@
-sample	genotype	replicate	2-carene 	a-phellandrene 	a-terpinene 	B-phellandrene 	E-B-ocimene 	terpinolene 	a-bergamotene 	a-santalene 	B-caryophyllene 	B-bergamotene 	a-humulene 	7epiZ 	Germacrene_D 	3_7_11_Selinadiene 	Germacrene_B 	9HZ 	9H10epoZ 	a-bergamotoic_acid 	a-santanaloic_acid 	B-bergamotoic_acid 	summed_terpenes
+sample	genotype	replicate	2-carene 	a-phellandrene 	a-terpinene 	B-phellandrene 	E-B-ocimene 	terpinolene 	a-bergamotene 	a-santalene 	B-caryophyllene 	B-bergamotene 	a-humulene 	7epiZ	Germacrene_D 	3_7_11_Selinadiene 	Germacrene_B 	9HZ 	9H10epoZ 	a-bergamotoic_acid 	a-santanaloic_acid 	B-bergamotoic_acid 	summed_terpenes
 LA CV-1	LA1777_CV	1	0.14	0.19	0.06	0.85	0	0	0	0	1.77	0	0.84	0	0.01	0.02	0.02	0	0	0	0	0	3.98
 LA CV-2	LA1777_CV	2	0.03	0.03	0	0.15	0	0	0	0	1.12	0	0.54	0	0	0.01	0	0	0	0	0	0	1.94
 LA CV-3	LA1777_CV	3	0.07	0.09	0.04	0.47	0	0	0	0	1.04	0	0.5	0	0	0	0	0	0	0	0	0	2.25

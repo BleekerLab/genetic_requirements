@@ -2,10 +2,8 @@ library(tidyverse)
 library(RColorBrewer)
 library(multcompView)
 library(Rmisc)
-library(FSA)
 library(ggpubr)
 
-setwd(dir = "~/Documents/Github_R/genetic_requirements/")
 #############################
 # Custom theme for plotting #
 #############################

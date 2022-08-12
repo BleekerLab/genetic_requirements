@@ -13,8 +13,7 @@ my.theme =
         panel.grid.minor = element_blank(),
         panel.border = element_rect(),
         panel.background = element_rect(fill = NA, color = "black"),
-        strip.text.x = element_text(size=8, colour = "black")
-  )+
+        strip.text.x = element_text(size=8, colour = "black")) +
   theme_bw()
 
 #############

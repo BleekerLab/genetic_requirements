@@ -1,18 +1,7 @@
-###########
-# The checkpoint library checkpoint allows you to install packages 
-# as they existed on CRAN on a specific snapshot.
-# It ensures script reproducibility
-# More info: https://rdrr.io/cran/checkpoint/
-###########
-
-
-
 library(tidyverse)
 library(Rmisc)
 library(car)
 library(multcompView)
-
-source("Figure_1/full_ptable.R")
 
 ############################
 # Custom theme for plotting#
@@ -83,60 +72,8 @@ p.type_VI = df_parsed  %>%
   xlab(NULL) + 
   ylab(expression("Leaf trichome density, trichomes/mm^2")) 
   
-ggsave(file = "Figure_1/Fig1B.pdf", plot = p.type_VI, width = 9, height = 5.5, units = "cm")
+ggsave(file = "figures/Figure_01_terpenes_type6_CVxPI127826/Fig1B.pdf", plot = p.type_VI, width = 9, height = 5.5, units = "cm")
 
-
-#############
-# Statistic #
-#############
-
-# function for easy comparisons of types / surface
-test = function(x, y, z) {
-  {x.sub = x %>% filter(type == y) %>% filter(surface == z)} #subsets the dataset
-  {will = pairwise.wilcox.test(x.sub$density_mm2, x.sub$genotype, p.adjust.method = "none")} #wilcox test
-  {letters_sig = multcompLetters(fullPTable(will$p.value), #compare the groups
-                                 compare = "<",
-                                 threshold = 0.05)}
-  results = list(will, letters_sig)
-  
-  return(results)
-  
-}
-
-# Calculate the statistics in a list called 'stats'
-stats = list(
-  type_VI_abaxial = test(df_parsed, "type_VI", "abaxial"),
-  type_VI_adaxial = test(df_parsed, "type_VI", "adaxial"),
-  
-  type_I_IV_abaxial = test(df_parsed, "type_I_IV", "abaxial"),
-  type_I_IV_adaxial = test(df_parsed, "type_I_IV", "adaxial"),
-  
-  type_non_glandular_abaxial = test(df_parsed, "non_glandular", "abaxial"),
-  type_non_glandular_adaxial = test(df_parsed, "non_glandular", "adaxial")
-)
-
-# extract letters
-groups_ab = as.data.frame(stats$type_VI_abaxial[[2]]$Letters)
-colnames(groups_ab) = "abaxial"
-groups_ab$genotype = row.names(groups_ab)
-
-groups_ad = as.data.frame(stats$type_VI_adaxial[[2]]$Letters)
-colnames(groups_ad) = "adaxial"
-groups_ad$genotype = row.names(groups_ad)
-
-groups_ad = pivot_longer(
-  data = groups_ad,
-  cols = "adaxial", 
-  names_to = "surface", 
-  values_to = "group")
-
-groups_ab = pivot_longer(
-  data = groups_ab,
-  cols = "abaxial", 
-  names_to = "surface", 
-  values_to = "group")
-
-groups_side = rbind(groups_ad, groups_ab)
 ###########
 # Figure 1B
 ###########
@@ -155,7 +92,6 @@ p.type_VI_alternative =
   my.theme +
   xlab(NULL) + 
   ylab(expression("Leaf trichome density, trichomes/mm"^2)) +
-  scale_y_continuous(limits = c(0,15)) + 
-  geom_text(data = groups_side, aes(x = genotype, y = 15, label = group))
+  scale_y_continuous(limits = c(0,15)) 
 
 p.type_VI_alternative

@@ -2,7 +2,6 @@ library(tidyverse)
 library(RColorBrewer)
 library(multcompView)
 library(Rmisc)
-library(FSA)
 library(ggpubr)
 
 #############################
@@ -23,7 +22,7 @@ my.theme =
   )
 
 ##############
-# Figure S3A #
+# Figure S2A #
 #############
 df = read.delim("Figure_03_trichome_vs_7epi/volatiles_and_trichomes.tsv", 
                 header = T, 
@@ -84,12 +83,12 @@ df.fused %>%
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank())
 
-ggsave(filename = "trichome_density_distribution.svg", height = 6, width = 11, units = "cm")
+ggsave(filename = "figures/Figure_S2_Full_F2_density_classes_and_7epiZ/FigS2A_trichome_density_distribution.pdf", height = 6, width = 11, units = "cm")
 
 
 
 ##############
-# Figure S3B #
+# Figure S2B #
 ##############
 # 7-epiZ versus trichome densty-class
 # The genotypes with PI127826 zingiberene levels marked in red.
@@ -122,4 +121,4 @@ df.fused %>%
         panel.grid.minor = element_blank(),
         legend.position = "none")
 
-ggsave(filename = "figures/Figure_S2_Full_F2_density_classes_and_7epiZ/Fig_S2_density_vs_zingiberene.svg", height = 6, width = 11, units = "cm")
+ggsave(filename = "figures/Figure_S2_Full_F2_density_classes_and_7epiZ/Fig_S2B_density_vs_zingiberene.pdf", height = 6, width = 11, units = "cm")

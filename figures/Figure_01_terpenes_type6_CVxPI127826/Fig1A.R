@@ -41,7 +41,9 @@ df.long = df %>% pivot_longer(cols = 4:ncol(df), names_to = "metabolite", values
 
 # calculate average values for each metabolite
 
-df.avg = df.long %>% dplyr::group_by(genotype, metabolite) %>% dplyr::summarise(mean_value = mean(value), se = sd(value)/sqrt(3)) 
+df.avg = df.long %>% 
+  dplyr::group_by(genotype, metabolite) %>% 
+  dplyr::summarise(mean_value = mean(value), se = sd(value)/sqrt(3)) 
 
 #####################################################
 # Fig 1A: plot 7-epizingiberene and summed_terpenes #
