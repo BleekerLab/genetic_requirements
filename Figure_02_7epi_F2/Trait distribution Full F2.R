@@ -4,6 +4,9 @@ library(multcompView)
 library(Rmisc)
 library(FSA)
 library(ggpubr)
+
+
+setwd(dir = "~/Documents/Github_R/genetic_requirements/")
 #############################
 # Custom theme for plotting #
 #############################
@@ -25,10 +28,10 @@ my.theme =
 # Load data #
 #############
 
-trichomes = read.csv(file= "Figure_2/type_VI_trichomes_full_F2.csv", header = T, stringsAsFactors = T)
-volatiles = read.csv(file = "Figure_2/GCMS_Leafwash_Full_F2_EZ_clean_data.csv", header = T, stringsAsFactors = T, check.names = F)
-homo = read.csv(file = "Figure_2/homozygous_ZGB_genotypes_F2.csv", header = T, stringsAsFactors = T) #List with plants homozygous for zFPS/ZIS
-volatiles_VI = read.csv(file = "Figure_2/type_VI_gland_terpenes_F2.csv", header = T, stringsAsFactors = T, check.names = F)
+trichomes = read.csv(file= "Figure_2_7epi_F2/type_VI_trichomes_full_F2.csv", header = T, stringsAsFactors = T)
+volatiles = read.csv(file = "Figure_2_7epi_F2/GCMS_Leafwash_Full_F2_EZ_clean_data.csv", header = T, stringsAsFactors = T, check.names = F)
+homo = read.csv(file = "Figure_2_7epi_F2/homozygous_ZGB_genotypes_F2.csv", header = T, stringsAsFactors = T) #List with plants homozygous for zFPS/ZIS
+volatiles_VI = read.csv(file = "Figure_2_7epi_F2/type_VI_gland_terpenes_F2.csv", header = T, stringsAsFactors = T, check.names = F)
 
 # Take only the volatile data from plants homozygous for zFPS/ZIS + P450
 volatiles.homo = left_join(homo, volatiles, by = "genotype")
@@ -47,12 +50,12 @@ df$genotype = as.factor(df$genotype)
 # Main plot #
 #############
 
-p.F2.ylim = # only show the non-0 values - includes the statistics per bin 
+ #p.F2.ylim = # only show the non-0 values - includes the statistics per bin 
   volatiles %>% filter(., group == "F2") %>% filter(zingiberene != 0) %>%
   ggplot(., aes(x = zingiberene))+
   #stat_bin(binwidth = 100000, colour="black", fill="white") +
-  geom_histogram(binwidth = 100000, colour="black", fill="lightgrey") +
-  stat_bin(binwidth = 100000, aes(y=..count.., label=..count..), geom="text", vjust = -1)+
+  geom_histogram(binwidth = 140664, colour="black", fill="lightgrey") +
+  stat_bin(binwidth = 140664, aes(y=..count.., label=..count..), geom="text", vjust = -1)+
   #facet_grid(~group) +
   xlim(-100000,2000000)+
   ylim(0,45)+
@@ -60,12 +63,55 @@ p.F2.ylim = # only show the non-0 values - includes the statistics per bin
   xlab("7-epizingiberene abundance (peak area)")+
   ylab("Number of F2 genotypes")+
   my.theme
-ggsave(filename = "Figure_2/plots/F2_zingiberene_histogram_no_zeroes.pdf", plot = p.F2.ylim, width = 5, height = 4)
+ggsave("Figure_2_7epi_F2/plots/F2_zingiberene_histogram_stdev_zingi.svg", plot = p.F2.ylim, width = 5, height = 4)
 
 # Calculate the mean value of the parents to show in plot
 sum <- volatiles.parents %>% dplyr::group_by(genotype) %>% 
-  dplyr::summarise(zingi_mean = mean(zingiberene), zingi_std = sd(zingiberene))
+  dplyr::summarise(zingi_mean = mean(zingiberene), zingi_std = sd(zingiberene), n = n()) %>% 
+  mutate(CI_upper = 1.96*(zingi_std/sqrt(n)))
 # Plot different genotype groups seperatly
+
+nrow(volatiles.homo)
+
+nrow(volatiles.homo %>% filter(zingiberene > (514142-159176)))
+
+
+#####################
+# ZGB + Derivatives #
+#####################
+
+# Parents
+# Calculate the mean value of the parents to show in plot
+sum <- volatiles.parents %>%
+  mutate(zgb_all = zingiberene + zingiberenol + `epoxy-zingiberenol`) %>%
+  dplyr::group_by(genotype) %>% 
+  dplyr::summarise(zingi_mean = mean(zgb_all), zingi_std = sd(zgb_all), n = n()) %>% 
+  mutate(CI_upper = 1.96*(zingi_std/sqrt(n)))
+
+nrow(volatiles.homo)
+
+nrow(volatiles.homo %>% 
+       mutate(zgb_all = zingiberene + zingiberenol + `epoxy-zingiberenol`) %>% 
+       filter(zgb_all > (558676-188767)))
+
+
+
+volatiles %>% filter(., group == "F2") %>% filter(zingiberene != 0) %>%
+  mutate(zgb_all = zingiberene + zingiberenol + `epoxy-zingiberenol`) %>%
+  ggplot(., aes(x = zgb_all))+
+  #stat_bin(binwidth = 100000, colour="black", fill="white") +
+  geom_histogram(binwidth = 166814, colour="black", fill="lightgrey") +
+  stat_bin(binwidth = 166814, aes(y=..count.., label=..count..), geom="text", vjust = -1)+
+  #facet_grid(~group) +
+  xlim(-100000,2000000)+
+  ylim(0,45)+
+  #ylim(0,30)+
+  xlab("7-epizingiberene abundance (peak area)")+
+  ylab("Number of F2 genotypes")+
+  my.theme
+
+
+
 
 #########################################
 # plot ZGB content seperately per group #
@@ -147,3 +193,22 @@ trichomes %>% filter(group != "F2") %>%
   dplyr::summarise(sum_type_VI = sum(type_VI)) %>%
   dplyr::group_by(group) %>%
   dplyr::summarise(mean_class = mean(sum_type_VI), se = sd(sum_type_VI)/sqrt(n()))
+
+
+############
+# type VI #
+###########
+
+df.f1 <- volatiles_VI %>%
+  filter(group == "F1")
+
+df.f1 <- df.f1 %>% mutate(zgb_products = zingiberene + zingiberenol + `epoxy-zingiberenol`)
+
+df.f1.long <- df.f1 %>% pivot_longer(cols = c(`B-phellandrene/D-limonene`,zgb_products),
+                                     names_to = "major_volatile",
+                                     values_to = "ng") %>% 
+  select(sample, genotype, major_volatile, ng)
+
+df.f1.avg <- df.f1.long %>% 
+group_by(major_volatile) %>% 
+dplyr::summarise(avg_volatiles = mean(ng))

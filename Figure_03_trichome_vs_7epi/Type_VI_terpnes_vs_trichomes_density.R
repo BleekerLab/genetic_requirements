@@ -9,46 +9,48 @@ library(Rmisc)
 
 my.theme = theme_bw()+ 
   theme(text = element_text(),
-        axis.text.x = element_text(size = 8, colour = "black", angle = 90, vjust = 0.6),
-        axis.text.y = element_text(size = 8, colour = "black"),
-        axis.title.y = element_text(size = 8, colour = "black"),
+        axis.text.x = element_text(size = 12, colour = "black", angle = 90, vjust = 0.6),
+        axis.text.y = element_text(size = 12, colour = "black"),
+        axis.title.y = element_text(size = 12, colour = "black"),
         strip.background = element_blank(),
         panel.grid.minor = element_blank(),
         panel.border = element_rect(),
         panel.background = element_rect(fill = NA, color = "black"),
-        strip.text.x = element_text(size=8, colour = "black")
+        strip.text.x = element_text(size=10, colour = "black")
   )
 
 
 
 
 
-df.terpenes <-read.csv(file = "Figure_2/type_VI_gland_terpenes_F2.csv", header = T, stringsAsFactors = T, check.names = F) %>% 
+df.terpenes <-read.csv(file = "Figure_2_7epi_F2/type_VI_gland_terpenes_F2.csv", header = T, stringsAsFactors = T, check.names = F) %>% 
   filter(., !genotype %in% c("LA1777", "PI127826xLA1777", "LA1777_F1", "CV_LA1777"))
 
 ###########
 # BARPLOT #
 ###########
 sum.terpenes <- summarySE(df.terpenes, measurevar = "total_volatiles", groupvars = c("genotype", "group")) %>%
-  select(genotype, total_volatiles, group) 
+  select(genotype, total_volatiles, group) %>%
+  mutate(activity = ifelse(total_volatiles > (17.7-8.8), "High", "Low")) 
 
-p.bar = 
+#p.bar = 
 ggplot(sum.terpenes, aes(x = reorder(genotype, -total_volatiles), y = total_volatiles, group = group))+
   geom_bar(stat = "identity", aes(fill = group, color = group)) +
   scale_fill_manual(values = c("darkgreen", "yellow", "grey", "red"))+
   scale_color_manual(values = c("black", "black", "black", "black"))+
   ylab("Total terpenes (ng/ type-VI gland)")+
   xlab(NULL)+
-  my.theme
+  my.theme+
+  theme(panel.grid.minor =  element_blank())
 
-ggsave(filename = "Figure_3/type_VI_volatiles_barplot.pdf", plot = p.bar, height = 4, width = 5.5)
+ggsave(filename = "Figure_3_trichome_vs_7epi/type_VI_volatiles_barplot.svg", plot = p.bar, height = 4, width = 10)
 
 
 #######################################
 # Gland volatiles vs trichome density #
 #######################################
 
-df.density <- read.delim("Figure_3/20170620_Selected_F2_type VI_mm2.txt",
+df.density <- read.delim("Figure_3_trichome_vs_7epi/20170620_Selected_F2_type VI_mm2.txt",
                          header = TRUE, 
                          stringsAsFactors = TRUE,
                          sep = "\t",
@@ -76,12 +78,13 @@ df.terpenes.density = left_join(df.terpenes.density, df.names, by = "genotype")
 # Scatterplot trichome density versus total terpene levels
 p.density.terpenes = 
 df.terpenes.density  %>%
+  filter(activity == "Low") %>%
   ggplot(aes(x = avg_density, y = total_volatiles, group = group)) +
   geom_point(size = 2, aes(color = group)) +
   geom_smooth(method = "lm", formula = y ~ x, alpha  = 0.2) + 
-  ylab("Total terpenes (ng / mg fresh leaf)") +
+  ylab("Type-VI trichome terpebes (ng / type-VI gland)") +
   xlab("Type-VI trichome density (trichomes / mm2)") +
-  #geom_text_repel(aes(label = df.terpenes.density$genotype)) +
+  geom_text_repel(aes(label = df.terpenes.density$genotype), size = 3) +
   scale_color_manual(values = c("darkgreen", "yellow", "black", "red"))+
   stat_cor(
     method = "pearson",
@@ -89,7 +92,8 @@ df.terpenes.density  %>%
     label.y =30,
     label.x.npc = 0, 
     label.y.npc = 0.9) +
+  ylim(0,20)+
   my.theme
 
-ggsave(filename = "Figure_3/type_VI_terpenes_vs_density.pdf", plot = p.density.terpenes, height = 4, width = 5.5)
+ggsave(filename = "Figure_3_trichome_vs_7epi/type_VI_terpenes_vs_density_2.pdf", plot = p.density.terpenes, height = 4, width = 5.5)
 
