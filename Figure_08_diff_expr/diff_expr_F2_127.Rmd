@@ -1,0 +1,206 @@
+---
+title: "Differential expression (F2-127, Elite and PI127826 2020 plants)"
+author: "Marc Galland"
+date: "10/17/2021"
+output:
+  pdf_document:
+    toc: true
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+suppressPackageStartupMessages(library("tidyverse"))
+suppressPackageStartupMessages(library("DESeq2"))
+```
+
+\newpage
+
+# Data import 
+
+## Import scaled counts
+
+```{r}
+scaled_counts <- read.delim("../Supplemental_data_RNA-seq/scaled_counts.tsv", 
+                         check.names = F, 
+                         stringsAsFactors = F) %>%
+  mutate(gene = gsub(pattern = "mRNA:", replacement = "", x = gene)) %>% 
+  dplyr::select("gene", "F2.127", "Elite_2020", "PI127826_2020")
+```
+
+\newpage
+
+
+\newpage
+
+# QC plots 
+
+## Plot density counts
+
+```{r}
+scaled_counts %>% 
+  pivot_longer(- gene, names_to = "genotype", values_to = "counts") %>% 
+  ggplot(aes(x = log10(counts + 1), fill = genotype)) +
+  geom_density(alpha = 0.2)
+```
+The density of genes woth low count values (log10 = 0.3) is lower for F2.127 but
+seems to be comparable for other genes. 
+
+## Plot log2ratio F2.127 vs Elite
+
+First, let's extract genes with counts > 0
+```{r}
+genes_sums <- scaled_counts %>% column_to_rownames("gene") %>% rowSums()
+genes_non_null <- genes_sums[genes_sums > 0] 
+genes_non_null <- names(genes_non_null)
+```
+
+
+```{r}
+scaled_counts %>% 
+  filter(gene %in% genes_non_null) %>% 
+  mutate(log2fc_P127 = log2(`F2.127`/Elite_2020)) %>% 
+  ggplot(aes(x = log2fc_P127)) +
+  geom_density() +
+  ggtitle("Distribution of the log2 ratios of F2.127 vs Elite gene counts")
+```
+
+The log2ratio distribution looks OK. 
+
+## Plot log2ratio PI127826 vs Elite
+
+```{r}
+scaled_counts %>% 
+  filter(gene %in% genes_non_null) %>% 
+  mutate(log2fc_PI127826 = log2(PI127826_2020/Elite_2020)) %>% 
+  ggplot(aes(x = log2fc_PI127826)) +
+  geom_density() +
+  ggtitle("Distribution of the log2 ratios of PI127826 vs Elite gene counts")
+```
+\newpage
+
+# Compute DE genes based on log2ratio Z-score
+
+## Calculate log2ratios 
+
+A positive log2ratio for F2.127 and PI127826 means that the gene is more expressed in F2.127 and PI127826 (relative to the Elite line).
+
+Let's calculate the log2ratio and remove the "Infinite" values.  
+```{r}
+log2ratio <- 
+  scaled_counts %>% 
+  filter(gene %in% genes_non_null) %>% 
+  mutate(log2ratio_P127 = log2(`F2.127`/Elite_2020)) %>%
+  mutate(log2ratio_PI127826 = log2(PI127826_2020/Elite_2020)) %>% 
+  select(gene, log2ratio_P127, log2ratio_PI127826) %>% 
+  filter(!grepl(pattern = "Inf", x = log2ratio_P127)) %>% 
+  filter(!grepl(pattern = "Inf", x = log2ratio_PI127826))
+
+head(log2ratio)
+```
+
+A total of **`r nrow(log2ratio)`** have a finite log2ratio in both F2.127 vs Elite and PI127826 vs Elite. 
+
+## Calculate Z-scores and associated p-values
+
+Let's calculate the Z-score of the log2ratio + its associated p-value
+```{r}
+log2ratio_zscores_pvals <- 
+  log2ratio %>% 
+  mutate(zscore_P127 = scale(log2ratio_P127, center = T, scale = T)) %>% 
+  mutate(zscore_PI127826 = scale(log2ratio_PI127826, center = T, scale = T)) %>% 
+  mutate(pval_P127 = pnorm(q = abs(zscore_P127), mean = 0, sd=1, log.p = FALSE, lower.tail=FALSE)) %>% 
+  mutate(pval_PI127826 = pnorm(q = abs(zscore_PI127826), mean = 0, sd=1, log.p = FALSE, lower.tail=FALSE)) %>% 
+  arrange(desc(log2ratio_P127)) %>% 
+  as_tibble()
+
+head(log2ratio_zscores_pvals)
+```
+## Add original counts and annotations
+
+Add back the scaled counts. 
+
+```{r}
+log2ratio_zscores_pvals_with_counts <- inner_join(scaled_counts, log2ratio_zscores_pvals, by = "gene") 
+```
+
+Add descriptions
+```{r}
+annots <- read.csv("info/ITAG2.4_loci_gene_descriptions.csv", stringsAsFactors = F)
+
+final <- 
+  log2ratio_zscores_pvals_with_counts %>% 
+  mutate(locus = substr(gene, start = 1, stop = 14)) %>% 
+  inner_join(x = ., y = annots, by = "locus") %>% 
+  as_tibble()
+
+dim(final)
+```
+
+## Write to CSV file
+```{r}
+dir.create(path = "./tables_F2-127/", showWarnings = F, recursive = T)
+write.csv(final, 
+          file = "tables_F2-127/diff_res_F2.127_or_PI127826_vs_Elite.csv", 
+          row.names = F, 
+          quote = F)
+```
+
+\newpage
+
+# MEP and MVA pathway gene analysis
+
+## Import MEP and MVA gene identifiers
+
+```{r}
+mep_mva_gene_ids <- read.csv("info/mep_mva_terpene_gene_ids.csv", 
+                             stringsAsFactors = F)
+```
+
+## Filter for significant DE genes
+
+:warning: nothing significant at __p < 0.05__ so I had to "relax" the p-value threshold to __p < 0.1.__ 
+
+```{r}
+signif_genes <- filter(final, pval_P127 < 0.1) %>% pull(gene)
+```
+
+## Keep only MEP and MVA genes significant
+
+```{r}
+mep_mva_genes <- inner_join(final, mep_mva_gene_ids) 
+
+mep_mva_gene_signif <- 
+  mep_mva_genes %>% 
+  filter(gene %in% signif_genes)
+
+# show table
+mep_mva_gene_signif %>% 
+  select(name, gene, pathway, log2ratio_P127, log2ratio_PI127826, pval_P127, pval_PI127826) %>% 
+  knitr::kable()
+
+write.csv(mep_mva_gene_signif, 
+            file = "tables_F2-127/mep_mva_gene_signif.csv", 
+            row.names = F, 
+            quote = F)
+```
+
+\newpage
+
+## Plot all MEP and MVA genes
+
+```{r}
+for (i in seq_along(mep_mva_genes$gene)){
+  tmp_df <- mep_mva_genes[i,]
+  tmp_df$title4plot <- paste(tmp_df$name, tmp_df$gene, sep = "_")
+  
+  p <- 
+    tmp_df %>% 
+    select(title4plot, `F2.127`, Elite_2020, PI127826_2020) %>% 
+    pivot_longer(- title4plot, names_to = "genotype", values_to = "counts") %>% 
+    ggplot(., aes(x = genotype, y = counts, fill = genotype)) +
+    geom_bar(stat = "identity") + 
+    ggtitle(tmp_df$title4plot)
+  
+  print(p)
+}
+```

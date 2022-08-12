@@ -138,9 +138,9 @@ dim(final)
 
 ## Write to CSV file
 ```{r}
-dir.create(path = "./tables_F2.28/", showWarnings = F, recursive = T)
+dir.create(path = "./tables_F2-28/", showWarnings = F, recursive = T)
 write.csv(final, 
-          file = "tables_F2.28/diff_res_F2.28orPI127826_vs_Elite.csv", 
+          file = "tables_F2-28/diff_res_F2-28_or_PI127826_vs_Elite.csv", 
           row.names = F, 
           quote = F)
 ```
@@ -154,14 +154,15 @@ write.csv(final,
 ```{r}
 mep_mva_gene_ids <- read.csv("info/mep_mva_terpene_gene_ids.csv", 
                              stringsAsFactors = F)
+mep_mva_gene_ids
 ```
 
 ## Filter for significant DE genes
 
-Should be significant (p < 0.05) in **either** PI127826 vs Elite _AND_ F2.28 vs Elite. 
+Should be significant (p < 0.05) in F2.28 vs Elite. 
 
 ```{r}
-signif_genes <- filter(final, pval_P28 < 0.05 | pval_PI127826 < 0.05) %>% pull(gene)
+signif_genes <- filter(final, pval_P28 < 0.05) %>% pull(gene)
 ```
 
 ## Keep only MEP and MVA genes significant
@@ -175,11 +176,11 @@ mep_mva_gene_signif <-
 
 # show table
 mep_mva_gene_signif %>% 
-  select(name, gene, pathway, pval_P28, pval_PI127826) %>% 
+  select(name, gene, pathway, log2ratio_P28, log2ratio_PI127826, pval_P28, pval_PI127826) %>% 
   knitr::kable()
 
 write.csv(mep_mva_gene_signif, 
-            file = "tables/mep_mva_gene_signif.csv", 
+            file = "tables_F2-28/mep_mva_gene_signif.csv", 
             row.names = F, 
             quote = F)
 ```

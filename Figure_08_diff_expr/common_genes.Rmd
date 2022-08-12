@@ -1,0 +1,89 @@
+---
+title: "Intersection of the three F2 lines"
+author: "Marc Galland"
+date: "11/29/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+suppressPackageStartupMessages(library("tidyverse"))
+```
+
+# p-value threshold
+```{r}
+pval_threshold <- 0.05
+```
+
+
+# Import tables
+
+## F2-28
+```{r}
+a <- read.csv("tables_F2-28/diff_res_F2-28_or_PI127826_vs_Elite.csv", stringsAsFactors = FALSE) %>% 
+  filter(pval_P28 < pval_threshold) %>% 
+  pull(gene) 
+head(a)
+```
+## F2-73
+```{r}
+b <- read.csv("tables_F2-73/diff_res_F2-73_or_PI127826_vs_Elite.csv",  stringsAsFactors = FALSE) %>% 
+  filter(pval_P73 < pval_threshold) %>% 
+  pull(gene)
+head(b)
+```
+
+## F2-127
+```{r}
+c <- read.csv("tables_F2-127/diff_res_F2.127_or_PI127826_vs_Elite.csv", stringsAsFactors = FALSE) %>% 
+  filter(pval_P127 < pval_threshold) %>% 
+  pull(gene) 
+head(c)
+```
+# Genes commonly DE in all 3 active lines
+
+```{r}
+common_deg <- base::Reduce(intersect, list(a, b, c))
+```
+
+# Get back annotations and log2fold changes
+
+```{r}
+a <- read.csv("tables_F2-28/diff_res_F2-28_or_PI127826_vs_Elite.csv", stringsAsFactors = FALSE) %>% 
+  filter(pval_P28 < pval_threshold)
+b <- read.csv("tables_F2-73/diff_res_F2-73_or_PI127826_vs_Elite.csv",  stringsAsFactors = FALSE) %>% 
+  filter(pval_P73 < pval_threshold)
+c <- read.csv("tables_F2-127/diff_res_F2.127_or_PI127826_vs_Elite.csv", stringsAsFactors = FALSE) %>% 
+  filter(pval_P127 < pval_threshold)
+```
+
+```{r}
+dfs <- list(a, b, c)
+common <- dfs %>% purrr::reduce(inner_join, by = "gene") 
+head(common)
+```
+```{r}
+cols2keep <- c("gene",
+               "description.x",
+               "F2.28_concat",
+               "F2.73",
+               "F2.127",
+               "Elite_2020.x",
+               "PI127826_2020.x",
+               "log2ratio_P28",
+               "log2ratio_P73",
+               "log2ratio_P127",
+               "pval_P28",
+               "pval_P73",
+               "pval_P127")
+               
+common %>% 
+  select(one_of(cols2keep)) %>% 
+  write.csv(., 
+          file = file.path(paste0(
+            "tables_deg_common_all_three_active_lines/common_deg_in_all_three_active_lines_pval", 
+            pval_threshold, 
+            ".csv")), 
+          quote = F, 
+          row.names = F)
+```
+

@@ -178,10 +178,10 @@ mep_mva_gene_ids <- read.csv("info/mep_mva_terpene_gene_ids.csv",
 
 ## Filter for significant DE genes
 
-Should be significant (p < 0.05) in **either** PI127826 vs Elite _AND_ F2-28 vs Elite. 
+Should be significant (p < 0.05) in F2-73 vs Elite. 
 
 ```{r}
-signif_genes <- filter(final, pval_P73 < 0.05 | pval_PI127826 < 0.05) %>% pull(gene)
+signif_genes <- filter(final, pval_P73 < 0.05) %>% pull(gene)
 ```
 
 ## Keep only MEP and MVA genes significant
