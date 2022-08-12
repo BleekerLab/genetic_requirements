@@ -1,5 +1,0 @@
-                Df Sum Sq Mean Sq F value   Pr(>F)    
-df_wf$genotype   6  15431    2572   10.45 1.19e-09 ***
-Residuals      148  36412     246                     
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
