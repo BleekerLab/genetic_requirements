@@ -1,0 +1,41 @@
+Read1 before filtering:
+total reads: 51103371
+total bases: 5110337100
+Q20 bases: 4979673007(97.4431%)
+Q30 bases: 4852598607(94.9565%)
+
+Read1 after filtering:
+total reads: 46672187
+total bases: 4662630710
+Q20 bases: 4599758685(98.6516%)
+Q30 bases: 4517073417(96.8782%)
+
+Read2 before filtering:
+total reads: 51103371
+total bases: 5110337100
+Q20 bases: 4791770465(93.7662%)
+Q30 bases: 4638116353(90.7595%)
+
+Read2 aftering filtering:
+total reads: 46672187
+total bases: 4662630710
+Q20 bases: 4580359771(98.2355%)
+Q30 bases: 4481554403(96.1164%)
+
+Filtering result:
+reads passed filter: 93344374
+reads failed due to low quality: 8847868
+reads failed due to too many N: 14500
+reads failed due to too short: 0
+reads with adapter trimmed: 877148
+bases trimmed due to adapters: 9577878
+
+Duplication rate: 69.2437%
+
+Insert size peak (evaluated by paired-end reads): 169
+
+JSON report: /scratch/mgalland/fastp/PI127826_2017_fastp.json
+HTML report: /scratch/mgalland/fastp/PI127826_2017_fastp.html
+
+fastp --thread 10 --html /scratch/mgalland/fastp/PI127826_2017_fastp.html --json /scratch/mgalland/fastp/PI127826_2017_fastp.json --qualified_quality_phred 30 --in1 /zfs/omics/personal/mgallan1/gls/ruy/PI26_P2_w_4_AGCGATAG-TATAGCCT_L005_R1_001.fastq.gz --in2 /zfs/omics/personal/mgallan1/gls/ruy/PI26_P2_w_4_AGCGATAG-TATAGCCT_L005_R2_001.fastq.gz --out1 /scratch/mgalland/trimmed/PI127826_2017_R1_trimmed.fq.gz --out2 /scratch/mgalland/trimmed/PI127826_2017_R2_trimmed.fq.gz 
+fastp v0.19.5, time used: 474 seconds

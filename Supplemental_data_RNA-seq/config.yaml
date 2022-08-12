@@ -1,0 +1,32 @@
+--- 
+count_multimappers: true
+
+fastp: 
+  qualified_quality_phred: 30
+
+refs: 
+  genome: config/refs/lycopersicum/S_lycopersicum_chromosomes.2.50.fa
+  gtf: config/refs/lycopersicum/ITAG2.4_gene_models.gtf 
+
+result_dir: /zfs/omics/personal/mgallan1/gls/ruy/results/
+
+star: 
+  intronmax: "25000"
+  matchminoverlengthread: "0.66"
+  matesgap: "20000"
+  mismatches: "4"
+  multimappers: "10"
+  samattributes: "NH HI AS nM MD"
+  samtype: "BAM SortedByCoordinate"
+  unmapped: None
+
+star_index: 
+  genomeSAindexNbases: 13
+  limitGenomeGenerateRAM: 300000000000
+  sjdbOverhang: 100
+  genomeChrBinNbits: 14   
+
+units: config/samples.tsv
+
+working_dir: /scratch/mgalland/
+
