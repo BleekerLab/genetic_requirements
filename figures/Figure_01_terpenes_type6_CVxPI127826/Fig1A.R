@@ -1,4 +1,5 @@
 library(tidyverse)
+
 ##############
 # custom theme
 ##############
@@ -65,4 +66,4 @@ df.avg %>% filter(metabolite %in% c("7epiZ", "summed_terpenes")) %>%
   xlab(NULL) + 
   ylab(expression("Metabolite abundance (ng / mg fresh leaf)"))
 
-ggsave(file = "Figure_1/Fig1A.pdf", plot = p.fig1a, width = 9, height = 5.5, units = "cm")
+ggsave(file = "figures/Figure_01_terpenes_type6_CVxPI127826/Fig1A.pdf", plot = p.fig1a, width = 9, height = 5.5, units = "cm")
