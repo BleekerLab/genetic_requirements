@@ -3,7 +3,6 @@ library(Rmisc)
 library(car)
 library(multcompView)
 
-source("Figure_1/full_ptable.R")
 
 ############################
 # Custom theme for plotting#
