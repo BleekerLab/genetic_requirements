@@ -12,6 +12,7 @@ library(ggpubr)
 library(gridExtra)
 library(svglite)
 
+setwd("~/Documents/Github_R/genetic_requirements")
 #############################
 # Custom theme for plotting #
 #############################
@@ -21,7 +22,7 @@ my_theme <- source("theme.R")
 # Load data #
 #############
 
-df = read.delim("Figure_3/volatiles_and_trichomes.tsv", 
+df = read.delim("Figure_3_trichome_vs_7epi/volatiles_and_trichomes.tsv", 
                 header = T, 
                 stringsAsFactors = F)
 
@@ -396,5 +397,185 @@ p.box.highlight.subset =
   ylab("7-epizingiberene (ion counts / leaflet)")+
   xlab("Type-VI trichome-density class")+
   my.theme
+
+
+####################################
+# Distribution of trichome classes #
+####################################
+
+df.t <- 
+df %>% 
+  mutate(density = ifelse(type_VI == 1, 0,
+                          ifelse(type_VI == 2, 7.5,
+                                 ifelse(type_VI == 3, 22.5,
+                                        ifelse(type_VI == 4, 40, 50
+                                               )))))
+
+more.replicates <- df.t %>% dplyr::count(sample) %>% arrange(n) %>% filter(n != 2) %>% .$sample
+
+df.t2 <-
+  df.t %>%
+  filter(!sample %in% more.replicates) %>% 
+  group_by(sample) %>% 
+  dplyr::summarise(ab_ad_density = sum(density))
+
+
+df.zingiberene <- 
+  df %>%
+  group_by(sample) %>% 
+  dplyr::summarise(zingiberene = mean(zingiberene))
+
+df.fused <- 
+  left_join(df.t2, df.zingiberene, by = "sample") %>% 
+mutate(class = ifelse(ab_ad_density %in% c(0, 7.5), "0-10 trichomes",
+                        ifelse(ab_ad_density %in% c(15), "11-20 trichomes",
+                               ifelse(ab_ad_density %in% c(22.5, 30), "21-30 trichomes",
+                                      ifelse(ab_ad_density %in% c(40), "31-40 trichomes",
+                                             ifelse(ab_ad_density %in% c(45,47.5), "41-50 trichomes",
+                                                    ifelse(ab_ad_density %in% c(50,57.5), "51-60 trichomes",
+                                                           ifelse(ab_ad_density %in% c(62.5), "61-70 trichomes",
+                                                                  ifelse(ab_ad_density %in% c(72.5, 80), "71-80 trichomes",
+                                                                         ifelse(ab_ad_density %in% c(90),"81-90 trichomes", 
+                                                                                "90-100+ trichomes"
+                                                                                
+                                             ))))))))))
+
+
+df.fused$class <- factor(df.fused$class, levels = unique(df.fused$class)[c(10,9,2,8,5,7,6,3,4,1)], ordered = TRUE)
+df.fused$class <- gsub(" trichomes", "", df.fused$class)
+
+df.fused %>%
+  count(class) %>%
+  ggplot(aes(x = class, y = n))+
+  geom_col(fill = "grey", color = "black") +
+  ylab("Numer of F2 plants")+
+  xlab("Trichomes per leafdisc")+
+  geom_text(aes(label = paste(n)), position =   position_dodge(1), vjust = -0.5, size = 3)+
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 10))+
+  ylim(0,75) +
+  theme_bw()+
+  theme(axis.text = element_text(size = 10, color = "black"),
+        axis.text.x = element_text(size = 8, colour = "black", angle = 45, hjust = 1),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank())
+
+ggsave(filename = "trichome_density_distribution.svg", height = 6, width = 11, units = "cm")
+  
+ give.n <- function(x){
+  return(c(y = 18, label = length(x))) 
+  # experiment with the multiplier to find the perfect position
+}
+df.fused %>% 
+  mutate(zingiberene = ifelse(zingiberene ==0 & class == "0-10", 1, zingiberene)) %>%
+  mutate(selected = ifelse(zingiberene != 0 ,1, ifelse(class=="0-10", 1, 0))) %>%
+  mutate(chemotype = ifelse(zingiberene > (514142-159176), "PI127826", "Elite")) %>%
+ # filter(selected == 1) %>%
+  ggplot(aes(x = class, y = log(zingiberene)))+
+  geom_boxplot(fill = "grey")+
+  geom_jitter(width = 0.05, aes(color = chemotype))+
+  stat_summary(fun.data = give.n, geom = "text", fun = median,
+               position = position_dodge(1), size = 3)+
+  ylab("7-epizingiberene (log2 ion-counts")+
+  xlab("Trichomes-density class")+
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 10)) +
+  scale_color_manual(values = c("black", "red"))+
+  theme_bw()+
+#  ylim(0,40)+
+  scale_fill_brewer(palette = "Greys")+
+  theme(axis.text = element_text(size = 8, color = "black"),
+        axis.text.x = element_text(size = 8, colour = "black", angle = 45, hjust = 1),
+        axis.title = element_text(size = 10, color = "black"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.position = "none")
+
+ggsave(filename = "density_vs_zingiberene.svg", height = 6, width = 11, units = "cm")
+
+####
+# Parental zingiberene levels
+
+df.fused %>% 
+  mutate(zingiberene = ifelse(zingiberene ==0 & class == "0-10", 1, zingiberene)) %>%
+  mutate(selected = ifelse(zingiberene != 0 ,1, ifelse(class=="0-10", 1, 0))) %>%
+  mutate(chemotype = ifelse(zingiberene > (514142-281327), "PI127826", "Elite")) %>%
+  dplyr::count(class, chemotype) %>% 
+  filter(chemotype == "PI127826")
+
+
+
+##################################
+# Selection supplemental figures #
+##################################
+
+selected_lines <- read.delim("Figure_3_trichome_vs_7epi/mean_volatiles_type_VI_glands.tsv")
+selected_lines <- unique(selected_lines$genotype)
+
+df.fused2 <- df.fused
+
+df.fused2$sample <- gsub("14830-", "", df.fused2$sample)
+
+df.fused2 %>% 
+  mutate(zingiberene = ifelse(zingiberene ==0 & class == "0-10", 1, zingiberene)) %>%
+  mutate(selected = ifelse(zingiberene != 0 ,1, ifelse(class=="0-10", 1, 0))) %>%
+  mutate(chemotype = ifelse(sample %in% c(selected_lines,"073", "028"), "Selected", "Not-selected")) %>%
+  mutate(label_line = ifelse(chemotype == "Selected", sample, NA)) %>%
+  # filter(selected == 1) %>%
+  ggplot(aes(x = class, y = log(zingiberene)))+
+  geom_boxplot(fill = "grey")+
+  geom_jitter(width = 0.15, aes(color = chemotype))+
+  geom_text_repel(aes(label = label_line), vjust = -1)+
+  ylab("7-epizingiberene (log2 ion-counts")+
+  xlab("Trichomes-density class")+
+  scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 10)) +
+  scale_color_manual(values = c("transparent", "red"))+
+  theme_bw()+
+  #  ylim(0,40)+
+  scale_fill_brewer(palette = "Greys")+
+  theme(axis.text = element_text(size = 8, color = "black"),
+        axis.text.x = element_text(size = 8, colour = "black", angle = 45, hjust = 1),
+        axis.title = element_text(size = 10, color = "black"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.position = "none")
+
+ggsave(filename = "figure_S3A_selected_F2s_labelled.svg", height = 8, width = 13, units = "cm")
+  #######
+# Stats #
+########
+
+df.no.zero <- df.fused %>% 
+  filter(zingiberene != 0) %>% 
+  mutate(zingiberene = log(zingiberene))
+
+#Test for normality
+shapiro.test(df.no.zero$zingiberene)
+
+anova <- aov(zingiberene ~ class, data = df.no.zero)
+
+
+#Kruskal-Wallis test
+kruskal.test(data = df2, zingiberene~sum_type_VI)
+
+#Dunn's test for parewise comparison
+dt = dunnTest(data = df2, zingiberene ~ sum_type_VI, method = "bh")
+#show signficant comparisons from Dunn's test
+sig.groups = dt$res[,c(1,4)] %>% filter(., P.adj < 0.05)
+
+
+###########
+# Parents #
+###########
+
+df.parents <- read.csv("Figure_2_7epi_F2/type_VI_trichomes_full_F2.csv") %>% 
+  filter(group != "F2") %>% 
+  mutate(density = ifelse(type_VI == 1, 0,
+                          ifelse(type_VI == 2, 7.5,
+                                 ifelse(type_VI == 3, 22.5,
+                                        ifelse(type_VI == 4, 40, 50
+                                        )))))  %>% 
+  group_by(genotype, group) %>% 
+  dplyr::summarise(ab_ad_density = sum(density)) %>%
+  dplyr::group_by(group) %>% 
+  dplyr::summarise(mean_density = mean(density))
 
 

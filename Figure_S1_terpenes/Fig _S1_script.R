@@ -7,17 +7,16 @@ library(Rmisc)
 
 my.theme = 
   theme(text = element_text(),
-        axis.text.x = element_text(size = 8, angle = 45, hjust = 1, colour = "black"),
-        axis.text.y  = element_text(size = 6, angle = 0, colour = "black"),
-        strip.text =  element_text(size = 6, colour = "black"),
-        strip.background = element_blank(),
+        axis.text.x = element_text(size = 12, angle = 45, hjust = 1, colour = "black"),
+        axis.text.y  = element_text(size = 11, angle = 0, colour = "black"),
+        axis.title.x = element_text(size = 12, colour = "black"),
+        strip.text =  element_text(size = 12, colour = "black"),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         panel.border = element_rect(),
         panel.background = element_rect(fill = NA, color = "black"),
-        strip.text.x = element_text(size=8, colour = "black")
-  )+
-  theme_bw()
+        strip.text.x = element_text(size=12, colour = "black")
+  )
 
 
 #########################
@@ -25,7 +24,7 @@ my.theme =
 #########################
 
 #Create_dataframe
-df <- read.delim("Figure_1/20200722_F1s_leafwash_ng_mg_tissue.txt", header = T, sep = "\t", dec = ".", check.names = FALSE)
+df <- read.delim("Figure_1_terpenes_type6_CVxPI127826/20200722_F1s_leafwash_ng_mg_tissue.txt", header = T, sep = "\t", dec = ".", check.names = FALSE)
 df[,3:ncol(df)] = lapply(df[,3:ncol(df)], as.numeric)
 
 
@@ -42,27 +41,49 @@ df_long$genotype <- factor(df_long$genotype, levels = c("Elite", "F1", "PI127826
 #summarise data for barplot
 sum = summarySE(df_long, measurevar = "abundance", groupvars = c("genotype", "metabolite"))
 
+# Voeg classes toe aan de metaboliten
+
+terpene2class <- openxlsx::read.xlsx("Figure_S1_terpenes/terpene2class.xlsx")
+
+sum <- left_join(sum, terpene2class, by = "metabolite")
+
+sum$class <- factor(sum$class, levels = c("monoterpene", "plastidial sesquiterpene", "cytosolic sesquiterpene"),
+                    ordered = T)
+
+
+
+sum$metabolite <- gsub('_', '-', sum$metabolite)
+sum$genotype <- gsub('_', '-', sum$genotype)
+
+sum$genotype <- factor(sum$genotype, levels = c("Elite", "F1", "PI127826", "F1-hab", "LA1777"),
+                       ordered = TRUE)
 ########### 
 # BARPLOT #
 ###########
 
 p.leafwash =
-sum %>% filter(metabolite != "summed_terpenes") %>%
+sum %>% 
+filter(metabolite != "summed-terpenes") %>%
 ggplot(., aes(x = genotype, y = abundance)) +
-  geom_bar(stat = "identity", color = "black", fill = "black") +
+  geom_bar(stat = "identity", color = "black", aes(fill = class)) +
     geom_errorbar(aes(x = genotype, ymin=abundance-se, ymax=abundance+se), width=.2) +
     my.theme +
-  facet_wrap(~metabolite, ncol =4, scale = "free")+
+  facet_wrap(class~metabolite, ncol =4, scale = "free")+
+  scale_fill_manual(values = c("Black", "Grey", "white"))+ # colors c("#002a5c", "#e9500e", "#42b8b2")
   ylab("Metabolites (ng / mg fresh leaf tissue)")+
-  xlab(NULL)
+  xlab(NULL)+
+  theme_bw()+
+  my.theme+
+  theme(legend.position = "none")
 
-ggsave(filename = "Figure_S1/Fig_S1_leafwash.svg", plot = p.leafwash, width = 12, height = 12)
+ ggsave(filename = "Figure_S1_terpenes/Fig_S1_leafwash_3.svg", plot = p.leafwash, width = 210, height = 297, units = "mm")
 
 p.leafwash.stacked =
   sum %>% filter(metabolite != "summed_terpenes") %>%
   ggplot(., aes(x = genotype, y = abundance)) +
-  geom_bar(aes(x = genotype, y = abundance, fill = metabolite), stat = "identity") + 
-  my.theme 
+  geom_bar(aes(x = genotype, y = abundance, fill = metabolite), stat = "identity", position = "stack") + 
+  my.theme +
+  theme(legend.position = "none")
 
 ############### 
 # STATISCTICS #
