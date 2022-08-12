@@ -34,7 +34,7 @@ my.theme =
 #####################################################################################
 # Figure 1A: 7-epizingiberene levels (norm. peak area) in F1s, parents, etc.
 #####################################################################################
-terpenes <- read.delim("Figure_1/20170425_leaf_washes.tsv", 
+terpenes <- read.delim("Figure_01_terpenes_type6_CVxPI127826/20170425_leaf_washes.tsv", 
                        header = T, 
                        sep = "\t", 
                        dec = ".", 
