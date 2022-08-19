@@ -1,0 +1,11 @@
+﻿sample_id,sample_name,tissue,genotype,terpene_productivity,description
+S06,S06_Elite_cultivar_typeVI_leaf_gland_trichome_rep1,typeVI_gland_leaf_trichome,Elite,low,Elite cultivar
+S07,S07_Elite_cultivar_typeVI_leaf_gland_trichome_rep2,typeVI_gland_leaf_trichome,Elite,low,Elite cultivar
+S08,S08_Elite_cultivar_typeVI_leaf_gland_trichome_rep3,typeVI_gland_leaf_trichome,Elite,low,Elite cultivar
+S09,S09_Elite_cultivar_typeVI_leaf_gland_trichome_rep4,typeVI_gland_leaf_trichome,Elite,low,Elite cultivar
+S10,S10_Elite_cultivar_typeVI_leaf_gland_trichome_rep5,typeVI_gland_leaf_trichome,Elite,low,Elite cultivar
+S11,S11_P28_typeVI_leaf_gland_trichome_rep1,typeVI_gland_leaf_trichome,P28,high,Plant 28 from F2 S. lyc Elite x S. hab PI127826
+S12,S12_P28_typeVI_leaf_gland_trichome_rep2,typeVI_gland_leaf_trichome,P28,high,Plant 28 from F2 S. lyc Elite x S. hab PI127826
+S13,S13_P28_typeVI_leaf_gland_trichome_rep3,typeVI_gland_leaf_trichome,P28,high,Plant 28 from F2 S. lyc Elite x S. hab PI127826
+S14,S14_P28_typeVI_leaf_gland_trichome_rep4,typeVI_gland_leaf_trichome,P28,high,Plant 28 from F2 S. lyc Elite x S. hab PI127826
+S15,S15_P28_typeVI_leaf_gland_trichome_rep5,typeVI_gland_leaf_trichome,P28,high,Plant 28 from F2 S. lyc Elite x S. hab PI127826

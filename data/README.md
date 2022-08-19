@@ -1,11 +1,7 @@
-# Datasets
+# Exploratory data analysis of counts
 
-## XX
+All analyses are based on alignment allowing up to 8 mismatches to the reference genome (to accomoate the genetic distance between S. habrochaites PI127826 and S. lycopersicum Moneymaker/Elite line).
 
-## Genotyping information
+## PCA score plot 
 
-The F2 population was genotyped to determine which F2 lines were homozygous for 7-epizingiberene
-synthase (ZIS) and the Z,Z-Farnesyl Diphosphate Synthase (zFPS).
-
-The two parents (Elite and PI127826) as well as the F1 are also added to this file.
-
+![PCA_score_plot.png](./PCA_score_plot.png)

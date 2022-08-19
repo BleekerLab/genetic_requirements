@@ -1,0 +1,41 @@
+Read1 before filtering:
+total reads: 35963576
+total bases: 5430499976
+Q20 bases: 5307374166(97.7327%)
+Q30 bases: 5092200568(93.7704%)
+
+Read1 after filtering:
+total reads: 34525544
+total bases: 5152748978
+Q20 bases: 5069124242(98.3771%)
+Q30 bases: 4882058628(94.7467%)
+
+Read2 before filtering:
+total reads: 35963576
+total bases: 5430499976
+Q20 bases: 5264162273(96.937%)
+Q30 bases: 5009583049(92.249%)
+
+Read2 aftering filtering:
+total reads: 34525544
+total bases: 5152783733
+Q20 bases: 5055667485(98.1153%)
+Q30 bases: 4833332975(93.8004%)
+
+Filtering result:
+reads passed filter: 69051088
+reads failed due to low quality: 2844066
+reads failed due to too many N: 1368
+reads failed due to too short: 30630
+reads with adapter trimmed: 4733360
+bases trimmed due to adapters: 119741860
+
+Duplication rate: 93.319%
+
+Insert size peak (evaluated by paired-end reads): 245
+
+JSON report: /scratch/mgalland/temp/fastp/S12_fastp.json
+HTML report: /scratch/mgalland/temp/fastp/S12_fastp.html
+
+fastp --thread 10 --html /scratch/mgalland/temp/fastp/S12_fastp.html --json /scratch/mgalland/temp/fastp/S12_fastp.json --qualified_quality_phred 30 --in1 /zfs/omics/personal/mgallan1/gls/marc/MAD1205-002-007/S12_R1.fastq.gz --in2 /zfs/omics/personal/mgallan1/gls/marc/MAD1205-002-007/S12_R2.fastq.gz --out1 /scratch/mgalland/temp/trimmed/S12_R1_trimmed.fq.gz --out2 /scratch/mgalland/temp/trimmed/S12_R2_trimmed.fq.gz 
+fastp v0.19.5, time used: 368 seconds

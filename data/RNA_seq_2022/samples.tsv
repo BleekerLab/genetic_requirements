@@ -1,0 +1,11 @@
+sample	fq1	fq2
+S06	/zfs/omics/personal/mgallan1/gls/marc/MAD1205-002-007/S06_R1.fastq.gz	/zfs/omics/personal/mgallan1/gls/marc/MAD1205-002-007/S06_R2.fastq.gz
+S07	/zfs/omics/personal/mgallan1/gls/marc/MAD1205-002-007/S07_R1.fastq.gz	/zfs/omics/personal/mgallan1/gls/marc/MAD1205-002-007/S07_R2.fastq.gz
+S08	/zfs/omics/personal/mgallan1/gls/marc/MAD1205-002-007/S08_R1.fastq.gz	/zfs/omics/personal/mgallan1/gls/marc/MAD1205-002-007/S08_R2.fastq.gz
+S09	/zfs/omics/personal/mgallan1/gls/marc/MAD1205-002-007/S09_R1.fastq.gz	/zfs/omics/personal/mgallan1/gls/marc/MAD1205-002-007/S09_R2.fastq.gz
+S10	/zfs/omics/personal/mgallan1/gls/marc/MAD1205-002-007/S10_R1.fastq.gz	/zfs/omics/personal/mgallan1/gls/marc/MAD1205-002-007/S10_R2.fastq.gz
+S11	/zfs/omics/personal/mgallan1/gls/marc/MAD1205-002-007/S11_R1.fastq.gz	/zfs/omics/personal/mgallan1/gls/marc/MAD1205-002-007/S11_R2.fastq.gz
+S12	/zfs/omics/personal/mgallan1/gls/marc/MAD1205-002-007/S12_R1.fastq.gz	/zfs/omics/personal/mgallan1/gls/marc/MAD1205-002-007/S12_R2.fastq.gz
+S13	/zfs/omics/personal/mgallan1/gls/marc/MAD1205-002-007/S13_R1.fastq.gz	/zfs/omics/personal/mgallan1/gls/marc/MAD1205-002-007/S13_R2.fastq.gz
+S14	/zfs/omics/personal/mgallan1/gls/marc/MAD1205-002-007/S14_R1.fastq.gz	/zfs/omics/personal/mgallan1/gls/marc/MAD1205-002-007/S14_R2.fastq.gz
+S15	/zfs/omics/personal/mgallan1/gls/marc/MAD1205-002-007/S15_R1.fastq.gz	/zfs/omics/personal/mgallan1/gls/marc/MAD1205-002-007/S15_R2.fastq.gz
