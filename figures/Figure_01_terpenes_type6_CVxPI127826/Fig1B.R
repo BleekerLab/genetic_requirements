@@ -37,6 +37,8 @@ df_tidy = df %>%
          -genotype, - plant, -surface, -leafdisc, - date, -person)
 
 
+df_tidy$genotype <- factor(df_tidy$genotype,levels = c("Elite","F1", "PI127826", "F1_hab", "LA1777"),
+       ordered = TRUE) 
 # Summarise different types of trichomes (average of adaxial / abaxial side)
 # First over the leafdisc (Welch Two Sample t-test, p-value == 0.6539)
 # leaf_disc_one = df %>% filter(leafdisc == 1)
@@ -44,11 +46,11 @@ df_tidy = df %>%
 # t.test(x = leaf_disc_one$density_mm2, y = leaf_disc_two$density_mm2)
 
 df_parsed = df_tidy %>% 
-  dplyr::group_by(genotype, plant, surface, type) %>% 
-  dplyr::summarise(density_mm2 = mean(density_mm2)) %>% 
+  dplyr::group_by(genotype, plant, leafdisc, type) %>% 
+  dplyr::summarise(density_ab_ad_mm2 = sum(density_mm2)) %>% 
   # summarise over the genotypes
-  summarySE(measurevar = "density_mm2", 
-            groupvars = c("genotype", "surface", "type"))
+  summarySE(measurevar = "density_ab_ad_mm2", 
+            groupvars = c("genotype", "type"))
   
 df_parsed$genotype = factor(df_parsed$genotype,levels = c("Elite","F1", "PI127826", "F1_hab", "LA1777"),
                                ordered = TRUE) 
@@ -58,41 +60,59 @@ df_parsed$genotype = factor(df_parsed$genotype,levels = c("Elite","F1", "PI12782
 p.type_VI = df_parsed  %>% 
   filter(type == "type_VI") %>%
   ggplot(., aes(x = genotype,
-                y = density_mm2)) +
+                y = density_ab_ad_mm2)) +
   geom_bar(aes(x = genotype, 
-               y = density_mm2), 
+               y = density_ab_ad_mm2), 
            stat = "identity",
            color = "black", 
            fill = "black") +
   geom_errorbar(aes(x = genotype, 
-                    ymin = density_mm2 - se, 
-                    ymax = density_mm2 + se), 
+                    ymin = density_ab_ad_mm2- se, 
+                    ymax = density_ab_ad_mm2+ se), 
                 width = 0.2) +
-  facet_wrap(~ surface, scales = "fixed") +
   my.theme +
   xlab(NULL) + 
   ylab(expression("Leaf trichome density, trichomes/mm^2")) 
   
-ggsave(file = "figures/Figure_01_terpenes_type6_CVxPI127826/Fig1B.pdf", plot = p.type_VI, width = 9, height = 5.5, units = "cm")
+ggsave(file = "figures/Figure_01_terpenes_type6_CVxPI127826/Fig1B.pdf", plot = p.type_VI, width = 9/2, height = 5.5, units = "cm")
 
-###########
-# Figure 1B
-###########
+##########################
+# Supplemental figure S2 #
+##########################
+p.type_NG_I <-
+df_parsed  %>% 
+  filter(!type %in% c("type_VI", "sum_glandular")) %>%
+  ggplot(., aes(x = genotype,
+                y = density_ab_ad_mm2)) +
+  geom_bar(aes(x = genotype, 
+               y = density_ab_ad_mm2), 
+           stat = "identity",
+           color = "black", 
+           fill = "black") +
+  geom_errorbar(aes(x = genotype, 
+                    ymin = density_ab_ad_mm2- se, 
+                    ymax = density_ab_ad_mm2+ se), 
+                width = 0.2) +
+  facet_grid(~type) +
+  my.theme +
+  xlab(NULL) + 
+  ylab(expression("Leaf trichome density, trichomes/mm^2"))
+
+ggsave(file = "figures/Figure_01_terpenes_type6_CVxPI127826/Fig1B.pdf", plot = p.type_NG_I, width = 9, height = 5.5, units = "cm")
 
 # calculate maximum value + small margin to positionate the HSD letters
 y_max <- max(df_tidy$density_mm2) + 0.1 * max(df_tidy$density_mm2)
 
-p.type_VI_alternative = 
+#p.type_VI_alternative = 
   df_tidy  %>% 
-  filter(type == "type_VI") %>%
+  filter(type != "sum_glandular") %>%
   ggplot(., aes(x = genotype,
                 y = density_mm2)) +
   geom_boxplot() +
   geom_jitter(stat = "identity", width = 0.05) +
-  facet_grid(~ surface, scales = "fixed") +
+  facet_grid(type~ surface, scale = "free") +
   my.theme +
   xlab(NULL) + 
-  ylab(expression("Leaf trichome density, trichomes/mm"^2)) +
-  scale_y_continuous(limits = c(0,15)) 
+  ylab(expression("Leaf trichome density, trichomes/mm"^2))
 
 p.type_VI_alternative
