@@ -5,17 +5,16 @@ library(tidyverse)
 ##############
 my.theme = 
   theme(text = element_text(),
-        axis.text.x = element_text(size = 8, colour = "black", angle = 90),
+        axis.text.x = element_text(size = 8, colour = "black", angle = 45, hjust = 1),
         axis.text.y = element_text(size = 8, colour = "black"),
-        axis.title.y = element_text(size = 8, colour = "black"),
-        strip.background = element_blank(),
+        axis.title.y = element_text(size = 10, colour = "black"),
+       # strip.background = element_blank(),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         panel.border = element_rect(),
         panel.background = element_rect(fill = NA, color = "black"),
-        strip.text.x = element_text(size=8, colour = "black")
-  )+
-  theme_bw()
+        strip.text.x = element_text(size=10, colour = "black")
+  )
 
 #######
 
@@ -66,6 +65,8 @@ df.avg %>% filter(metabolite %in% c("7epiZ", "summed_terpenes")) %>%
   facet_wrap(~metabolite, scale = "free")+
   my.theme +
   xlab(NULL) + 
-  ylab(expression("Metabolite abundance (ng / mg fresh leaf)"))
+  ylab(expression("Metabolite abundance (ng / mg fresh leaf)"))+
+  theme_bw()+
+  my.theme
 
-ggsave(file = "figures/Figure_01_terpenes_type6_CVxPI127826/Fig1A.pdf", plot = p.fig1a, width = 9, height = 5.5, units = "cm")
+ggsave(file = "figures/Figure_01_terpenes_type6_CVxPI127826/Fig1A.pdf", plot = p.fig1a, width = 12, height = 6.5, units = "cm")
