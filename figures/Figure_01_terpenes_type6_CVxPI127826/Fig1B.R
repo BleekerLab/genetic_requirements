@@ -8,17 +8,16 @@ library(multcompView)
 ############################
 my.theme = 
   theme(text = element_text(),
-        axis.text.x = element_text(size = 8, colour = "black", angle = 90),
+        axis.text.x = element_text(size = 8, colour = "black", angle = 45, hjust = 1),
         axis.text.y = element_text(size = 8, colour = "black"),
-        axis.title.y = element_text(size = 8, colour = "black"),
-        strip.background = element_blank(),
+        axis.title.y = element_text(size = 10, colour = "black"),
+        # strip.background = element_blank(),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         panel.border = element_rect(),
         panel.background = element_rect(fill = NA, color = "black"),
-        strip.text.x = element_text(size=8, colour = "black")
-  )+
-  theme_bw()
+        strip.text.x = element_text(size=10, colour = "black")
+  )
 
 #########################
 # Import and shape data #
@@ -70,11 +69,12 @@ p.type_VI = df_parsed  %>%
                     ymin = density_ab_ad_mm2- se, 
                     ymax = density_ab_ad_mm2+ se), 
                 width = 0.2) +
-  my.theme +
   xlab(NULL) + 
-  ylab(expression("Leaf trichome density, trichomes/mm^2")) 
+  ylab(expression("Leaf trichome density, trichomes/mm^2"))+
+  theme_bw()+
+  my.theme
   
-ggsave(file = "figures/Figure_01_terpenes_type6_CVxPI127826/Fig1B.pdf", plot = p.type_VI, width = 9/2, height = 5.5, units = "cm")
+ggsave(file = "figures/Figure_01_terpenes_type6_CVxPI127826/Fig1B.pdf", plot = p.type_VI, width = 7, height = 6.5, units = "cm")
 
 ##########################
 # Supplemental figure S2 #
@@ -98,7 +98,7 @@ df_parsed  %>%
   xlab(NULL) + 
   ylab(expression("Leaf trichome density, trichomes/mm^2"))
 
-ggsave(file = "figures/Figure_01_terpenes_type6_CVxPI127826/Fig1B.pdf", plot = p.type_NG_I, width = 9, height = 5.5, units = "cm")
+ggsave(file = "figures/Figure_01_terpenes_type6_CVxPI127826/Fig_S2.pdf", plot = p.type_NG_I, width = 9, height = 6.5, units = "cm")
 
 # calculate maximum value + small margin to positionate the HSD letters
 y_max <- max(df_tidy$density_mm2) + 0.1 * max(df_tidy$density_mm2)
