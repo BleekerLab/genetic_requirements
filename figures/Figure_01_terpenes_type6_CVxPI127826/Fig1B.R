@@ -71,10 +71,11 @@ p.type_VI = df_parsed  %>%
                 width = 0.2) +
   xlab(NULL) + 
   ylab(expression("Leaf trichome density, trichomes/mm^2"))+
+  facet_grid(~type)+
   theme_bw()+
   my.theme
   
-ggsave(file = "figures/Figure_01_terpenes_type6_CVxPI127826/Fig1B.pdf", plot = p.type_VI, width = 7, height = 6.5, units = "cm")
+ggsave(file = "figures/Figure_01_terpenes_type6_CVxPI127826/Fig1B.pdf", plot = p.type_VI, width = 6.5, height = 6.5, units = "cm")
 
 ##########################
 # Supplemental figure S2 #
@@ -94,9 +95,10 @@ df_parsed  %>%
                     ymax = density_ab_ad_mm2+ se), 
                 width = 0.2) +
   facet_grid(~type) +
-  my.theme +
   xlab(NULL) + 
-  ylab(expression("Leaf trichome density, trichomes/mm^2"))
+  ylab(expression("Leaf trichome density, trichomes/mm^2")) +
+  theme_bw()+
+  my.theme
 
 ggsave(file = "figures/Figure_01_terpenes_type6_CVxPI127826/Fig_S2.pdf", plot = p.type_NG_I, width = 9, height = 6.5, units = "cm")
 
