@@ -36,22 +36,26 @@ res <- results(dds, contrast = c("genotype", "P28", "Elite"))
 res <- lfcShrink(dds,
           contrast = c("genotype", "P28", "Elite"), res=res, type = 'ashr')
 
+# Volcano plot
+
+EnhancedVolcano(res,
+                lab = rownames(res),
+                x = 'log2FoldChange',
+                y = 'pvalue')
+
 # extract a table with the DESeq results
 # To be used showing the MEP/MVA pathway genes
-fold.changes <- bind_cols(gene_id = res@rownames, 
-                          bind_cols(res@listData))
+fold.changes.precursors <- bind_cols(gene_id = res@rownames, 
+                          bind_cols(res@listData)) %>% 
+  filter(gene_id %in% precursors$gene_id)
 
-m <- fold.changes.precursors %>% select(gene_id, log2FoldChange) %>% 
+m <- fold.changes %>% select(gene_id, log2FoldChange) %>% 
   column_to_rownames("gene_id")
 
 fold.changes.precursors <- fold.changes %>% 
   filter(gene_id %in% precursors$gene_id) %>% 
   left_join(.,precursors, by = "gene_id")
 
-EnhancedVolcano(res,
-                lab = rownames(res),
-                x = 'log2FoldChange',
-                y = 'pvalue')
 
 ############################
 # Obtain normalised counts #
@@ -61,10 +65,14 @@ dds.size.factors <- estimateSizeFactors(dds.data)
 
 df.normalised <- counts(dds.size.factors, normalized = TRUE)
 
+# Save dataframe
+# write.table(df.normalised, file="data/Deseq2_normalised_counts_P28_CV.txt", sep="\t", quote=F, col.names=NA)
 #############################################
 # plot normalised counts of precursor genes #
 #############################################
 
+# Open dataset
+df.normalised <- read.table("data/Deseq2_normalised_counts_P28_CV.txt")
 
 df <- as.data.frame(df.normalised) %>% 
   rownames_to_column(var = "gene_id") 
