@@ -2,32 +2,32 @@ library(pheatmap)
 library(tidyverse)
 
 # Load raw data
-df.raw <- read.delim("RNA_Seq_2022/scaled_counts.tsv") %>% 
-  select(c(1,7:16)) %>% 
-  pivot_longer(-gene, names_to = "sample", values_to = "scaled_counts")
+df.raw <- read.delim("data/Deseq2_normalised_counts_P28_CV.txt") %>% 
+  rename(gene = X) %>%
+  pivot_longer(-gene, names_to = "sample", values_to = "normalised_counts")
 
 # Get sample information
-sample.description <- read.csv("RNA_Seq_2022/samples_to_conditions.csv", sep = ",")
+sample.description <- read.csv("data/RNA_Seq_2022/samples_to_conditions.csv", sep = ",")
 
 # fuse scaled-counts data with sample info
 df <- 
   left_join(df.raw, sample.description, by = c("sample" = "sample_id")) %>% 
-  select(gene, sample, genotype, scaled_counts) %>% 
+  select(gene, sample, genotype, normalised_counts) %>% 
+  mutate(genotype = if_else(genotype == "Elite", "Cultivar", genotype)) %>%
   mutate(genotype_sample= paste0(genotype, "_", sample))
 
-# clean-up the gene name
-df$gene <- str_sub(df$gene, start = 6, 19)
+
 
 # Open genes of interest and description
-targets <- read.delim("RNA_Seq_2022/terpene_pathways.txt")
+targets <- read.delim("figures/Figure_6_RNA_seq/precursor_genes.tsv")
 targets2 <- targets %>% filter(target_id %in% df$gene) %>% distinct(target_id, .keep_all =T)
 
 # Fuse gene info of the targets and filter them from the dataset
 df.targets <- 
   df %>% 
+  filter(gene %in% targets$target_id) %>% 
   left_join(., targets, by = c("gene" = "target_id")) %>% 
-  filter(!is.na(pathway)) %>% 
-  mutate(scaled_counts = log(scaled_counts+1, base = 10)) # log scale transformation
+  mutate(normalised_counts = log(normalised_counts+1, base = 10)) # log scale transformation
 
 
 #############
@@ -37,12 +37,12 @@ df.targets <-
 df.mep.mva <- 
   df.targets %>% 
   filter(pathway %in% c("MEP", "MVA")) %>% 
-  arrange(factor(gene, levels = as.vector(targets2 %>% 
+  arrange(factor(gene, levels = as.vector(targets %>% 
                                             filter(pathway %in% c("MEP", "MVA")) %>% 
                                             filter(target_id %in% df.targets$gene) %>% 
                                             .$target_id))) %>%
-  select(genotype_sample, gene, scaled_counts) %>% 
-  pivot_wider(names_from = genotype_sample, values_from = scaled_counts) %>% 
+  select(genotype_sample, gene, normalised_counts) %>% 
+  pivot_wider(names_from = genotype_sample, values_from = normalised_counts) %>% 
   column_to_rownames(var = "gene")
 
 # Colors for the plot
@@ -73,11 +73,11 @@ pheatmap(mat = df.mep.mva,
 
 df.mean <- df %>% 
   group_by(genotype, gene) %>% 
-  summarise(mean_counts = mean(scaled_counts))
+  summarise(mean_counts = mean(normalised_counts))
 
 df %>% 
-  filter(gene %in% c("Solyc11g010850","Solyc11g069380", "Solyc01g109300","Solyc08g005680")) %>%
-  ggplot(aes(x = genotype, y = scaled_counts, fill = genotype)) +
+#  filter(gene %in% c("Solyc11g010850","Solyc11g069380", "Solyc01g109300","Solyc08g005680")) %>%
+  ggplot(aes(x = genotype, y = normalised_counts, fill = genotype)) +
   geom_boxplot()+
   geom_point(color = "darkgrey")+
   facet_grid(~gene)+
@@ -119,7 +119,7 @@ for (i in unique(df.targets$pathway)){
 
 df %>% 
   filter(gene %in% c("Solyc04g039670", "Solyc12g099260", "Solyc05g006520")) %>%
-  ggplot(aes(x = genotype, y = scaled_counts, fill = genotype)) +
+  ggplot(aes(x = genotype, y = normalised_counts, fill = genotype)) +
   geom_boxplot()+
   geom_point(color = "darkgrey")+
   facet_grid(~gene)+
