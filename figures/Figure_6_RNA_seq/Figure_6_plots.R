@@ -17,10 +17,11 @@ df <-
   mutate(genotype_sample= paste0(genotype, "_", sample))
 
 
-
 # Open genes of interest and description
 targets <- read.delim("figures/Figure_6_RNA_seq/precursor_genes.tsv")
-targets2 <- targets %>% filter(target_id %in% df$gene) %>% distinct(target_id, .keep_all =T)
+targets2 <- targets %>% 
+  filter(target_id %in% df$gene) %>% 
+distinct(target_id, .keep_all =T)
 
 # Fuse gene info of the targets and filter them from the dataset
 df.targets <- 
@@ -54,6 +55,7 @@ my_colour = list(
 annotation_rows <- targets %>% filter(pathway %in% c("MEP", "MVA")) %>% column_to_rownames(var = "target_id") %>% select(pathway) # this makes the rows separate in MEP/MVA
 
 pheatmap(mat = df.mep.mva, 
+         color = colorRampPalette(c("white","yellow" ,"darkred"))(25),
          scale = "none", 
          cluster_rows = F, 
          cluster_cols = F,
@@ -66,17 +68,55 @@ pheatmap(mat = df.mep.mva,
          gaps_row = 12,
          gaps_col = 5)
         #, filename = "MEP_MVA_heatmap_normalised_counts2.pdf")
+##########
+# Ratios #
+##########
 
+df.mean <- df %>% 
+  group_by(genotype, gene) %>% 
+  summarise(mean_counts = mean(normalised_counts)) %>% 
+  filter(gene %in% targets$target_id)
+
+df.ratio <- df.mean %>% 
+  pivot_wider(names_from = genotype, values_from = mean_counts) %>% 
+  mutate(Log2_ratio = log(P28/Cultivar,2)) %>% 
+  left_join(., targets, by = c("gene" = "target_id")) %>% 
+  arrange(-P28, -Log2_ratio)
+
+df.ratio %>% 
+  pivot_longer(cols = c(Cultivar, P28), names_to = "plant", values_to = "normalised_counts") %>% 
+  ggplot(aes(x = log(normalised_counts,2), fill = plant)) + 
+  geom_density(alpha = 0.5)+
+  facet_wrap(~pathway, ncol = 1)+
+  theme_bw()
+
+mat.ratio <-
+df.ratio %>% 
+  select(gene, Log2_ratio) %>%
+  arrange(factor(gene, levels = as.vector(targets %>% 
+                                            filter(pathway %in% c("MEP", "MVA")) %>% 
+                                            filter(target_id %in% df.targets$gene) %>% 
+                                            .$target_id))) %>%
+  column_to_rownames("gene")
+
+pheatmap(mat = mat.ratio, 
+         color = colorRampPalette(c("blue","white" ,"red"), bias = 1.75)(30),
+         scale = "none", 
+         cluster_rows = F, 
+         cluster_cols = F,
+         fontsize = 10,
+         cellwidth = 15,
+         cellheight = 15,
+         #annotation_col = annotation_cols, 
+         annotation_row = df.ratio %>% select(gene, pathway) %>% column_to_rownames("gene"),
+         annotation_colors = my_colour,
+         gaps_row = 12)
 ###########
 # Boxplot #
 ###########
 
-df.mean <- df %>% 
-  group_by(genotype, gene) %>% 
-  summarise(mean_counts = mean(normalised_counts))
-
 df %>% 
-#  filter(gene %in% c("Solyc11g010850","Solyc11g069380", "Solyc01g109300","Solyc08g005680")) %>%
+  filter(gene %in% c("Solyc08g005680","Solyc02g038740", "Solyc06g066310")) %>%
   ggplot(aes(x = genotype, y = normalised_counts, fill = genotype)) +
   geom_boxplot()+
   geom_point(color = "darkgrey")+
@@ -118,7 +158,7 @@ for (i in unique(df.targets$pathway)){
 }
 
 df %>% 
-  filter(gene %in% c("Solyc04g039670", "Solyc12g099260", "Solyc05g006520")) %>%
+  filter(gene %in% c("Solyc04g039670", "Solyc12g099260", "Solyc05g006520", "Solyc12g015860")) %>%
   ggplot(aes(x = genotype, y = normalised_counts, fill = genotype)) +
   geom_boxplot()+
   geom_point(color = "darkgrey")+
