@@ -18,7 +18,8 @@ df <-
 
 
 # Open genes of interest and description
-targets <- read.delim("figures/Figure_6_RNA_seq/precursor_genes.tsv")
+targets <- read.delim("figures/Figure_6_RNA_seq/precursor_genes.tsv") %>% 
+  filter(name != "TPS20")
 targets2 <- targets %>% 
   filter(target_id %in% df$gene) %>% 
 distinct(target_id, .keep_all =T)
@@ -101,7 +102,7 @@ df.ratio %>%
   column_to_rownames("gene")
 
 pheatmap(mat = mat.ratio, 
-         color = colorRampPalette(c("blue","white" ,"red"), bias = 1.75)(30),
+         color = colorRampPalette(c("blue","white" ,"red"), bias = 1.75)(20),
          scale = "none", 
          cluster_rows = F, 
          cluster_cols = F,
@@ -109,7 +110,7 @@ pheatmap(mat = mat.ratio,
          cellwidth = 15,
          cellheight = 15,
          #annotation_col = annotation_cols, 
-         annotation_row = df.ratio %>% select(gene, pathway) %>% column_to_rownames("gene"),
+         annotation_row = annotation_rows,
          annotation_colors = my_colour,
          gaps_row = 12)
 ###########
@@ -117,14 +118,19 @@ pheatmap(mat = mat.ratio,
 ###########
 
 df %>% 
-  filter(gene %in% c("Solyc08g005680","Solyc02g038740", "Solyc06g066310")) %>%
+  filter(gene %in% targets$target_id) %>%
+  left_join(., targets, by = c("gene" = "target_id")) %>%
+  mutate(gene = paste(name, gene)) %>%
   ggplot(aes(x = genotype, y = normalised_counts, fill = genotype)) +
   geom_boxplot()+
   geom_point(color = "darkgrey")+
-  facet_grid(~gene)+
+  facet_wrap(pathway~gene)+
   scale_fill_brewer(palette = "Dark2")+
   theme_bw()+
-  theme(legend.position = "none")
+  theme(legend.position = "none",
+        strip.background = element_rect(fill = "white"),
+        strip.text = element_text(size = 6)
+  )
   
 ggsave("MEP_genes.svg")
 
