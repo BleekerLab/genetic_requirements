@@ -28,7 +28,7 @@ df.targets <-
   df %>% 
   filter(gene %in% targets$target_id) %>% 
   left_join(., targets, by = c("gene" = "target_id")) %>% 
-  mutate(normalised_counts = log(normalised_counts+1, base = 10)) # log scale transformation
+  mutate(normalised_counts = log(normalised_counts+1, base = 2)) # log scale transformation
 
 
 #############
@@ -42,20 +42,21 @@ df.mep.mva <-
                                             filter(pathway %in% c("MEP", "MVA")) %>% 
                                             filter(target_id %in% df.targets$gene) %>% 
                                             .$target_id))) %>%
-  select(genotype_sample, gene, normalised_counts) %>% 
+  select(genotype_sample, gene, name, normalised_counts) %>% 
   pivot_wider(names_from = genotype_sample, values_from = normalised_counts) %>% 
   column_to_rownames(var = "gene")
 
 # Colors for the plot
 my_colour = list(
-  pathway= c(MEP = "forestgreen", MVA = "midnightblue")
+  pathway= c(MEP = "black", MVA = "grey")
 )
 
 # Annotation of the rows in the heatmap
 annotation_rows <- targets %>% filter(pathway %in% c("MEP", "MVA")) %>% column_to_rownames(var = "target_id") %>% select(pathway) # this makes the rows separate in MEP/MVA
+annotation_rows$name <- targets %>% filter(pathway %in% c("MEP", "MVA")) %>% column_to_rownames(var = "target_id") %>% .$name 
 
-pheatmap(mat = df.mep.mva, 
-         color = colorRampPalette(c("white","yellow" ,"darkred"))(25),
+pheatmap(mat = df.mep.mva %>% select(-name), 
+         color = colorRampPalette(c("white","yellow" ,"red"))(20),
          scale = "none", 
          cluster_rows = F, 
          cluster_cols = F,
@@ -67,7 +68,7 @@ pheatmap(mat = df.mep.mva,
          annotation_colors = my_colour,
          gaps_row = 12,
          gaps_col = 5)
-        #, filename = "MEP_MVA_heatmap_normalised_counts2.pdf")
+      #   filename = "figures/Figure_6_RNA_seq/MEP_MVA_heatmap_normalised_counts2.pdf")
 ##########
 # Ratios #
 ##########
