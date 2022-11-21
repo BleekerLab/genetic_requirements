@@ -68,8 +68,8 @@ pheatmap(mat = df.mep.mva %>% select(-name),
          annotation_row = annotation_rows,
          annotation_colors = my_colour,
          gaps_row = 11,
-         gaps_col = 5)
-      #   filename = "figures/Figure_6_RNA_seq/MEP_MVA_heatmap_normalised_counts2.pdf")
+         gaps_col = 5,
+        filename = "figures/Figure_6_RNA_seq/MEP_MVA_heatmap_normalised_counts2.pdf")
 ##########
 # Ratios #
 ##########
@@ -112,7 +112,8 @@ pheatmap(mat = mat.ratio,
          #annotation_col = annotation_cols, 
          annotation_row = annotation_rows,
          annotation_colors = my_colour,
-         gaps_row = 12)
+         gaps_row = 11,
+         filename = "figures/Figure_6_RNA_seq/ratio_heatmap.pdf")
 
 ###########
 # Boxplot #
