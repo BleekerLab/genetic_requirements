@@ -67,7 +67,7 @@ pheatmap(mat = df.mep.mva %>% select(-name),
          #annotation_col = annotation_cols, 
          annotation_row = annotation_rows,
          annotation_colors = my_colour,
-         gaps_row = 12,
+         gaps_row = 11,
          gaps_col = 5)
       #   filename = "figures/Figure_6_RNA_seq/MEP_MVA_heatmap_normalised_counts2.pdf")
 ##########
@@ -113,6 +113,7 @@ pheatmap(mat = mat.ratio,
          annotation_row = annotation_rows,
          annotation_colors = my_colour,
          gaps_row = 12)
+
 ###########
 # Boxplot #
 ###########
@@ -123,7 +124,7 @@ df %>%
   mutate(gene = paste(name, gene)) %>%
   ggplot(aes(x = genotype, y = normalised_counts, fill = genotype)) +
   geom_boxplot()+
-  geom_point(color = "darkgrey")+
+  geom_point(color = "black")+
   facet_wrap(pathway~gene)+
   scale_fill_brewer(palette = "Dark2")+
   theme_bw()+
@@ -133,6 +134,32 @@ df %>%
   )
   
 ggsave("MEP_genes.svg")
+
+top_genes <- c("Solyc11g010850", 
+               "Solyc01g109300", 
+               "Solyc11g069380",
+               "Solyc04g056390", 
+               "Solyc08g005680") 
+
+df %>% 
+  filter(gene %in% top_genes) %>%
+  left_join(., targets, by = c("gene" = "target_id")) %>%
+  mutate(gene = paste(name, gene)) %>%
+  ggplot(aes(x = genotype, y = normalised_counts, fill = genotype)) +
+  geom_boxplot()+
+  geom_point(color = "black")+
+  xlab(NULL)+
+  ylab("Normalised counts")+
+  facet_grid(~gene)+
+  scale_fill_brewer(palette = "Dark2")+
+  theme_bw()+
+  theme(legend.position = "none",
+        strip.text = element_text(size = 7),
+        axis.text  = element_text(colour = "black", size = 8)
+  )
+
+ggsave("figures/Figure_6_RNA_seq/boxplot_top_candidates.pdf", height = 2.5, width = 7)
+
 
 #####################
 # Multiple heatmaps #
