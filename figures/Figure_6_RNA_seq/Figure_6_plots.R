@@ -13,7 +13,7 @@ sample.description <- read.csv("data/RNA_Seq_2022/samples_to_conditions.csv", se
 df <- 
   left_join(df.raw, sample.description, by = c("sample" = "sample_id")) %>% 
   select(gene, sample, genotype, normalised_counts) %>% 
-  mutate(genotype = if_else(genotype == "Elite", "Cultivar", genotype)) %>%
+  mutate(genotype = if_else(genotype == "Elite", "Cultivar", "F2-28")) %>%
   mutate(genotype_sample= paste0(genotype, "_", sample))
 
 
@@ -134,7 +134,7 @@ df %>%
         strip.text = element_text(size = 6)
   )
   
-ggsave("MEP_genes.svg")
+ggsave("figures/Figure_6_RNA_seq/boxplot_all_MVA_MEP.pdf", height = 11, width = 8)
 
 top_genes <- c("Solyc11g010850", 
                "Solyc01g109300", 
@@ -156,10 +156,11 @@ df %>%
   theme_bw()+
   theme(legend.position = "none",
         strip.text = element_text(size = 7),
-        axis.text  = element_text(colour = "black", size = 8)
+        axis.text  = element_text(colour = "black", size = 8),
+        axis.title.y = element_text(size = 8, colour = "black")
   )
 
-ggsave("figures/Figure_6_RNA_seq/boxplot_top_candidates.pdf", height = 2.5, width = 7)
+ggsave("figures/Figure_6_RNA_seq/boxplot_top_candidates.pdf", height = 2.25, width = 6.5)
 
 
 #####################
