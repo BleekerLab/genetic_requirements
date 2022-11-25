@@ -57,7 +57,7 @@ annotation_rows <- targets %>% filter(pathway %in% c("MEP", "MVA")) %>% column_t
 annotation_rows$name <- targets %>% filter(pathway %in% c("MEP", "MVA")) %>% column_to_rownames(var = "target_id") %>% .$name 
 
 pheatmap(mat = df.mep.mva %>% select(-name), 
-         color = colorRampPalette(c("white","yellow" ,"red"))(20),
+         color = colorRampPalette(c("white","red" ,"black"))(15), #white","yellow" ,"red"
          scale = "none", 
          cluster_rows = F, 
          cluster_cols = F,
@@ -68,8 +68,8 @@ pheatmap(mat = df.mep.mva %>% select(-name),
          annotation_row = annotation_rows,
          annotation_colors = my_colour,
          gaps_row = 11,
-         gaps_col = 5,
-        filename = "figures/Figure_6_RNA_seq/MEP_MVA_heatmap_normalised_counts2.pdf")
+         gaps_col = 5)#,
+      #  filename = "figures/Figure_6_RNA_seq/MEP_MVA_heatmap_normalised_counts2.pdf")
 ##########
 # Ratios #
 ##########
@@ -77,19 +77,19 @@ pheatmap(mat = df.mep.mva %>% select(-name),
 df.mean <- df %>% 
   group_by(genotype, gene) %>% 
   summarise(mean_counts = mean(normalised_counts)) %>% 
-  filter(gene %in% targets$target_id)
+  filter(gene %in% targets$target_id) %>% 
+  left_join(., targets, by = c("gene" = "target_id")) 
 
 df.ratio <- df.mean %>% 
   pivot_wider(names_from = genotype, values_from = mean_counts) %>% 
-  mutate(Log2_ratio = log(P28/Cultivar,2)) %>% 
-  left_join(., targets, by = c("gene" = "target_id")) %>% 
-  arrange(-P28, -Log2_ratio)
+  mutate(Log2_ratio = log(`F2-28`/Cultivar,2)) %>% 
+  arrange( -`F2-28`)
 
 df.ratio %>% 
-  pivot_longer(cols = c(Cultivar, P28), names_to = "plant", values_to = "normalised_counts") %>% 
-  ggplot(aes(x = log(normalised_counts,2), fill = plant)) + 
+  pivot_longer(cols = c(Cultivar, `F2-28`), names_to = "plant", values_to = "normalised_counts") %>% 
+  ggplot(aes(x = log(normalised_counts,2), fill = pathway)) + 
   geom_density(alpha = 0.5)+
-  facet_wrap(~pathway, ncol = 1)+
+  facet_wrap(~plant, ncol = 1)+
   theme_bw()
 
 mat.ratio <-
@@ -126,11 +126,14 @@ df %>%
   ggplot(aes(x = genotype, y = normalised_counts, fill = genotype)) +
   geom_boxplot()+
   geom_point(color = "black")+
-  facet_wrap(pathway~gene)+
+  scale_y_continuous(labels = scales::scientific)+
+  facet_wrap(pathway~gene, scale = "free", ncol = 5)+
   scale_fill_brewer(palette = "Dark2")+
   theme_bw()+
   theme(legend.position = "none",
         strip.background = element_rect(fill = "white"),
+        axis.text.y = element_text(size = 6),
+        axis.text.x = element_text(size = 6),
         strip.text = element_text(size = 6)
   )
   
@@ -162,6 +165,22 @@ df %>%
 
 ggsave("figures/Figure_6_RNA_seq/boxplot_top_candidates.pdf", height = 2.25, width = 6.5)
 
+###########
+# T- Test #
+###########
+
+df %>% 
+  filter(gene %in% targets$target_id) %>%
+  left_join(., targets, by = c("gene" = "target_id")) %>%
+  mutate(gene = paste(name, gene)) %>% 
+  select(gene, genotype, normalised_counts) %>%
+  group_by(genotype, gene) %>% 
+  summarise(normalised_counts = list(normalised_counts)) %>% 
+  pivot_wider(names_from = genotype, values_from = normalised_counts) %>% 
+  group_by(gene) %>% 
+  mutate(p_value = t.test(unlist(Cultivar), unlist(`F2-28`))$p.value,
+         t_value = t.test(unlist(Cultivar), unlist(`F2-28`))$statistic) %>% 
+  openxlsx::write.xlsx("figures/Figure_6_RNA_seq/T_text.results.xlsx")
 
 #####################
 # Multiple heatmaps #
