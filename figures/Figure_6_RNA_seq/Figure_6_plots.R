@@ -19,10 +19,7 @@ df <-
 
 # Open genes of interest and description
 targets <- read.delim("figures/Figure_6_RNA_seq/precursor_genes.tsv") %>% 
-  filter(name != "TPS20")
-targets2 <- targets %>% 
-  filter(target_id %in% df$gene) %>% 
-distinct(target_id, .keep_all =T)
+  filter(name != "TPS20") #remove TPS20 from precursor list
 
 # Fuse gene info of the targets and filter them from the dataset
 df.targets <- 
@@ -54,10 +51,11 @@ my_colour = list(
 
 # Annotation of the rows in the heatmap
 annotation_rows <- targets %>% filter(pathway %in% c("MEP", "MVA")) %>% column_to_rownames(var = "target_id") %>% select(pathway) # this makes the rows separate in MEP/MVA
-annotation_rows$name <- targets %>% filter(pathway %in% c("MEP", "MVA")) %>% column_to_rownames(var = "target_id") %>% .$name 
+annotation_rows$name <- targets %>% filter(pathway %in% c("MEP", "MVA")) %>% column_to_rownames(var = "target_id") %>% .$name # To annotate the heatmap with gene-annotations
 
+# Plot the heatmap 
 pheatmap(mat = df.mep.mva %>% select(-name), 
-         color = colorRampPalette(c("white","red" ,"black"))(15), #white","yellow" ,"red"
+         color = colorRampPalette(c("white","yellow" ,"red"))(15), 
          scale = "none", 
          cluster_rows = F, 
          cluster_cols = F,
@@ -70,28 +68,25 @@ pheatmap(mat = df.mep.mva %>% select(-name),
          gaps_row = 11,
          gaps_col = 5)#,
       #  filename = "figures/Figure_6_RNA_seq/MEP_MVA_heatmap_normalised_counts2.pdf")
-##########
-# Ratios #
-##########
 
+####################################################
+# Differential expression (ratio F2-28 / Cultivar) #
+####################################################
+
+# Calculate the mean expression over the replicated
 df.mean <- df %>% 
   group_by(genotype, gene) %>% 
   summarise(mean_counts = mean(normalised_counts)) %>% 
   filter(gene %in% targets$target_id) %>% 
   left_join(., targets, by = c("gene" = "target_id")) 
 
+# Calculate the ratio of the mean expression levels 
 df.ratio <- df.mean %>% 
   pivot_wider(names_from = genotype, values_from = mean_counts) %>% 
   mutate(Log2_ratio = log(`F2-28`/Cultivar,2)) %>% 
   arrange( -`F2-28`)
 
-df.ratio %>% 
-  pivot_longer(cols = c(Cultivar, `F2-28`), names_to = "plant", values_to = "normalised_counts") %>% 
-  ggplot(aes(x = log(normalised_counts,2), fill = pathway)) + 
-  geom_density(alpha = 0.5)+
-  facet_wrap(~plant, ncol = 1)+
-  theme_bw()
-
+# Create a dataframe suitable for to make a heatmap of the ratios
 mat.ratio <-
 df.ratio %>% 
   select(gene, Log2_ratio) %>%
@@ -101,6 +96,7 @@ df.ratio %>%
                                             .$target_id))) %>%
   column_to_rownames("gene")
 
+# Plot the heatmap 
 pheatmap(mat = mat.ratio, 
          color = colorRampPalette(c("blue","white" ,"red"), bias = 1.75)(20),
          scale = "none", 
@@ -109,16 +105,33 @@ pheatmap(mat = mat.ratio,
          fontsize = 10,
          cellwidth = 15,
          cellheight = 15,
-         #annotation_col = annotation_cols, 
          annotation_row = annotation_rows,
          annotation_colors = my_colour,
-         gaps_row = 11,
-         filename = "figures/Figure_6_RNA_seq/ratio_heatmap.pdf")
+         gaps_row = 11)
+        # filename = "figures/Figure_6_RNA_seq/ratio_heatmap.pdf")
 
-###########
-# Boxplot #
-###########
+##########################################
+# Statistics: T- Test F2-28 vs. Cultivar #
+##########################################
+df.t.test <-
+df %>% 
+  filter(gene %in% targets$target_id) %>%
+  left_join(., targets, by = c("gene" = "target_id")) %>%
+  mutate(gene = paste(name, gene)) %>% 
+  select(gene, genotype, normalised_counts) %>%
+  group_by(genotype, gene) %>% 
+  summarise(normalised_counts = list(normalised_counts)) %>% 
+  pivot_wider(names_from = genotype, values_from = normalised_counts) %>% 
+  group_by(gene) %>% 
+  mutate(p_value = t.test(unlist(Cultivar), unlist(`F2-28`))$p.value,
+         t_value = t.test(unlist(Cultivar), unlist(`F2-28`))$statistic)
 
+ # openxlsx::write.xlsx(df.t.test, "figures/Figure_6_RNA_seq/T_text.results.xlsx")
+###############################
+# Boxplots of precursor genes #
+###############################
+
+# Plot all precursor genes for Supplemental Figure S8
 df %>% 
   filter(gene %in% targets$target_id) %>%
   left_join(., targets, by = c("gene" = "target_id")) %>%
@@ -137,7 +150,7 @@ df %>%
         strip.text = element_text(size = 6)
   )
   
-ggsave("figures/Figure_6_RNA_seq/boxplot_all_MVA_MEP.pdf", height = 11, width = 8)
+# ggsave("figures/Figure_6_RNA_seq/boxplot_all_MVA_MEP.pdf", height = 11, width = 8)
 
 top_genes <- c("Solyc11g010850", 
                "Solyc01g109300", 
@@ -165,61 +178,4 @@ df %>%
 
 ggsave("figures/Figure_6_RNA_seq/boxplot_top_candidates.pdf", height = 2.25, width = 6.5)
 
-###########
-# T- Test #
-###########
 
-df %>% 
-  filter(gene %in% targets$target_id) %>%
-  left_join(., targets, by = c("gene" = "target_id")) %>%
-  mutate(gene = paste(name, gene)) %>% 
-  select(gene, genotype, normalised_counts) %>%
-  group_by(genotype, gene) %>% 
-  summarise(normalised_counts = list(normalised_counts)) %>% 
-  pivot_wider(names_from = genotype, values_from = normalised_counts) %>% 
-  group_by(gene) %>% 
-  mutate(p_value = t.test(unlist(Cultivar), unlist(`F2-28`))$p.value,
-         t_value = t.test(unlist(Cultivar), unlist(`F2-28`))$statistic) %>% 
-  openxlsx::write.xlsx("figures/Figure_6_RNA_seq/T_text.results.xlsx")
-
-#####################
-# Multiple heatmaps #
-#####################
-
-for (i in unique(df.targets$pathway)){
-  
-  df.i<- 
-    df.targets %>% 
-    filter(pathway %in% i) %>% 
-    arrange(factor(gene, levels = as.vector(targets2 %>% 
-                                              filter(pathway %in% i) %>% 
-                                              filter(target_id %in% df.targets$gene) %>% 
-                                              .$target_id))) %>%
-    select(genotype_sample, gene, scaled_counts) %>% 
-    distinct(genotype_sample, gene, .keep_all = TRUE) %>% 
-    pivot_wider(names_from = genotype_sample, values_from = scaled_counts) %>%
-    column_to_rownames(var = "gene")
-  
-  pheatmap(mat = df.i, 
-           scale = "none", 
-           cluster_rows = F, 
-           cluster_cols = F,
-           fontsize = 10,
-           cellwidth = 15,
-           cellheight = 15,
-           gaps_col = 5,
-           filename = paste0("RNA_Seq_2022/Heatmaps/", i, "_heatmap.pdf"))
-  
-}
-
-df %>% 
-  filter(gene %in% c("Solyc04g039670", "Solyc12g099260", "Solyc05g006520", "Solyc12g015860")) %>%
-  ggplot(aes(x = genotype, y = normalised_counts, fill = genotype)) +
-  geom_boxplot()+
-  geom_point(color = "darkgrey")+
-  facet_grid(~gene)+
-  scale_fill_brewer(palette = "Dark2")+
-  theme_bw()+
-  theme(legend.position = "none")
-
-ggsave("RNA_Seq_2022/citrate_shuttle_genes.png", width = 5, height = 3)
