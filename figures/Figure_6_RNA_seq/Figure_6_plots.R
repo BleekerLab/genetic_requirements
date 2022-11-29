@@ -123,7 +123,9 @@ df %>%
   summarise(normalised_counts = list(normalised_counts)) %>% 
   pivot_wider(names_from = genotype, values_from = normalised_counts) %>% 
   group_by(gene) %>% 
-  mutate(p_value = t.test(unlist(Cultivar), unlist(`F2-28`))$p.value,
+  mutate(shapiro_cultivar = shapiro.test(unlist(Cultivar))$p.value,
+         shapiro_F2_28 = shapiro.test(unlist(`F2-28`))$p.value,
+         p_value = t.test(unlist(Cultivar), unlist(`F2-28`))$p.value,
          t_value = t.test(unlist(Cultivar), unlist(`F2-28`))$statistic)
 
  # openxlsx::write.xlsx(df.t.test, "figures/Figure_6_RNA_seq/T_text.results.xlsx")
