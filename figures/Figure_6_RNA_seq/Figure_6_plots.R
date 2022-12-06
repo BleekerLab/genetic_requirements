@@ -160,7 +160,8 @@ top_genes <- c("Solyc11g010850",
                "Solyc01g109300", 
                "Solyc11g069380",
                "Solyc04g056390", 
-               "Solyc08g005680") 
+               "Solyc08g005680",
+               "Solyc12g099900") 
 
 df %>% 
   filter(gene %in% top_genes) %>%
@@ -208,7 +209,7 @@ df %>%
   geom_point(color = "black")+
   xlab(NULL)+
   ylab("Normalised counts")+
-  facet_grid(~gene)+
+  facet_wrap(~gene, scale = "free")+
   scale_fill_brewer(palette = "Dark2")+
   theme_bw()+
   theme(legend.position = "none",
@@ -216,6 +217,8 @@ df %>%
         axis.text  = element_text(colour = "black", size = 8),
         axis.title.y = element_text(size = 8, colour = "black")
   )
+
+ggsave("figures/Figure_6_RNA_seq/boxplot_regulators.pdf", height = 2.25, width = 5)
 
 # T-Test
   df %>% 
