@@ -129,6 +129,7 @@ df %>%
          t_value = t.test(unlist(Cultivar), unlist(`F2-28`))$statistic)
 
  # openxlsx::write.xlsx(df.t.test, "figures/Figure_6_RNA_seq/T_text.results.xlsx")
+
 ###############################
 # Boxplots of precursor genes #
 ###############################
@@ -154,6 +155,7 @@ df %>%
   
 # ggsave("figures/Figure_6_RNA_seq/boxplot_all_MVA_MEP.pdf", height = 11, width = 8)
 
+# Plot top candidates - Figure 6B
 top_genes <- c("Solyc11g010850", 
                "Solyc01g109300", 
                "Solyc11g069380",
@@ -178,6 +180,62 @@ df %>%
         axis.title.y = element_text(size = 8, colour = "black")
   )
 
-ggsave("figures/Figure_6_RNA_seq/boxplot_top_candidates.pdf", height = 2.25, width = 6.5)
+# ggsave("figures/Figure_6_RNA_seq/boxplot_top_candidates.pdf", height = 2.25, width = 6.5)
 
+#################################
+# Boxplots of known regulators  #
+#################################
 
+# SlEOT1 (Solyc02g062400) 
+# SlMYC1 (Solyc08g005050)
+# SlSCL3 (Solyc12g099900) 
+
+regulator_genes <- data.frame(target_id = 
+                               c("Solyc02g062400", 
+                                 "Solyc08g005050", 
+                                 "Solyc12g099900"),
+                             name = c("EOT1",
+                                      "MYC1",
+                                      "SCL3")
+)
+
+df %>% 
+  filter(gene %in% regulator_genes$target_id) %>%
+  left_join(., regulator_genes, by = c("gene" = "target_id")) %>%
+  mutate(gene = paste(name, gene)) %>%
+  ggplot(aes(x = genotype, y = normalised_counts, fill = genotype)) +
+  geom_boxplot()+
+  geom_point(color = "black")+
+  xlab(NULL)+
+  ylab("Normalised counts")+
+  facet_grid(~gene)+
+  scale_fill_brewer(palette = "Dark2")+
+  theme_bw()+
+  theme(legend.position = "none",
+        strip.text = element_text(size = 7),
+        axis.text  = element_text(colour = "black", size = 8),
+        axis.title.y = element_text(size = 8, colour = "black")
+  )
+
+# T-Test
+  df %>% 
+  filter(gene %in% regulator_genes$target_id) %>%
+  left_join(., regulator_genes, by = c("gene" = "target_id")) %>%
+  mutate(gene = paste(name, gene)) %>% 
+  select(gene, genotype, normalised_counts) %>%
+  group_by(genotype, gene) %>% 
+  summarise(normalised_counts = list(normalised_counts)) %>% 
+  pivot_wider(names_from = genotype, values_from = normalised_counts) %>% 
+  group_by(gene) %>% 
+  mutate(shapiro_cultivar = shapiro.test(unlist(Cultivar))$p.value,
+         shapiro_F2_28 = shapiro.test(unlist(`F2-28`))$p.value,
+         p_value = t.test(unlist(Cultivar), unlist(`F2-28`))$p.value,
+         t_value = t.test(unlist(Cultivar), unlist(`F2-28`))$statistic)
+  
+  df %>% 
+    filter(gene %in% regulator_genes$target_id) %>%
+    left_join(., regulator_genes, by = c("gene" = "target_id")) %>% 
+    group_by(genotype, name) %>% 
+    summarise(avg = mean(normalised_counts)) %>% 
+    arrange(name)
+  
