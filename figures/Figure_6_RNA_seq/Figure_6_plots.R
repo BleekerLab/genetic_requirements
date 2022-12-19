@@ -234,7 +234,8 @@ ggsave("figures/Figure_6_RNA_seq/boxplot_regulators.pdf", height = 2.25, width =
          shapiro_F2_28 = shapiro.test(unlist(`F2-28`))$p.value,
          p_value = t.test(unlist(Cultivar), unlist(`F2-28`))$p.value,
          t_value = t.test(unlist(Cultivar), unlist(`F2-28`))$statistic)
-  
+
+  # Mean expression  
   df %>% 
     filter(gene %in% regulator_genes$target_id) %>%
     left_join(., regulator_genes, by = c("gene" = "target_id")) %>% 
