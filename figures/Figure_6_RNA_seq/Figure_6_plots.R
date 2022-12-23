@@ -194,10 +194,14 @@ df %>%
 regulator_genes <- data.frame(target_id = 
                                c("Solyc02g062400", 
                                  "Solyc08g005050", 
-                                 "Solyc12g099900"),
+                                 "Solyc12g099900",
+                                 "Solyc10g086250",
+                                 "Solyc02g088190"),
                              name = c("EOT1",
                                       "MYC1",
-                                      "SCL3")
+                                      "SCL3",
+                                      "MYB75",
+                                      "MIXTA-like")
 )
 
 df %>% 
